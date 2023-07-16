@@ -2,8 +2,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <readline.h>
-#include <history.h>
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -15,5 +15,9 @@
 #include <errno.h>
 #include <termios.h>
 #include <termcap.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+//typedef struct ast
 
 # endif
