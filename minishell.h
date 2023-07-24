@@ -3,7 +3,7 @@
 # define MINISHELL_H
 
 
-
+#include "./libft/libfte.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,6 +18,19 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-//typedef struct ast
+typedef enum s_token{
+   cmd,
+   opetion,
+   word,
+    // Add more node types as needed
+} t_token;
+
+typedef struct s_ast
+{
+    int how_many_cmd;
+    char **cmd;
+    
+    t_token a;
+}t_ast;
 
 # endif

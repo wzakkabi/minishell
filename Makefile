@@ -8,11 +8,11 @@ OBJ = $(SRC.c=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJ)
-	gcc $(SRC) -lreadline -o $(NAME)
+$(NAME) : $(OBJ) re
+	gcc libft.a $(SRC) -lreadline -o $(NAME)
 
 %.o : %.c
-	gcc $(FLAGS) -c $<
+	gcc $(FLAGS) libft.a -c $<
 
 fclean : clean
 	rm -rf $(NAME)

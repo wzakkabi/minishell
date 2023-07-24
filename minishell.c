@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/07/16 23:50:14 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/07/23 22:25:03 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,10 @@ char **split(char *s)
 	return p;
 }
 
+void check(char *p)
+{
+	t_ast test;
+}
 
 int main() 
 {
@@ -65,7 +69,7 @@ int main()
 	{
 		input = readline("minishell~>");
 		add_history(input);
-		
+		check(input);
 		free(input);
 	}
 	return 0;
