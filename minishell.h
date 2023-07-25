@@ -3,7 +3,7 @@
 # define MINISHELL_H
 
 
-#include "./libft/libfte.h"
+#include "./libft/libft.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -18,19 +18,30 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-typedef enum s_token{
-   cmd,
-   opetion,
-   word,
-    // Add more node types as needed
+typedef enum s_token
+{
+	PIPE = 1,
+	GREAT,
+	GREAT_GREAT,
+	LESS,
+	LESS_LESS,
 } t_token;
+
+typedef struct s_lexer
+{
+	char    	*str;
+	t_token        token;
+	int		i;
+	struct s_lexer	*next;
+	struct s_lexer	*prev;
+}	t_lexer;
+
 
 typedef struct s_ast
 {
-    int how_many_cmd;
-    char **cmd;
-    
-    t_token a;
-}t_ast;
+    char **p;
+    struct s_ast *next;
+} t_ast
+
 
 # endif
