@@ -6,10 +6,10 @@ SRC = minishell.c
 
 OBJ = $(SRC.c=.o)
 
-all : $(NAME)
+all : re $(NAME)
 
-$(NAME) : $(OBJ) re
-	gcc libft.a $(SRC) -lreadline -o $(NAME)
+$(NAME) : $(OBJ)
+	gcc $(SRC) libft.a -lreadline -o $(NAME)
 
 %.o : %.c
 	gcc $(FLAGS) libft.a -c $<

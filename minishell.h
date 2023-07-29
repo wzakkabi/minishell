@@ -20,28 +20,27 @@
 
 typedef enum s_token
 {
-	PIPE = 1,
-	GREAT,
-	GREAT_GREAT,
-	LESS,
-	LESS_LESS,
+	PIPE, // |
+	GREAT, // >
+	GREAT_GREAT, // >>
+	LESS, // <
+	LESS_LESS, // <<
 } t_token;
 
 typedef struct s_lexer
 {
 	char    	*str;
 	t_token        token;
-	int		i;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
 
-
 typedef struct s_ast
 {
-    char **p;
-    struct s_ast *next;
-} t_ast
-
-
+	char **cmd;
+	t_lexer lexer;
+	struct s_ast *next;
+	struct s_ast *prev;
+} t_ast;
+// hello cv | test yarbi hadchi ikhdm
 # endif
