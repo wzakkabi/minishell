@@ -37,10 +37,10 @@ typedef struct s_lexer
 
 typedef struct s_ast
 {
-	char **cmd;
+	char *cmd;
 	t_lexer lexer;
 	struct s_ast *next;
 	struct s_ast *prev;
 } t_ast;
-// hello cv | test yarbi hadchi ikhdm
+	// hello cv | test yarbi hadchi ikhdm
 # endif
