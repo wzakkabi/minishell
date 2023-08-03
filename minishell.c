@@ -17,6 +17,7 @@
 bach tfhm l pipex kifach khdamin nkon ana salit lexer o parser and expander too ila jat blan golha liya
 ila jab lah o mabantch lik chi haja wadha fl code golha liya 
 had lcode mazal ghir kanchof kifach n parser thing to the correct way */
+// hada ghir test ila kant endk chi idea ola chi l3ba golha liya
 
 t_ast *newnode()
 {
@@ -38,16 +39,14 @@ void    split_to_ast(t_ast *tool, char *s)
 			x++;
 			while(s[x] != 34)
 				x++;
-			x++;
 		}
-		if(s[x] == 39)
+		else if(s[x] == 39)
 		{
 			x++;
 			while(s[x] != 39)
 				x++;
-			x++;
 		}
-		if(s[x] == '|')
+		else if(s[x] == '|')
 		{
 			tool->cmd = ft_substr(s, y, x - y);
 			y = x + 1;
@@ -57,7 +56,7 @@ void    split_to_ast(t_ast *tool, char *s)
 			tool->next->prev = tool;
 			tool = tool->next;
 		}
-		else if(s[x + 1] == '\0')
+		if(s[x + 1] == '\0')
 		{
 			tool->cmd = ft_substr(s, y, x - y + 1);
 			//tool->cmd = ft_split(p, ' ');

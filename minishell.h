@@ -31,6 +31,7 @@ typedef struct s_lexer
 {
 	char    	*str;
 	t_token        token;
+	int i; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
@@ -42,5 +43,5 @@ typedef struct s_ast
 	struct s_ast *next;
 	struct s_ast *prev;
 } t_ast;
-	// hello cv | test yarbi hadchi ikhdm
+// hello cv | test yarbi hadchi ikhdm
 # endif
