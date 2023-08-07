@@ -2,22 +2,29 @@ NAME = minishell
 
 FLAGS = -Wall -Wextra -Werror
 
+LIBFT = ./libft/libft.a
+
 SRC = minishell.c
 
 OBJ = $(SRC.c=.o)
 
 all : re $(NAME)
 
-$(NAME) : $(OBJ)
-	gcc $(SRC) libft.a -lreadline -o $(NAME)
+$(NAME) : $(OBJ) $(LIBFT)
+	gcc $(SRC) $(LIBFT) -lreadline -o $(NAME)
+
+$(LIBFT) :
+	make -C ./libft
 
 %.o : %.c
 	gcc $(FLAGS) libft.a -c $<
 
 fclean : clean
 	rm -rf $(NAME)
+	rm -f $(LIBFT)
 
 clean :
 	rm -rf $(OBJ)
+	rm -f ./libft/*.o
 
 re : fclean all
