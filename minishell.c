@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/07/26 00:56:26 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/08/08 15:10:22 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,14 +134,17 @@ void	check_quest(char *p)
 
 void    minishell_loop(t_ast *tool)
 {
-	char *input;
+	char 			*input;
 
-	input = readline("minishell~>");
+	using_history();
+	printf("%s minishell~>", getenv("USER"));
+	input = readline("");
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
 		minishell_loop(tool);
 	}
+	add_history(input);
 	input = chrandreplace(input, '\t', ' ');
 	check_quest(input);
 	split_to_ast(tool, input);
