@@ -29,7 +29,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (0);
 	if (start <= ft_strlen(s))
 	{
-		while (x < len && start <= ft_strlen(s))
+		while (x < len && start < u)
 			p[x++] = s[start++];
 	}
 	return (p);

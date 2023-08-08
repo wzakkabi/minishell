@@ -20,28 +20,29 @@
 
 typedef enum s_token
 {
-	PIPE, // |
 	GREAT, // >
 	GREAT_GREAT, // >>
 	LESS, // <
 	LESS_LESS, // <<
+	PIPE,
 } t_token;
 
 typedef struct s_lexer
 {
-	char    	*str;
+	char    	*word;
 	t_token        token;
-	int i; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
+	int num_node; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
 
 typedef struct s_ast
 {
-	char *cmd;
-	t_lexer lexer;
+	char **str;
+	t_lexer *lx;
 	struct s_ast *next;
 	struct s_ast *prev;
 } t_ast;
+void ft_print(t_lexer *lx);
 // hello cv | test yarbi hadchi ikhdm
 # endif

@@ -17,7 +17,7 @@ $(LIBFT) :
 	make -C ./libft
 
 %.o : %.c
-	gcc $(FLAGS) libft.a -c $<
+	gcc $(FLAGS) $(LIBFT) -c $<
 
 fclean : clean
 	rm -rf $(NAME)

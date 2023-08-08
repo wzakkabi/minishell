@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/08 15:10:22 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/07/26 00:56:26 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,102 +27,40 @@ t_ast *newnode()
 	new->prev = NULL;
 	return new;
 }
-void    split_to_ast(t_ast *tool, char *s)
+t_lexer *lxnewnode()
 {
-	int x = -1;
-	int y = 0;
-	char *p;
-	while(s[++x])
-	{
-		if(s[x] == 34)
-		{
-			x++;
-			while(s[x] != 34)
-				x++;
-		}
-		else if(s[x] == 39)
-		{
-			x++;
-			while(s[x] != 39)
-				x++;
-		}
-		else if(s[x] == '|')
-		{
-			tool->cmd = ft_substr(s, y, x - y);
-			y = x + 1;
-			//tool->cmd = ft_split(p, ' ');
-			//free(p);
-			tool->next = newnode();
-			tool->next->prev = tool;
-			tool = tool->next;
-		}
-		if(s[x + 1] == '\0')
-		{
-			tool->cmd = ft_substr(s, y, x - y + 1);
-			//tool->cmd = ft_split(p, ' ');
-			//free(p);
-		}
-	}
+	t_lexer *new;
+	static int i = 0;
+	new = (t_lexer *)malloc(sizeof(t_lexer));
+	new->num_node = i;
+	new->next = NULL;
+	new->prev = NULL;
+	i++;
+	//printf("nn = %d\n", i);
+	return new;
 }
-
-void print(t_ast *s)
+void	check_quest(char *str)
 {
 	int x = 0;
-	int node=1;
-	while(s->prev != NULL)
+	while(str[x])
 	{
-		printf("1\n");
-		s = s->prev;
-	}
-	while(s != NULL)
-	{
-		x = 0;
-		printf("node == %d (%s)\n",node ,s->cmd);
-		s = s->next;
-		node++;
-	}
-}
-
-char *chrandreplace(char *s, int find, int replace)
-{
-	int x;
-	char *p;
-
-	p = ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	x = 0;
-	while (s[x])
-	{
-		if (s[x] == find)
-			p[x] = replace;
-		else
-			p[x] = s[x];
-		x++;
-	}
-	free(s);
-	return (p);
-}
-void	check_quest(char *p)
-{
-	int x = 0;
-	while(p[x])
-	{
-		if(p[x] == 34)
+		if(str[x] == 34)
 		{
 			x++;
-			while(p[x] != 34 && p[x])
+			while(str[x] != 34 && str[x])
 				x++;
-			if(p[x] == 0)
+			if(str[x] == 0)
 			{
 				ft_putstr_fd("error double quest", 1);
 				exit(1);
 			}
 		}
-		else if (p[x] == 39)
+		else if (str[x] == 39)
 		{
 			x++;
-			while(p[x] != 39 && p[x])
+			while(str[x] != 39 && str[x])
 				x++;
-			if(p[x] == 0)
+			if(str[x] == 0)
 			{
 				ft_putstr_fd("error single quest", 1);
 				exit(1);
@@ -132,24 +70,130 @@ void	check_quest(char *p)
 	}
 }
 
+int token_or_not(char c, char c1)
+{
+	if (c == '<' && c1 == '<')
+		return 0;
+	else if (c == '>' && c1 == '>')
+		return 1;
+	else if (c == '<')
+		return 2;
+	else if (c == '>')
+		return 3;
+	else if(c == '|')
+		return 4;
+	return 6;
+}
+
+t_lexer *creat_node_token(char c, char c1, t_lexer *lx)
+{
+	t_token test;
+	if (c == '<' && c1 == '<')
+		test =  LESS_LESS;
+	else if (c == '>' && c1 == '>')
+		test =  GREAT_GREAT;
+	else if (c == '<')
+		test =  LESS;
+	else if (c == '>')
+		test =  GREAT;
+	else if(c == '|')
+		test =  PIPE;
+	lx->token = test;
+	lx->word = NULL;
+	lx->next = lxnewnode();
+	lx->next->prev = lx;
+	return lx->next;
+}
+
+t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y , int cnt)
+{
+	if(y == cnt)
+		return lx;
+	lx->word = ft_substr(ret, y, cnt);
+	//printf("word = (%s) (node = %d) y = %d cnt = %d\n", lx->word, lx->num_node , y, cnt);
+	lx->next = lxnewnode();
+	lx->next->prev = lx;
+	return lx->next;
+}
+
+t_lexer	*ft_token(char *ret)
+{
+	int cnt = 0;
+	t_lexer *lx;
+	char *p;
+	int y = 0;
+	int test;
+	int qst;
+	lx = lxnewnode();
+	while (ret[cnt])
+	{
+		test = token_or_not(ret[cnt], ret[cnt + 1]);
+		if(ret[cnt] == 34 || ret[cnt] == 39)
+		{
+			qst = ret[cnt];
+			cnt++;
+			while(ret[cnt] != qst && ret[cnt])
+				cnt++;
+			cnt++;
+				lx = creat_node_word(lx, ret, y , cnt);
+			y = cnt;
+		}
+		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
+		{
+			lx = creat_node_token(ret[cnt], ret[cnt + 1], lx);
+			if(test == 0 || test == 1)
+				cnt += 2;
+			else
+				cnt++;
+			y = cnt;
+		}
+		else if(ret[cnt] == ' ' || ret[cnt] == '\t')
+		{
+			lx = creat_node_word(lx, ret, y, cnt);
+			cnt++;
+			y = cnt;
+		}
+		else
+		{
+			cnt++;
+			if((ret[cnt] == 0 && ret[cnt - 1] != ' ') && (ret[cnt] == 0 && ret[cnt - 1] != '\t'))
+			{
+				lx = creat_node_word(lx, ret, y, cnt);
+			}
+		}
+	}
+	ft_print(lx);
+	return lx;
+	//printf("%s\n", ft_substr(ret, 6 , 11));
+}
+void ft_print(t_lexer *lx)
+{
+	//printf("%d\n", lx->num_node);
+	while(lx->prev != NULL)
+		lx = lx->prev;
+	//printf("1111\n");
+	while(lx->next != NULL)
+	{
+		
+		if(lx->word != NULL )
+			printf("word = (%s)\n", lx->word);
+		else
+			printf("token = (%d)\n", lx->token);
+		lx = lx->next;
+	}
+}
 void    minishell_loop(t_ast *tool)
 {
-	char 			*input;
-
-	using_history();
-	input = readline("minishell~> ");
+	char *input;
+	t_lexer *token;
+	input = readline("minishell~>");
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
 		minishell_loop(tool);
 	}
-	add_history(input);
-	input = chrandreplace(input, '\t', ' ');
-	check_quest(input);
-	split_to_ast(tool, input);
-	print(tool);
-	write(1, "\n\n", 2);
-	minishell_loop(tool);
+	check_quest(input);	
+	token = ft_token(input);
 }
 
 int main(int c, char **av)
