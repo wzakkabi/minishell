@@ -137,8 +137,7 @@ void    minishell_loop(t_ast *tool)
 	char 			*input;
 
 	using_history();
-	printf("%s minishell~>", getenv("USER"));
-	input = readline("");
+	input = readline("minishell~> ");
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
