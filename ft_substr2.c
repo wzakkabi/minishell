@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_substr.c                                        :+:      :+:    :+:   */
+/*   ft_substr2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/08 22:25:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2022/10/17 19:50:05 by wzakkabi         ###   ########.fr       */
+/*   Created: 2023/08/18 00:16:49 by toor              #+#    #+#             */
+/*   Updated: 2023/08/18 00:26:56 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr2(char const *s, unsigned int start, size_t len)
 {
 	char	*p;
 	size_t	x;
@@ -29,7 +29,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (0);
 	if (start <= ft_strlen(s))
 	{
-		while (x < len && start <= ft_strlen(s))
+		while (x < len && start < u)
 			p[x++] = s[start++];
 	}
 	return (p);

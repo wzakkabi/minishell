@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/07/26 00:56:26 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/08/18 00:20:07 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y , int cnt)
 {
 	if(y == cnt)
 		return lx;
-	lx->word = ft_substr(ret, y, cnt);
+	lx->word = ft_substr2(ret, y, cnt);
 	//printf("word = (%s) (node = %d) y = %d cnt = %d\n", lx->word, lx->num_node , y, cnt);
 	lx->next = lxnewnode();
 	lx->next->prev = lx;
@@ -164,7 +164,7 @@ t_lexer	*ft_token(char *ret)
 	}
 	ft_print(lx);
 	return lx;
-	//printf("%s\n", ft_substr(ret, 6 , 11));
+	//printf("%s\n", ft_substr2(ret, 6 , 11));
 }
 void ft_print(t_lexer *lx)
 {

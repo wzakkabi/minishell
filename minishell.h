@@ -44,5 +44,6 @@ typedef struct s_ast
 	struct s_ast *prev;
 } t_ast;
 void ft_print(t_lexer *lx);
+char	*ft_substr2(char const *s, unsigned int start, size_t len);
 // hello cv | test yarbi hadchi ikhdm
 # endif
