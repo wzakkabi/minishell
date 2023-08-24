@@ -38,10 +38,12 @@ typedef struct s_lexer
 
 typedef struct s_ast
 {
-	char **str;
-	t_lexer *lx;
-	struct s_ast *next;
-	struct s_ast *prev;
+	char                    **str;
+	int                     num_redirections;
+	char                    *hd_file_name;
+	t_lexer                 *redirections;
+	struct s_ast			*next;
+	struct s_ast			*prev;
 } t_ast;
 void ft_print(t_lexer *lx);
 char	*ft_substr2(char const *s, unsigned int start, size_t len);

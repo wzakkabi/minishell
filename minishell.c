@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/18 00:20:07 by toor             ###   ########.fr       */
+/*   Updated: 2023/08/24 18:03:31 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_ast *newnode()
 {
 	t_ast *new;
 	new = (t_ast *)malloc(sizeof(t_ast));
+	new->str = (char **)calloc(sizeof(char *) , 10);
 	new->next = NULL;
 	new->prev = NULL;
 	return new;
@@ -36,7 +37,6 @@ t_lexer *lxnewnode()
 	new->next = NULL;
 	new->prev = NULL;
 	i++;
-	//printf("nn = %d\n", i);
 	return new;
 }
 void	check_quest(char *str)
@@ -110,7 +110,6 @@ t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y , int cnt)
 	if(y == cnt)
 		return lx;
 	lx->word = ft_substr2(ret, y, cnt);
-	//printf("word = (%s) (node = %d) y = %d cnt = %d\n", lx->word, lx->num_node , y, cnt);
 	lx->next = lxnewnode();
 	lx->next->prev = lx;
 	return lx->next;
@@ -162,49 +161,92 @@ t_lexer	*ft_token(char *ret)
 			}
 		}
 	}
-	ft_print(lx);
 	return lx;
-	//printf("%s\n", ft_substr2(ret, 6 , 11));
 }
 void ft_print(t_lexer *lx)
 {
-	//printf("%d\n", lx->num_node);
 	while(lx->prev != NULL)
 		lx = lx->prev;
-	//printf("1111\n");
 	while(lx->next != NULL)
 	{
 		
 		if(lx->word != NULL )
-			printf("word = (%s)\n", lx->word);
+			printf("word = (%s) %d\n", lx->word, lx->num_node);
 		else
-			printf("token = (%d)\n", lx->token);
+			printf("token = (%d) %d\n", lx->token, lx->num_node);
 		lx = lx->next;
 	}
 }
-void    minishell_loop(t_ast *tool)
+
+void ft_printast(t_ast *lx)
+{
+	int x = 0;
+	while(lx->prev != NULL)
+		lx = lx->prev;
+	while(lx != NULL)
+	{
+		while(lx->str[x])
+		{
+			printf("ast == (%s)\n", lx->str[x]);
+			x++;
+		}
+		x = 0;
+		lx = lx->next;
+	}
+}
+
+t_ast *split_to_ast(t_lexer *lx)
+{
+	t_ast *tool;
+	int cnt = 0;
+	tool = newnode();
+	while(lx->next != NULL)
+	{
+		if(lx->token == PIPE)
+		{
+			tool->next = newnode();
+			tool->next->prev = tool;
+			tool = tool->next;
+			cnt = 0;
+		}
+		else if(lx->word != NULL)
+		{
+			tool->str[cnt] = lx->word;
+			printf("str = %s %d\n",tool->str[cnt], cnt);
+			cnt++;
+		}
+		lx = lx->next;
+	}
+	return tool;
+}
+
+void    minishell_loop()
 {
 	char *input;
+	t_ast *tool;
 	t_lexer *token;
 	input = readline("minishell~>");
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
-		minishell_loop(tool);
+		minishell_loop();
 	}
-	check_quest(input);	
+	check_quest(input);
 	token = ft_token(input);
+	while(token->prev != NULL)
+		token = token->prev;
+	tool = split_to_ast(token);
+	ft_print(token);
+	ft_printast(tool);
 }
 
 int main(int c, char **av)
 {
-	t_ast *tool;
-	tool = newnode();
 	if (c > 1 || av[1])
 	{
 		printf("this program dont take paramiter");
 		exit(0);
 	}
-	minishell_loop(tool);
+	minishell_loop();
 	return 0;
 }
