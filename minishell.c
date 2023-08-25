@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/25 18:10:03 by toor             ###   ########.fr       */
+/*   Updated: 2023/08/25 18:18:15 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,6 +233,7 @@ t_ast *split_to_ast(t_lexer *lx)
 	return tool;
 }
 
+
 void    minishell_loop()
 {
 	char *input;
@@ -248,8 +249,9 @@ void    minishell_loop()
 	token = ft_token(input);
 	while(token->prev != NULL)
 		token = token->prev;
+	//check_syntax_error(token);
 	tool = split_to_ast(token);
-	ft_print(token);
+	//ft_print(token);
 	ft_printast(tool);
 }
 
