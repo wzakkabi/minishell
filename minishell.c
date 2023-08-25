@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/24 18:03:31 by toor             ###   ########.fr       */
+/*   Updated: 2023/08/25 18:10:03 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_ast *newnode()
 	t_ast *new;
 	new = (t_ast *)malloc(sizeof(t_ast));
 	new->str = (char **)calloc(sizeof(char *) , 10);
+	new->num_redirections = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	return new;
@@ -109,6 +110,7 @@ t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y , int cnt)
 {
 	if(y == cnt)
 		return lx;
+	lx->token = -1;
 	lx->word = ft_substr2(ret, y, cnt);
 	lx->next = lxnewnode();
 	lx->next->prev = lx;
@@ -200,6 +202,7 @@ t_ast *split_to_ast(t_lexer *lx)
 	t_ast *tool;
 	int cnt = 0;
 	tool = newnode();
+	tool->redirections = lxnewnode();
 	while(lx->next != NULL)
 	{
 		if(lx->token == PIPE)
@@ -208,6 +211,16 @@ t_ast *split_to_ast(t_lexer *lx)
 			tool->next->prev = tool;
 			tool = tool->next;
 			cnt = 0;
+		}
+		else if(lx->token == GREAT || lx->token == GREAT_GREAT || lx->token == LESS || lx->token == LESS_LESS)
+		{
+			printf("\nhello nigga == %d\n", lx->token);
+			tool->redirections->next = lxnewnode();
+			tool->redirections->token = lx->token;
+			lx = lx->next;
+			tool->redirections->word = lx->word;
+			tool->redirections->next->prev = tool->redirections;
+			tool->redirections->next = tool->redirections;
 		}
 		else if(lx->word != NULL)
 		{
