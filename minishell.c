@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/25 18:18:15 by toor             ###   ########.fr       */
+/*   Updated: 2023/08/27 21:30:02 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ t_lexer *lxnewnode()
 	new->prev = NULL;
 	i++;
 	return new;
+}
+t_env *envnode()
+{
+	t_env *new;
+	new = (t_env *)malloc(sizeof(t_env));
+	new->next = NULL;
+	new->prev = NULL;
 }
 void	check_quest(char *str)
 {
@@ -165,6 +172,7 @@ t_lexer	*ft_token(char *ret)
 	}
 	return lx;
 }
+
 void ft_print(t_lexer *lx)
 {
 	while(lx->prev != NULL)
@@ -234,16 +242,15 @@ t_ast *split_to_ast(t_lexer *lx)
 }
 
 
-void    minishell_loop()
+void    minishell_loop(t_ast *tool, t_lexer *token)
 {
 	char *input;
-	t_ast *tool;
-	t_lexer *token;
+	
 	input = readline("minishell~>");
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
-		minishell_loop();
+		minishell_loop(tool, token);
 	}
 	check_quest(input);
 	token = ft_token(input);
@@ -255,13 +262,48 @@ void    minishell_loop()
 	ft_printast(tool);
 }
 
-int main(int c, char **av)
+
+void *make_env_node(char **env, t_env *node)
 {
+	int cnt_x = 0;
+	int cnt_y = 0;
+ 	while(env[cnt_y])
+	{
+		while(env[cnt_y][cnt_x] != '=' && env[cnt_y][cnt_x])
+			cnt_x++;
+		node->key = ft_substr2(env[cnt_y], 0, cnt_x);
+		node->vule = ft_substr2(env[cnt_y] , cnt_x + 1, ft_strlen(env[cnt_y]));
+		// printf("node->key == (%s)", node->key);
+		// printf("node->value == (%s)\n", node->vule);
+		cnt_x = 0;
+		cnt_y++;
+		node->next = envnode();
+		node->next->prev = node;
+		node = node->next;
+	}
+}
+
+int main(int c, char **av, char **grep_env)
+{
+	t_ast *tool;
+	t_lexer *token;
+	t_env *env;
+	
+	
 	if (c > 1 || av[1])
 	{
 		printf("this program dont take paramiter");
 		exit(0);
 	}
-	minishell_loop();
+	env = envnode();
+	make_env_node(grep_env, env);
+	// while(env->next)
+	// {
+	// 	printf("node->key == (%s)", env->key);
+	// 	printf("node->value == (%s)\n", env->vule);
+	// 	env = env->next;
+	// }
+	//exit(0);
+	minishell_loop(tool, token);
 	return 0;
 }

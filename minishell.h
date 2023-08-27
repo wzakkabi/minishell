@@ -37,7 +37,6 @@ typedef struct s_lexer
 }	t_lexer;
 
 
-
 typedef struct s_ast
 {
 	char                    **str;
@@ -48,6 +47,18 @@ typedef struct s_ast
 	struct s_ast			*next;
 	struct s_ast			*prev;
 } t_ast;
+
+/* sat ana ghadi ncreate function li kat7wl mn  2d arry l node ela 9bl env o 
+mn b3d ghadi nchofo chi struct general jam3a parsing m3a env lmohem 
+mjmo3 fiha kolchi ga3 li ghadi n7tajo bach execute cmd */ 
+typedef struct s_env 
+{
+	char *key;
+	char *vule;
+	struct s_env *next;
+	struct s_env *prev;
+} t_env;
+
 //sat ila kaina chi haja khassha tzzad golha liya ola zidha
 void ft_print(t_lexer *lx);
 char	*ft_substr2(char const *s, unsigned int start, size_t len);
