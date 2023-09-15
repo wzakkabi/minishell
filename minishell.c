@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/08/27 21:30:02 by toor             ###   ########.fr       */
+/*   Updated: 2023/09/15 21:22:16 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,13 @@ void ft_printast(t_ast *lx)
 			printf("ast == (%s)\n", lx->str[x]);
 			x++;
 		}
+		while(lx->redirections->prev)
+			lx->redirections = lx->redirections->prev;
+		while(lx->redirections->next)
+		{
+			printf("word = (%s) and token = (%d)", lx->redirections->word, lx->redirections->token);
+			lx->redirections = lx->redirections->next;
+		}
 		x = 0;
 		lx = lx->next;
 	}
@@ -222,18 +229,19 @@ t_ast *split_to_ast(t_lexer *lx)
 		}
 		else if(lx->token == GREAT || lx->token == GREAT_GREAT || lx->token == LESS || lx->token == LESS_LESS)
 		{
-			printf("\nhello nigga == %d\n", lx->token);
+			//printf("token == %d\n", lx->token);
 			tool->redirections->next = lxnewnode();
 			tool->redirections->token = lx->token;
 			lx = lx->next;
 			tool->redirections->word = lx->word;
 			tool->redirections->next->prev = tool->redirections;
-			tool->redirections->next = tool->redirections;
+			//printf("toekn (%d) and word (%s)\n", tool->redirections->token, tool->redirections->word);
+			tool->redirections = tool->redirections->next;
 		}
 		else if(lx->word != NULL)
 		{
 			tool->str[cnt] = lx->word;
-			printf("str = %s %d\n",tool->str[cnt], cnt);
+			//printf("str = %s\n",tool->str[cnt]);
 			cnt++;
 		}
 		lx = lx->next;
@@ -258,7 +266,6 @@ void    minishell_loop(t_ast *tool, t_lexer *token)
 		token = token->prev;
 	//check_syntax_error(token);
 	tool = split_to_ast(token);
-	//ft_print(token);
 	ft_printast(tool);
 }
 
