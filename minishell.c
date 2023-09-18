@@ -6,7 +6,7 @@
 /*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/15 21:22:16 by toor             ###   ########.fr       */
+/*   Updated: 2023/09/18 14:34:52 by toor             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,9 +200,7 @@ void ft_printast(t_ast *lx)
 			printf("ast == (%s)\n", lx->str[x]);
 			x++;
 		}
-		while(lx->redirections->prev)
-			lx->redirections = lx->redirections->prev;
-		while(lx->redirections->next)
+		while( lx->redirections && lx->redirections->next != NULL )
 		{
 			printf("word = (%s) and token = (%d)", lx->redirections->word, lx->redirections->token);
 			lx->redirections = lx->redirections->next;
@@ -217,7 +215,7 @@ t_ast *split_to_ast(t_lexer *lx)
 	t_ast *tool;
 	int cnt = 0;
 	tool = newnode();
-	tool->redirections = lxnewnode();
+	tool->redirections = NULL;
 	while(lx->next != NULL)
 	{
 		if(lx->token == PIPE)
@@ -230,6 +228,8 @@ t_ast *split_to_ast(t_lexer *lx)
 		else if(lx->token == GREAT || lx->token == GREAT_GREAT || lx->token == LESS || lx->token == LESS_LESS)
 		{
 			//printf("token == %d\n", lx->token);
+			if(tool->redirections == NULL)
+				tool->redirections = lxnewnode();
 			tool->redirections->next = lxnewnode();
 			tool->redirections->token = lx->token;
 			lx = lx->next;
@@ -246,6 +246,8 @@ t_ast *split_to_ast(t_lexer *lx)
 		}
 		lx = lx->next;
 	}
+	while(tool->redirections != NULL && tool->redirections->prev)
+			tool->redirections = tool->redirections->prev;
 	return tool;
 }
 
