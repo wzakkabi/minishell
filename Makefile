@@ -4,14 +4,14 @@ FLAGS = -Wall -Wextra -Werror
 
 LIBFT = ./libft/libft.a
 
-SRC = minishell.c ft_substr2.c
+SRC = minishell.c ft_substr2.c execution.c ./builtins/utils.c redirections.c
 
 OBJ = $(SRC.c=.o)
 
 all : re $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	gcc $(SRC) $(LIBFT) -lreadline -o $(NAME)
+	gcc $(SRC) $(LIBFT) -lreadline -g -o $(NAME)
 
 $(LIBFT) :
 	make -C ./libft
