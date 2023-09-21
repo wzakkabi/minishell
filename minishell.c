@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/19 16:37:38 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/21 17:11:11 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,9 +200,9 @@ void ft_printast(t_ast *lx)
 			printf("ast == (%s)\n", lx->str[x]);
 			x++;
 		}
-		while( lx->redirections && lx->redirections->next != NULL )
+		while(lx->redirections)
 		{
-			printf("word = (%s) and token = (%d)", lx->redirections->word, lx->redirections->token);
+			printf("word = (%s) and token = (%d)\n", lx->redirections->word, lx->redirections->token);
 			lx->redirections = lx->redirections->next;
 		}
 		x = 0;
@@ -230,13 +230,16 @@ t_ast *split_to_ast(t_lexer *lx)
 			//printf("token == %d\n", lx->token);
 			if(tool->redirections == NULL)
 				tool->redirections = lxnewnode();
+			else
+			{
 			tool->redirections->next = lxnewnode();
+			tool->redirections->next->prev = tool->redirections;
+			tool->redirections = tool->redirections->next;
+			}
 			tool->redirections->token = lx->token;
 			lx = lx->next;
 			tool->redirections->word = lx->word;
-			tool->redirections->next->prev = tool->redirections;
 			//printf("toekn (%d) and word (%s)\n", tool->redirections->token, tool->redirections->word);
-			tool->redirections = tool->redirections->next;
 		}
 		else if(lx->word != NULL)
 		{
@@ -251,6 +254,27 @@ t_ast *split_to_ast(t_lexer *lx)
 	return tool;
 }
 
+void	check_syntax_error(t_lexer *err)
+{
+	int i = 0;
+	while(err->prev)
+		err = err->prev;
+	while(err)
+	{
+		if(err->token >= GREAT && err->token <= PIPE)
+		{
+			if(i == 1)
+			{
+				printf("syntax error");
+				exit(1);
+			}
+			i = 1;
+		}
+		else
+			i = 0;
+		err = err->next;
+	}
+}
 
 void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 {
@@ -266,7 +290,7 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	token = ft_token(input);
 	while(token->prev != NULL)
 		token = token->prev;
-	//check_syntax_error(token);
+	check_syntax_error(token);
 	tool = split_to_ast(token);
 	// ft_printast(tool);
 	while(tool->prev != NULL)
