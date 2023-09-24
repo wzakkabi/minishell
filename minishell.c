@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/21 17:11:38 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/24 21:06:50 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ void ft_print(t_lexer *lx)
 void ft_printast(t_ast *lx)
 {
 	int x = 0;
+	printf("hna \n");
 	while(lx->prev != NULL)
 		lx = lx->prev;
 	while(lx != NULL)
@@ -224,6 +225,7 @@ t_ast *split_to_ast(t_lexer *lx)
 			tool->next->prev = tool;
 			tool = tool->next;
 			cnt = 0;
+			tool->redirections = NULL;
 		}
 		else if(lx->token == GREAT || lx->token == GREAT_GREAT || lx->token == LESS || lx->token == LESS_LESS)
 		{
@@ -239,18 +241,17 @@ t_ast *split_to_ast(t_lexer *lx)
 			tool->redirections->token = lx->token;
 			lx = lx->next;
 			tool->redirections->word = lx->word;
+			tool->num_redirections += 1;
 			//printf("toekn (%d) and word (%s)\n", tool->redirections->token, tool->redirections->word);
 		}
 		else if(lx->word != NULL)
-		{
+		{ 
 			tool->str[cnt] = lx->word;
 			//printf("str = %s\n",tool->str[cnt]);
 			cnt++;
 		}
 		lx = lx->next;
 	}
-	while(tool->redirections != NULL && tool->redirections->prev)
-			tool->redirections = tool->redirections->prev;
 	return tool;
 }
 
