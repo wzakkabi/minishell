@@ -6,13 +6,13 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/24 23:38:51 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:15:29 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	great(t_lexer *lexer, int *pipe_fds)
+void	overwrite_append(t_lexer *lexer, int *pipe_fds)
 {
 	int 	fd;
 	int		count;
@@ -20,22 +20,20 @@ void	great(t_lexer *lexer, int *pipe_fds)
 
 	if (lexer == NULL)
 		return ;
-	if (lexer->token != GREAT || lexer->word == NULL)
+	if ((lexer->token != GREAT && lexer->token != GREAT_GREAT)
+		|| lexer->word == NULL)
 		return ;
-	fd = open(lexer->word, O_CREAT | O_TRUNC | O_WRONLY, S_IRUSR | S_IWUSR);
+	// Needs to add permission check before trying to open the file
+	// Or handle it from open() ret values
+	if (lexer->token == GREAT)
+		fd = open(lexer->word, O_CREAT | O_TRUNC | O_WRONLY,
+			S_IRUSR | S_IWUSR);
+	else if (lexer->token == GREAT_GREAT)
+		fd = open(lexer->word, O_CREAT | O_APPEND | O_WRONLY | O_APPEND,
+				S_IRUSR | S_IWUSR);
+	// Bad file descriptor errors needs to be handled
 	if (fd <= 2)
 		return ;
-	// close(pipe_fds[1]);
-	// count = read(pipe_fds[0], buff, BUFSIZ);
-	// close(pipe_fds[0]);
-	// if (count > 0)
-	// {
-	// 	// buff[count] = '\0';
-	// 	int w_ret = write(fd, buff, count);
-	// 	if (w_ret <= 0)
-	// 		perror("write()");
-			
-	// }
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }

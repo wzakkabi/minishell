@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/24 23:44:47 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 00:14:14 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,6 @@ char	**get_bin_paths(t_env *env)
 	return (ret);
 }
 
-// void	set_redirections(t_lexer *lexer, int *pipe_fd)
-// {
-// 	int		fd;
-// 	t_lexer	*lex;
-
-// 	lex = lexer;
-// 	while (lex)
-// 	{
-// 		if (lex->token == PIPE)
-// 	}
-// }
-
 void	check_redirections(t_lexer *lexer, int *fds)
 {
 	int	i;
@@ -57,8 +45,9 @@ void	check_redirections(t_lexer *lexer, int *fds)
 	lexer_p = lexer;
 	while (lexer_p != NULL)
 	{
-		if (lexer_p->token == GREAT)
-			great(lexer_p, fds);
+		if (lexer_p->token == GREAT
+			|| lexer_p->token == GREAT_GREAT)
+			overwrite_append(lexer_p, fds);
 		lexer_p = lexer_p->next;
 	}
 	
@@ -73,44 +62,20 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	static int save;
 
 	pipe(pipe_fd);
-
-	// if (ast == NULL)
-	// 	return 0;
-	// if (ast->prev != NULL)
-	// {
-	// 	// dup2(pipe_fd[0], STDIN_FILENO);
-	// 	// close(pipe_fd[1]);
-	// 	close(pipe_fd[1]);
-	// }
 	check_redirections(ast->redirections, pipe_fd);
 	child = fork();
 	if (child == 0)
 	{
-		// getchar();
-		// if (ast->next != NULL /*|| (ast->redirections != NULL
-		// 	&& ast->redirections->token == GREAT)*/)
-		// {
-		// 	close(pipe_fd[0]);
-		// 	dup2(pipe_fd[1], STDOUT_FILENO);
-		// 	close(pipe_fd[1]);
-		// }
-		// else if (ast->prev != NULL)
-		// {
-		// 	close(pipe_fd[1]);
-		// 	dup2(pipe_fd[0], STDIN_FILENO);
-		// 	close(pipe_fd[0]);
-		// }
-
 		if (!ast->prev && ast->next && !ast->redirections) {
-			dup2(pipe_fd[1], 1); //STDOUT
+			dup2(pipe_fd[1], STDOUT_FILENO);
 		}
 		else if (ast->prev && ast->next)
 		{
-			dup2(save, 0); //STDIN
-			dup2(pipe_fd[1], 1); //STDOUT
+			dup2(save, STDIN_FILENO);
+			dup2(pipe_fd[1], STDOUT_FILENO);
 		}
 		else if (!ast->next) {
-			dup2(save, 0); //STDIN
+			dup2(save, STDIN_FILENO);
 		}
 		
 		close(pipe_fd[0]);
@@ -122,7 +87,6 @@ int	execute_cmd(t_ast *ast, t_env *env)
 		{
 			tmp = ft_strjoin(bin_paths[i], ast->str[0]);
 			execve(tmp, ast->str, NULL);
-			// perror("execve()");
 		}
 	}
 	else
@@ -131,7 +95,6 @@ int	execute_cmd(t_ast *ast, t_env *env)
 			close(save);
 		save = pipe_fd[0];
 		close(pipe_fd[1]);
-		// check_redirections(ast->redirections, pipe_fd);
 		return child;
 	}
 }
@@ -141,8 +104,6 @@ void	execute(t_ast *ast, t_env *env)
 	t_ast	*ast_p;
 	int		child;
 	int		state;
-	// int		pipe_fd[2];
-
 	
 	ast_p = ast;
 	while (ast_p)
@@ -150,9 +111,6 @@ void	execute(t_ast *ast, t_env *env)
 		// if (ast->builtins != 0)
 		// 	builtin(ast, env);
 		// else
-		// if (ast_p->redirections != NULL)
-		// 	check_redirections(ast_p->redirections);
-			
 			child = execute_cmd(ast_p, env);
 		// if (child != 0)
 		// 	waitpid(child, &state ,0);
