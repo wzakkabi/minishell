@@ -17,6 +17,7 @@
 #include <termcap.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <sys/wait.h>
 
 typedef enum s_token
 {
@@ -54,7 +55,7 @@ mjmo3 fiha kolchi ga3 li ghadi n7tajo bach execute cmd */
 typedef struct s_env 
 {
 	char *key;
-	char *vule;
+	char *value;
 	struct s_env *next;
 	struct s_env *prev;
 } t_env;
@@ -62,4 +63,11 @@ typedef struct s_env
 //sat ila kaina chi haja khassha tzzad golha liya ola zidha
 void ft_print(t_lexer *lx);
 char	*ft_substr2(char const *s, unsigned int start, size_t len);
+
+// execution.c
+void	execute(t_ast *ast, t_env *env);
+
+// redirections.c
+void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+
 # endif

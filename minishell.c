@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/23 19:58:25 by toor             ###   ########.fr       */
+/*   Updated: 2023/09/24 21:06:50 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ void	check_syntax_error(t_lexer *err)
 	}
 }
 
-void    minishell_loop(t_ast *tool, t_lexer *token)
+void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 {
 	char *input;
 	
@@ -285,7 +285,7 @@ void    minishell_loop(t_ast *tool, t_lexer *token)
 	if(input == NULL || input[0] == 0)
 	{
 		free(input);
-		minishell_loop(tool, token);
+		minishell_loop(tool, token, env);
 	}
 	check_quest(input);
 	token = ft_token(input);
@@ -293,7 +293,10 @@ void    minishell_loop(t_ast *tool, t_lexer *token)
 		token = token->prev;
 	check_syntax_error(token);
 	tool = split_to_ast(token);
-	ft_printast(tool);
+	// ft_printast(tool);
+	while(tool->prev != NULL)
+		tool = tool->prev;
+	execute(tool, env);
 }
 
 
@@ -306,9 +309,9 @@ void *make_env_node(char **env, t_env *node)
 		while(env[cnt_y][cnt_x] != '=' && env[cnt_y][cnt_x])
 			cnt_x++;
 		node->key = ft_substr2(env[cnt_y], 0, cnt_x);
-		node->vule = ft_substr2(env[cnt_y] , cnt_x + 1, ft_strlen(env[cnt_y]));
+		node->value = ft_substr2(env[cnt_y] , cnt_x + 1, ft_strlen(env[cnt_y]));
 		// printf("node->key == (%s)", node->key);
-		// printf("node->value == (%s)\n", node->vule);
+		// printf("node->value == (%s)\n", node->value);
 		cnt_x = 0;
 		cnt_y++;
 		node->next = envnode();
@@ -334,10 +337,10 @@ int main(int c, char **av, char **grep_env)
 	// while(env->next)
 	// {
 	// 	printf("node->key == (%s)", env->key);
-	// 	printf("node->value == (%s)\n", env->vule);
+	// 	printf("node->value == (%s)\n", env->value);
 	// 	env = env->next;
 	// }
 	//exit(0);
-	minishell_loop(tool, token);
+	minishell_loop(tool, token, env);
 	return 0;
 }
