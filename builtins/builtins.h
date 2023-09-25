@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:52:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/01 15:09:16 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 21:41:02 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,7 @@ int		cd(t_ast *ast, t_env *env);
 
 //pwd.c
 int		pwd(t_ast *ast, t_env *env);
+
+//exit.c
+void	builtin_exit(t_ast *ast, t_env *env);
 #endif
