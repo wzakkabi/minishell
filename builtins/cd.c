@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:51:22 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/01 15:11:57 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:20:05 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*parse_path(char	**cmd, t_env *env)
 		ft_putstr_fd(tmp, STDERR_FILENO);
 		ft_putchar_fd('\n', STDERR_FILENO);
 		free(tmp);
-		exit(1);
+		return (NULL);
 	}
 	else if (i == 2)
 	{
@@ -72,10 +72,7 @@ void	update_pwd_env(char	*old_path, t_env *env)
 	if (getcwd(path, sizeof(path)))
 		update_env_var(env, "PWD", path);
 	else
-	{
 		perror("cd: getcwd()");
-		exit(1);
-	}
 }
 
 int	cd(t_ast *ast, t_env *env)
@@ -97,12 +94,13 @@ int	cd(t_ast *ast, t_env *env)
 	path_to = parse_path(ast->str, env);
 	if (getcwd(old_path, sizeof(old_path)) == NULL)
 		perror("getcwd()");
-	if (chdir(path_to) != 0)
+	i = chdir(path_to);
+	if (i == 0)
 	{
-		perror("cd");
-		exit(1);
+		update_pwd_env(old_path, env);
+		free(path_to);
 	}
-	update_pwd_env(old_path, env);
-	free(path_to);
-	return (0);
+	else
+		perror("cd");
+	return (i);
 }

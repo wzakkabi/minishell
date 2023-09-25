@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror
 
 LIBFT = ./libft/libft.a
 
-SRC = minishell.c ft_substr2.c execution.c ./builtins/utils.c redirections.c
+SRC = minishell.c ft_substr2.c execution.c ./builtins/utils.c redirections.c ./builtins/cd.c
 
 OBJ = $(SRC.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/24 21:06:50 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:13:24 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,6 +297,24 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	while(tool->prev != NULL)
 		tool = tool->prev;
 	execute(tool, env);
+	// freeing ast && lexer linked lists before starting a new prompt
+	while (tool)
+	{
+		int i = -1;
+		t_ast *tmp_ast = tool->next;
+		while (tool->str[++i])
+			free(tool->str[i]);
+		while (tool->redirections)
+		{
+			t_lexer *tmp = tool->redirections->next;
+			free(tool->redirections->word);
+			free(tool->redirections);
+			tool->redirections = tmp;
+		}
+		free(tool);
+		tool = tmp_ast;
+	}
+	minishell_loop(tool, token, env);
 }
 
 

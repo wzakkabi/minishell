@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/25 01:22:52 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 20:13:59 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,12 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	}
 }
 
+void	builtin(t_ast *ast, t_env *env)
+{
+	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
+		cd(ast, env);
+}
+
 void	execute(t_ast *ast, t_env *env)
 {
 	t_ast	*ast_p;
@@ -108,9 +114,14 @@ void	execute(t_ast *ast, t_env *env)
 	ast_p = ast;
 	while (ast_p)
 	{	
-		// if (ast->builtins != 0)
-		// 	builtin(ast, env);
-		// else
+		//Temporary For Test ___________________
+		if ( ft_strncmp(ast_p->str[0], "cd", 2) == 0)
+			ast_p->builtins = 1;
+		//______________________________________
+		
+		if (ast->builtins == 1)
+			builtin(ast, env);
+		else
 			child = execute_cmd(ast_p, env);
 		// if (child != 0)
 		// 	waitpid(child, &state ,0);
