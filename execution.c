@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/25 00:14:14 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/25 01:22:52 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	execute(t_ast *ast, t_env *env)
 		// 	waitpid(child, &state ,0);
 		ast_p = ast_p->next;
 	}
-	// waitpid(child, &state ,0);
+	waitpid(child, &state ,0);
 	// close (pipe_fd[1]);
 	// close (pipe_fd[0]);
 }
