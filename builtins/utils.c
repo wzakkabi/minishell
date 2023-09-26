@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:56:15 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/01 15:19:25 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/26 04:04:40 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*env_p;
 
-	if (!env || !key || !value)
+	if (!env || !key )//|| !value)
 		return (0);
 	env_p = *env;
 	while (env_p->next != NULL)
@@ -97,7 +97,10 @@ int	add_env_var(t_env **env, char *key, char *value)
 		env_p->next = malloc(sizeof(t_env));
 		env_p = env_p->next;
 		env_p->key = ft_strdup(key);
-		env_p->value = ft_strdup(value);
+		if (!value)
+			env_p->value = NULL;
+		else
+			env_p->value = ft_strdup(value);
 		return (1);
 	}
 	return (0);
