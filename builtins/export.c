@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/26 04:14:31 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/26 04:20:41 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int export(t_ast *ast, t_env *env)
 			key_val_env = parse_param(ast->str[i]);
 			if (!key_val_env)
 				printf("export: naming variable error \n");
-			if(!add_env_var(&env, key_val_env[0], key_val_env[1]))
+			else if(!add_env_var(&env, key_val_env[0], key_val_env[1]))
 				printf("export: error adding env var\n");
 		}
 	}
