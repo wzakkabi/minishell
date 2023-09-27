@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins/builtins.h"
 
 
 /*daba kan7awel ngad "lexer o parser" ela 7essab had struct li endi ila fik li i9lb ela executor
@@ -29,6 +30,7 @@ t_ast *newnode()
 	new->prev = NULL;
 	return new;
 }
+
 t_lexer *lxnewnode()
 {
 	t_lexer *new;
@@ -47,7 +49,7 @@ t_env *envnode()
 	new->next = NULL;
 	new->prev = NULL;
 }
-void	check_quest(char *str)
+void	check_quote(char *str)
 {
 	int x = 0;
 	while(str[x])
@@ -59,7 +61,7 @@ void	check_quest(char *str)
 				x++;
 			if(str[x] == 0)
 			{
-				ft_putstr_fd("error double quest", 1);
+				ft_putstr_fd("error double quote", 1);
 				exit(1);
 			}
 		}
@@ -70,7 +72,7 @@ void	check_quest(char *str)
 				x++;
 			if(str[x] == 0)
 			{
-				ft_putstr_fd("error single quest", 1);
+				ft_putstr_fd("error single quote", 1);
 				exit(1);
 			}
 		}
@@ -140,11 +142,17 @@ t_lexer	*ft_token(char *ret)
 		{
 			qst = ret[cnt];
 			cnt++;
+			test = cnt;
 			while(ret[cnt] != qst && ret[cnt])
 				cnt++;
-			cnt++;
-				lx = creat_node_word(lx, ret, y , cnt);
-			y = cnt;
+			if(test != cnt)
+			{
+				cnt++;
+					lx = creat_node_word(lx, ret, y , cnt);
+				y = cnt;
+			}
+			else
+				y =	++cnt;
 		}
 		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
 		{
@@ -191,7 +199,6 @@ void ft_print(t_lexer *lx)
 void ft_printast(t_ast *lx)
 {
 	int x = 0;
-	printf("hna \n");
 	while(lx->prev != NULL)
 		lx = lx->prev;
 	while(lx != NULL)
@@ -277,6 +284,89 @@ void	check_syntax_error(t_lexer *err)
 	}
 }
 
+void	check_expand(t_lexer *token, t_env *env)
+{
+	int x = 0, y = 0, i = 0;
+	int c_p_dollar = 0, c_p_key = 0;
+	char *key;
+	char *new_word;
+	t_env *test;
+
+	while(token->next != NULL)
+	{
+		if(ft_strrchr(token->word, '$') != NULL && token->word[0] != 39 && token->word)
+		{
+			while(token->word[x] != '$')
+				x++;
+			c_p_dollar = ++x;
+			c_p_key = 0;
+			while(token->word[x + c_p_key] != ' ' && token->word[x + c_p_key] != '$' && token->word[x + c_p_key] != '\t' && token->word[x + c_p_key] && token->word[x + c_p_key] != 34)
+				c_p_key++;
+			key = ft_substr2(token->word, c_p_dollar, c_p_key + x);
+			test = get_env_var(env, key);
+			if(test)
+			{
+				new_word = malloc((ft_strlen(token->word) - c_p_key) + ft_strlen(test->value));
+				x = 0;
+				while(token->word[x] != '$' && token->word)
+					new_word[y++] = token->word[x++];
+				while(test->value[i])
+					new_word[y++] = test->value[i++];
+				while(token->word[x + c_p_key])
+					new_word[y++] = token->word[x + ++c_p_key];
+				new_word[y] = 0;
+			}
+			else
+			{
+				new_word = malloc((ft_strlen(token->word) - c_p_key));
+				x = 0;
+				while(token->word[x] != '$' && token->word)
+					new_word[y++] = token->word[x++];
+				while(token->word[x + c_p_key])
+					new_word[y++] = token->word[x + ++c_p_key];
+				new_word[y] = 0;
+			}
+			free(token->word);
+			free(key);
+			token->word = new_word;
+
+		}
+		else
+		{
+			token = token->next;
+		}
+		c_p_dollar = 0;
+		c_p_key = 0;
+		y = 0;
+		x = 0;
+		i = 0;
+	}
+}
+
+void	remove_qost(t_lexer *token)
+{
+	char *new_word;
+	int x = 0, y = 0;
+	while (token->next)
+	{
+		if(token->word)
+		{
+			if(token->word[0] == 34 || token->word[0] == 39) 
+			{
+				new_word = malloc(ft_strlen(token->word) - 2);
+				while(token->word[++x] != token->word[0])
+					new_word[y++] = token->word[x];
+				new_word[y] = 0;
+				free(token->word);
+				token->word = new_word;
+			}
+		}
+		token = token->next;
+	}
+	
+}
+//&& token->word
+
 void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 {
 	char *input;
@@ -287,18 +377,19 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 		free(input);
 		minishell_loop(tool, token, env);
 	}
-	check_quest(input);
+	check_quote(input);
 	token = ft_token(input);
 	while(token->prev != NULL)
 		token = token->prev;
 	check_syntax_error(token);
+	check_expand(token, env);
+	remove_qost(token);
 	tool = split_to_ast(token);
-	// ft_printast(tool);
-	while(tool->prev != NULL)
-		tool = tool->prev;
+	 ft_printast(tool);
+	// while(tool->prev != NULL)
+		// tool = tool->prev;
 	execute(tool, env);
 }
-
 
 void *make_env_node(char **env, t_env *node)
 {

@@ -31,8 +31,8 @@ typedef enum s_token
 typedef struct s_lexer
 {
 	char    	*word;
-	t_token        token;
-	int num_node; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
+	t_token       token;
+	int			num_node; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
