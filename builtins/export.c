@@ -6,11 +6,41 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/26 04:20:41 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/29 21:54:09 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+void error__(char *token)
+{
+	if (!token)
+		return ;
+	ft_putstr_fd("export: `", STDERR_FILENO);
+	ft_putstr_fd(token, STDERR_FILENO);
+	ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+}
+
+void	print_env_vars(t_env *env)
+{
+	t_env	*env_p;
+
+	env_p = env;
+	while (env_p)
+	{
+		if (env_p->key)
+		{
+			ft_putstr_fd(env_p->key, STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			if (!env_p->value)
+				ft_putstr_fd("''", STDOUT_FILENO);
+			else
+				ft_putstr_fd(env_p->value, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
+		}
+		env_p = env_p->next;
+	}
+}
 
 char	**parse_param(char *str)
 {
@@ -35,6 +65,18 @@ char	**parse_param(char *str)
 	return (ret);
 }
 
+void	update_env_vars(t_env *env, char *key, char *val)
+{
+	int		i;
+	t_env	*current;
+
+	current = get_env_var(env, key);
+	if (!current)
+		add_env_var(&env, key, val);
+	else if (val && ft_strncmp(current->value, val, ft_strlen(val)) != 0)
+		update_env_var(env, current->key, val);
+}
+
 int export(t_ast *ast, t_env *env)
 {
 	int		i;
@@ -46,16 +88,7 @@ int export(t_ast *ast, t_env *env)
 		i++;
 	if (i == 1)
 	{
-		env_p = env;
-		while (env_p)
-		{
-			ft_putstr_fd(env_p->key, STDOUT_FILENO);
-			ft_putstr_fd("=", STDOUT_FILENO);
-			if (env_p->value)
-				ft_putstr_fd(env_p->value, STDOUT_FILENO);
-			ft_putchar_fd('\n', STDOUT_FILENO);
-			env_p = env_p->next;
-		}
+		print_env_vars(env);
 		return (0);
 	}
 	else
@@ -65,9 +98,10 @@ int export(t_ast *ast, t_env *env)
 		{
 			key_val_env = parse_param(ast->str[i]);
 			if (!key_val_env)
-				printf("export: naming variable error \n");
-			else if(!add_env_var(&env, key_val_env[0], key_val_env[1]))
-				printf("export: error adding env var\n");
+				error__(ast->str[i]);
+			else
+				update_env_vars(env, key_val_env[0], key_val_env[1]);
+			free(key_val_env);
 		}
 	}
 	return (0);

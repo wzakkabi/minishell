@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/26 03:32:43 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/29 19:55:29 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	child = fork();
 	if (child == 0)
 	{
-		if (!ast->prev && ast->next && !ast->redirections) {
+		if (!ast->prev && ast->next && !ast->redirections)
+		{
 			dup2(pipe_fd[1], STDOUT_FILENO);
 		}
 		else if (ast->prev && ast->next)
@@ -74,7 +75,8 @@ int	execute_cmd(t_ast *ast, t_env *env)
 			dup2(save, STDIN_FILENO);
 			dup2(pipe_fd[1], STDOUT_FILENO);
 		}
-		else if (!ast->next) {
+		else if (!ast->next)
+		{
 			dup2(save, STDIN_FILENO);
 		}
 		

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/25 20:13:24 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/29 03:25:35 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -385,9 +385,9 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	check_expand(token, env);
 	remove_qost(token);
 	tool = split_to_ast(token);
-	 ft_printast(tool);
-	// while(tool->prev != NULL)
-		// tool = tool->prev;
+	//  ft_printast(tool);
+	while(tool->prev != NULL)
+		tool = tool->prev;
 	execute(tool, env);
 	// freeing ast && lexer linked lists before starting a new prompt
 	while (tool)
