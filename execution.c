@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/29 19:55:29 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/29 22:20:32 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void	builtin(t_ast *ast, t_env *env)
 		builtin_env(ast, env);
 	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
 		export(ast, env);
+	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
+		unset(ast, env);
 }
 
 void	execute(t_ast *ast, t_env *env)
@@ -129,7 +131,8 @@ void	execute(t_ast *ast, t_env *env)
 			|| ft_strncmp(ast_p->str[0], "pwd", 3) == 0
 			|| ft_strncmp(ast_p->str[0], "exit", 4) == 0
 			|| ft_strncmp(ast_p->str[0], "env", 3) == 0
-			|| ft_strncmp(ast->str[0], "export", 6) == 0)
+			|| ft_strncmp(ast->str[0], "export", 6) == 0
+			|| ft_strncmp(ast->str[0], "unset", 5) == 0)
 			ast_p->builtins = 1;
 		//______________________________________
 		

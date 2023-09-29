@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:52:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/26 03:31:19 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/09/29 22:19:00 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,7 @@ void	builtin_env(t_ast *ast, t_env *env);
 
 //export.c
 int		export(t_ast *ast, t_env *env);
+
+//unset.c
+int		unset(t_ast *ast, t_env *env);
 #endif
