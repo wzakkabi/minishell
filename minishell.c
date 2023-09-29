@@ -434,6 +434,8 @@ void	remove_qost(t_lexer *token)
 				token->word = new_word;
 			}
 		}
+		y = 0;
+		x = 0;
 		token = token->next;
 	}
 	
@@ -458,8 +460,8 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	check_expand(token, env);
 	remove_qost(token);
 	tool = split_to_ast(token);
-	//ft_printast(tool);
-	execute(tool, env);
+	ft_printast(tool);
+	//execute(tool, env);
 }
 
 void *make_env_node(char **env, t_env *node)
