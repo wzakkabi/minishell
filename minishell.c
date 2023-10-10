@@ -364,7 +364,7 @@ void	check_expand(t_lexer *token, t_env *env)
 
 	while(token->next)
 	{
-		if(token->token == GREAT || token->token == GREAT_GREAT || token->token == LESS || token->token == LESS_LESS)
+		if(token->token == LESS_LESS)
 		{
 			token = token->next;
 			token = token->next;
