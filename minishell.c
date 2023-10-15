@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/24 21:06:50 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/15 01:22:13 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,12 @@ t_env *envnode()
 	new = (t_env *)malloc(sizeof(t_env));
 	new->next = NULL;
 	new->prev = NULL;
+	
+	return new;
 }
+//echo "hello" 
+
+
 void	check_quote(char *str)
 {
 	int x = 0;
@@ -80,7 +85,7 @@ void	check_quote(char *str)
 	}
 }
 
-int token_or_not(char c, char c1)
+int		token_or_not(char c, char c1)
 {
 	if (c == '<' && c1 == '<')
 		return 0;
@@ -92,7 +97,7 @@ int token_or_not(char c, char c1)
 		return 3;
 	else if(c == '|')
 		return 4;
-	return 6;
+	return (6);
 }
 
 t_lexer *creat_node_token(char c, char c1, t_lexer *lx)
@@ -145,14 +150,19 @@ t_lexer	*ft_token(char *ret)
 			test = cnt;
 			while(ret[cnt] != qst && ret[cnt])
 				cnt++;
-			if(test != cnt)
+			cnt++;
+			if (ret[cnt] == 0)
 			{
-				cnt++;
-					lx = creat_node_word(lx, ret, y , cnt);
-				y = cnt;
+				lx = creat_node_word(lx, ret, y, cnt);
 			}
-			else
-				y =	++cnt;
+			// if(test != cnt)
+			// {
+			// 	cnt++;
+			// 		lx = creat_node_word(lx, ret, y , cnt);
+			// 	y = cnt;
+			// }
+			// else
+			// 	y =	++cnt;
 		}
 		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
 		{
@@ -181,6 +191,15 @@ t_lexer	*ft_token(char *ret)
 	return lx;
 }
 
+// t_lexer	*ft_token(char *ret)
+// {
+// 	t_lexer lx;
+// 	int cnt;
+// 	int lest_cnt;
+	
+// 	return lx;
+// }
+
 void ft_print(t_lexer *lx)
 {
 	while(lx->prev != NULL)
@@ -205,7 +224,7 @@ void ft_printast(t_ast *lx)
 	{
 		while(lx->str[x])
 		{
-			printf("ast == (%s)\n", lx->str[x]);
+			printf("ast word == (%s)\n", lx->str[x]);
 			x++;
 		}
 		while(lx->redirections && lx->redirections->prev)
@@ -290,10 +309,26 @@ int how_many(char *s, int c)
 	int x = 0;
 	int find = 0;
 
-	if(!s || s[0] == 39)
+	if(!s)
 		return 0;
 	while(s[x])
 	{
+		if(s[x] == 39)
+		{
+			x++;
+			while(s[x] && s[x] != 39)
+				x++;
+		}
+		if(s[x] == 34)
+		{
+			x++;
+			while(s[x] && s[x] != 34)
+			{
+				if(s[x] == c)
+					find++;
+				x++;
+			}
+		}
 		if(s[x] == c)
 			find++;
 		x++;
@@ -354,14 +389,84 @@ while(token->next != NULL)
 	}
 */
 
+// void	check_expand(t_lexer *token, t_env *env)
+// {
+// 	int x = 0, y = 0, i = 0, dollar = 0;
+// 	int c_p_dollar = 0, c_p_key = 0;
+// 	char *key;
+// 	char *new_word;
+// 	t_env *test;
+
+// 	while(token->next)
+// 	{
+// 		if(token->token == LESS_LESS)
+// 		{
+// 			token = token->next;
+// 			token = token->next;
+// 		}
+// 		else
+// 		{
+// 			dollar = how_many(token->word, '$');
+// 			while(dollar != 0)
+// 			{
+// 				while(token->word[x] != '$')
+// 					x++;
+// 				if(token->word[x + 1] == ' ' || token->word[x + 1] == '\t' || token->word[x + 1] == '\0' || token->word[x + 1] == 34)
+// 					x++;
+// 				else
+// 				{
+// 					c_p_dollar = ++x;
+// 					c_p_key = 0;
+// 					while(token->word[x + c_p_key] != ' ' && token->word[x + c_p_key] != '$' && token->word[x + c_p_key] != '\t' && token->word[x + c_p_key] && token->word[x + c_p_key] != 34)
+// 						c_p_key++;
+// 					key = ft_substr2(token->word, c_p_dollar, c_p_key + x);
+// 					test = get_env_var(env, key);
+// 					if(test)
+// 					{
+// 						new_word = malloc((ft_strlen(token->word) - c_p_key) + ft_strlen(test->value));
+// 						c_p_dollar = 0;
+// 						while(c_p_dollar < x - 1)
+// 							new_word[y++] = token->word[c_p_dollar++];					
+// 						while(test->value[i])
+// 							new_word[y++] = test->value[i++];
+// 						while(token->word[c_p_dollar + c_p_key])
+// 							new_word[y++] = token->word[c_p_dollar + ++c_p_key];
+// 						new_word[y] = 0;
+// 					}
+// 					else
+// 					{
+// 						new_word = malloc((ft_strlen(token->word) - c_p_key));
+// 						c_p_dollar = 0;
+// 						while(c_p_dollar < x - 1)
+// 							new_word[y++] = token->word[c_p_dollar++];
+// 						while(token->word[c_p_dollar + c_p_key])
+// 							new_word[y++] = token->word[c_p_dollar + ++c_p_key];
+// 						new_word[y] = 0;
+// 					}
+// 					free(token->word);
+// 					free(key);
+// 					token->word = new_word;
+// 					dollar--;
+// 					c_p_dollar = 0;
+// 					c_p_key = 0;
+// 					y = 0;
+// 					i = 0;
+// 				}
+// 				dollar = how_many(token->word + x, '$');
+// 			}
+// 			token = token->next;
+// 			dollar = 0;
+// 		}
+// 	}
+	
+// }
+
 void	check_expand(t_lexer *token, t_env *env)
 {
-	int x = 0, y = 0, i = 0, dollar = 0;
-	int c_p_dollar = 0, c_p_key = 0;
-	char *key;
-	char *new_word;
-	t_env *test;
-
+	t_ex ex;
+	t_env	*test;
+	
+	ex.x = ((ex.y = 0, ex.i = 0, ex.dollar = 0, ex.c_p_dollar = 0, ex.c_p_key = 0), 0);
 	while(token->next)
 	{
 		if(token->token == LESS_LESS)
@@ -371,78 +476,91 @@ void	check_expand(t_lexer *token, t_env *env)
 		}
 		else
 		{
-			dollar = how_many(token->word, '$');
-			while(dollar != 0)
+			ex.dollar = how_many(token->word, '$');
+			while(ex.dollar != 0)
 			{
-				while(token->word[x] != '$')
-					x++;
-				if(token->word[x + 1] == ' ' || token->word[x + 1] == '\t' || token->word[x + 1] == '\0' || token->word[x + 1] == 34)
-					x++;
+				while(token->word[ex.x] != '$')
+					ex.x++;
+				if(token->word[ex.x + 1] == ' ' || token->word[ex.x + 1] == '\t' || token->word[ex.x + 1] == '\0' || token->word[ex.x + 1] == 34)
+					ex.x++;
 				else
 				{
-					c_p_dollar = ++x;
-					c_p_key = 0;
-					while(token->word[x + c_p_key] != ' ' && token->word[x + c_p_key] != '$' && token->word[x + c_p_key] != '\t' && token->word[x + c_p_key] && token->word[x + c_p_key] != 34)
-						c_p_key++;
-					key = ft_substr2(token->word, c_p_dollar, c_p_key + x);
-					test = get_env_var(env, key);
+					ex.c_p_dollar = ++ex.x;
+					ex.c_p_key = 0;
+					while(token->word[ex.x + ex.c_p_key] != ' ' && token->word[ex.x + ex.c_p_key] != '$' && token->word[ex.x + ex.c_p_key] != '\t' && token->word[ex.x + ex.c_p_key] && token->word[ex.x + ex.c_p_key] != 34 && token->word[ex.x + ex.c_p_key] != 39)
+						ex.c_p_key++;
+					ex.key = ft_substr2(token->word, ex.c_p_dollar, ex.c_p_key + ex.x);
+					test = get_env_var(env, ex.key);
 					if(test)
 					{
-						new_word = malloc((ft_strlen(token->word) - c_p_key) + ft_strlen(test->value));
-						c_p_dollar = 0;
-						while(c_p_dollar < x - 1)
-							new_word[y++] = token->word[c_p_dollar++];					
-						while(test->value[i])
-							new_word[y++] = test->value[i++];
-						while(token->word[c_p_dollar + c_p_key])
-							new_word[y++] = token->word[c_p_dollar + ++c_p_key];
-						new_word[y] = 0;
+						ex.new_word = malloc((ft_strlen(token->word) - ex.c_p_key) + ft_strlen(test->value));
+						ex.c_p_dollar = 0;
+						while(ex.c_p_dollar < ex.x - 1)
+							ex.new_word[ex.y++] = token->word[ex.c_p_dollar++];					
+						while(test->value[ex.i])
+							ex.new_word[ex.y++] = test->value[ex.i++];
+						while(token->word[ex.c_p_dollar + ex.c_p_key])
+							ex.new_word[ex.y++] = token->word[ex.c_p_dollar + ++ex.c_p_key];
+						ex.new_word[ex.y] = 0;
 					}
 					else
 					{
-						new_word = malloc((ft_strlen(token->word) - c_p_key));
-						c_p_dollar = 0;
-						while(c_p_dollar < x - 1)
-							new_word[y++] = token->word[c_p_dollar++];
-						while(token->word[c_p_dollar + c_p_key])
-							new_word[y++] = token->word[c_p_dollar + ++c_p_key];
-						new_word[y] = 0;
+						ex.new_word = malloc((ft_strlen(token->word) - ex.c_p_key));
+						ex.c_p_dollar = 0;
+						while(ex.c_p_dollar < ex.x - 1)
+							ex.new_word[ex.y++] = token->word[ex.c_p_dollar++];
+						while(token->word[ex.c_p_dollar + ex.c_p_key])
+							ex.new_word[ex.y++] = token->word[ex.c_p_dollar + ++ex.c_p_key];
+						ex.new_word[ex.y] = 0;
 					}
 					free(token->word);
-					free(key);
-					token->word = new_word;
-					dollar--;
-					c_p_dollar = 0;
-					c_p_key = 0;
-					y = 0;
-					i = 0;
+					free(ex.key);
+					token->word = ex.new_word;
+					ex.dollar--;
+					ex.c_p_dollar = 0;
+					ex.c_p_key = 0;
+					ex.y = 0;
+					ex.i = 0;
 				}
-				dollar = how_many(token->word + x, '$');
+				ex.dollar = how_many(token->word + ex.x, '$');
 			}
 			token = token->next;
-			dollar = 0;
+			ex.dollar = 0;
 		}
 	}
-	
 }
 
 void	remove_qost(t_lexer *token)
 {
 	char *new_word;
 	int x = 0, y = 0;
+	int qst = 0;
 	while (token->next)
 	{
-		if(token->word)
+		while(token->word && token->word[x])
 		{
-			if(token->word[0] == 34 || token->word[0] == 39) 
+			if(token->word[x] == 34 || token->word[x] == 39)
 			{
+				qst = token->word[x];
 				new_word = malloc(ft_strlen(token->word) - 2);
-				while(token->word[++x] != token->word[0])
-					new_word[y++] = token->word[x];
+				while(y < x)
+				{
+					new_word[y] = token->word[y];
+					y++;
+				}
+				x++;
+				while(token->word[x] && token->word[x] != qst)
+					new_word[y++] = token->word[x++];
+				x++;
+				qst = 0;
+				while(token->word[x + qst])
+					new_word[y++] = token->word[x + qst++];
 				new_word[y] = 0;
+				y = 0;
 				free(token->word);
 				token->word = new_word;
 			}
+			x++;
 		}
 		y = 0;
 		x = 0;
@@ -450,6 +568,30 @@ void	remove_qost(t_lexer *token)
 	}
 	
 }
+// void	remove_qost(t_lexer *token)
+// {
+// 	char *new_word;
+// 	int x = 0, y = 0;
+// 	while (token->next)
+// 	{
+// 		if(token->word)
+// 		{
+// 			if(token->word[0] == 34 || token->word[0] == 39) 
+// 			{
+// 				new_word = malloc(ft_strlen(token->word) - 2);
+// 				while(token->word[++x] != token->word[0])
+// 					new_word[y++] = token->word[x];
+// 				new_word[y] = 0;
+// 				free(token->word);
+// 				token->word = new_word;
+// 			}
+// 		}
+// 		y = 0;
+// 		x = 0;
+// 		token = token->next;
+// 	}
+	
+// }
 //&& token->word
 
 void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
@@ -469,13 +611,13 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	check_syntax_error(token);
 	check_expand(token, env);
 	remove_qost(token);
-	//ft_print(token);
-	tool = split_to_ast(token);
+	ft_print(token);
+	//tool = split_to_ast(token);
 	//ft_printast(tool);
-	execute(tool, env);
+	//execute(tool, env);
 }
 
-void *make_env_node(char **env, t_env *node)
+void 	make_env_node(char **env, t_env *node)
 {
 	int cnt_x = 0;
 	int cnt_y = 0;

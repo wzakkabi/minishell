@@ -1,0 +1,14 @@
+Makefile
+builtins
+execution.c
+file2
+ft_substr2.c
+libft
+ls
+minishell
+minishell.c
+minishell.dSYM
+minishell.h
+redirections.c
+test
+test.c

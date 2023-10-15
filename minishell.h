@@ -19,6 +19,18 @@
 #include <readline/history.h>
 #include <sys/wait.h>
 
+typedef struct s_expand
+{
+	int		x;
+	int		y;
+	int		i;
+	int		dollar;
+	int		c_p_dollar;
+	int		c_p_key;
+	char	*key;
+	char	*new_word;
+}t_ex;
+
 typedef enum s_token
 {
 	GREAT, // >
