@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/09/24 21:06:50 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/16 19:07:25 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_env *envnode()
 	new = (t_env *)malloc(sizeof(t_env));
 	new->next = NULL;
 	new->prev = NULL;
+	return (new);
 }
 void	check_quest(char *str)
 {
@@ -297,10 +298,20 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	while(tool->prev != NULL)
 		tool = tool->prev;
 	execute(tool, env);
+	while (tool)
+	{
+		free(tool);
+		tool = tool->next;
+	}
+	while (token)
+	{
+		free(token);
+		token = token->next;
+	}
+	minishell_loop(tool, token, env);
 }
 
-
-void *make_env_node(char **env, t_env *node)
+void	make_env_node(char **env, t_env *node)
 {
 	int cnt_x = 0;
 	int cnt_y = 0;
