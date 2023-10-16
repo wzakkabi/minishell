@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/16 20:07:27 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/16 23:10:37 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,22 @@ char	**get_bin_paths(t_env *env)
 	return (ret);
 }
 
+void	builtin(t_ast *ast, t_env *env)
+{
+	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
+		cd(ast, env);
+	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
+		pwd(ast, env);
+	else if (ft_strncmp(ast->str[0], "exit", 4) == 0)
+		builtin_exit(ast, env);
+	else if (ft_strncmp(ast->str[0], "env", 3) == 0)
+		builtin_env(ast, env);
+	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
+		export(ast, env);
+	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
+		unset(ast, env);
+}
+
 void	check_redirections(t_lexer *lexer, int *fds)
 {
 	int		i;
@@ -52,6 +68,23 @@ void	check_redirections(t_lexer *lexer, int *fds)
 	}
 }
 
+void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
+{
+	check_redirections(ast->redirections, pipe_fd);
+	if (!ast->prev && ast->next && !ast->redirections)
+		dup2(pipe_fd[1], STDOUT_FILENO);
+	else if (ast->prev && ast->next)
+	{
+		dup2(*save, STDIN_FILENO);
+		dup2(pipe_fd[1], STDOUT_FILENO);
+	}
+	else if (!ast->next)
+		dup2(*save, STDIN_FILENO);
+	close(pipe_fd[0]);
+	close(pipe_fd[1]);
+	close(*save);
+}
+
 int	execute_cmd(t_ast *ast, t_env *env)
 {
 	int		child;
@@ -64,29 +97,21 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	child = fork();
 	if (child == 0)
 	{
-		check_redirections(ast->redirections, pipe_fd);
-		if (!ast->prev && ast->next && !ast->redirections)
+		build_redirections(ast, pipe_fd, &save);
+		if (ast->builtins == 1)
 		{
-			dup2(pipe_fd[1], STDOUT_FILENO);
+			builtin(ast, env);
+			exit(0);
 		}
-		else if (ast->prev && ast->next)
+		else
 		{
-			dup2(save, STDIN_FILENO);
-			dup2(pipe_fd[1], STDOUT_FILENO);
-		}
-		else if (!ast->next)
-		{
-			dup2(save, STDIN_FILENO);
-		}
-		close(pipe_fd[0]);
-		close(pipe_fd[1]);
-		close(save);
-		bin_paths = get_bin_paths(env);
-		i = -1;
-		while (bin_paths[++i])
-		{
-			tmp = ft_strjoin(bin_paths[i], ast->str[0]);
-			execve(tmp, ast->str, NULL);
+			bin_paths = get_bin_paths(env);
+			i = -1;
+			while (bin_paths[++i])
+			{
+				tmp = ft_strjoin(bin_paths[i], ast->str[0]);
+				execve(tmp, ast->str, NULL);
+			}
 		}
 	}
 	else
@@ -97,22 +122,6 @@ int	execute_cmd(t_ast *ast, t_env *env)
 		close(pipe_fd[1]);
 	}
 	return (child);
-}
-
-void	builtin(t_ast *ast, t_env *env)
-{
-	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
-		cd(ast, env);
-	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
-		pwd(ast, env);
-	else if (ft_strncmp(ast->str[0], "exit", 4) == 0)
-		builtin_exit(ast, env);
-	else if (ft_strncmp(ast->str[0], "env", 3) == 0)
-		builtin_env(ast, env);
-	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
-		export(ast, env);
-	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
-		unset(ast, env);
 }
 
 void	execute(t_ast *ast, t_env *env)
@@ -133,7 +142,8 @@ void	execute(t_ast *ast, t_env *env)
 			|| ft_strncmp(ast->str[0], "unset", 5) == 0)
 			ast_p->builtins = 1;
 		//______________________________________
-		if (ast->builtins == 1)
+		if (ast->builtins == 1
+			&& (!ast->next && !ast->prev&& !ast->redirections))
 			builtin(ast, env);
 		else
 			child = execute_cmd(ast_p, env);
@@ -141,7 +151,7 @@ void	execute(t_ast *ast, t_env *env)
 		// 	waitpid(child, &state ,0);
 		ast_p = ast_p->next;
 	}
-	waitpid(child, &state ,0);
+	waitpid(child, &state, 0);
 	// close (pipe_fd[1]);
 	// close (pipe_fd[0]);
 }
