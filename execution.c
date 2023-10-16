@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/29 22:20:32 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/16 20:07:27 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ char	**get_bin_paths(t_env *env)
 
 void	check_redirections(t_lexer *lexer, int *fds)
 {
-	int	i;
+	int		i;
 	t_lexer	*lexer_p;
-	
+
 	lexer_p = lexer;
 	while (lexer_p != NULL)
 	{
@@ -50,7 +50,6 @@ void	check_redirections(t_lexer *lexer, int *fds)
 			overwrite_append(lexer_p, fds);
 		lexer_p = lexer_p->next;
 	}
-	
 }
 
 int	execute_cmd(t_ast *ast, t_env *env)
@@ -62,10 +61,10 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	static int save;
 
 	pipe(pipe_fd);
-	check_redirections(ast->redirections, pipe_fd);
 	child = fork();
 	if (child == 0)
 	{
+		check_redirections(ast->redirections, pipe_fd);
 		if (!ast->prev && ast->next && !ast->redirections)
 		{
 			dup2(pipe_fd[1], STDOUT_FILENO);
@@ -79,7 +78,6 @@ int	execute_cmd(t_ast *ast, t_env *env)
 		{
 			dup2(save, STDIN_FILENO);
 		}
-		
 		close(pipe_fd[0]);
 		close(pipe_fd[1]);
 		close(save);
@@ -97,8 +95,8 @@ int	execute_cmd(t_ast *ast, t_env *env)
 			close(save);
 		save = pipe_fd[0];
 		close(pipe_fd[1]);
-		return child;
 	}
+	return (child);
 }
 
 void	builtin(t_ast *ast, t_env *env)
@@ -122,12 +120,12 @@ void	execute(t_ast *ast, t_env *env)
 	t_ast	*ast_p;
 	int		child;
 	int		state;
-	
+
 	ast_p = ast;
 	while (ast_p)
-	{	
+	{
 		//Temporary For Test ___________________
-		if ( ft_strncmp(ast_p->str[0], "cd", 2) == 0
+		if (ft_strncmp(ast_p->str[0], "cd", 2) == 0
 			|| ft_strncmp(ast_p->str[0], "pwd", 3) == 0
 			|| ft_strncmp(ast_p->str[0], "exit", 4) == 0
 			|| ft_strncmp(ast_p->str[0], "env", 3) == 0
@@ -135,7 +133,6 @@ void	execute(t_ast *ast, t_env *env)
 			|| ft_strncmp(ast->str[0], "unset", 5) == 0)
 			ast_p->builtins = 1;
 		//______________________________________
-		
 		if (ast->builtins == 1)
 			builtin(ast, env);
 		else

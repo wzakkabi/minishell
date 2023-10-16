@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/15 19:04:20 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/16 19:22:21 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,15 +204,15 @@ void ft_print(t_lexer *lx)
 {
 	while(lx->prev != NULL)
 		lx = lx->prev;
-	while(lx->next != NULL)
-	{
+	// while(lx->next != NULL)
+	// {
 		
-		if(lx->word != NULL )
-			printf("word = (%s) %d\n", lx->word, lx->num_node);
-		else
-			printf("token = (%d) %d\n", lx->token, lx->num_node);
-		lx = lx->next;
-	}
+	// 	if(lx->word != NULL )
+	// 		printf("word = (%s) %d\n", lx->word, lx->num_node);
+	// 	else
+	// 		printf("token = (%d) %d\n", lx->token, lx->num_node);
+	// 	lx = lx->next;
+	// }
 }
 
 void ft_printast(t_ast *lx)
@@ -611,10 +611,23 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	check_syntax_error(token);
 	check_expand(token, env);
 	remove_qost(token);
-	ft_print(token);
-	//tool = split_to_ast(token);
+	// ft_print(token);
+	tool = split_to_ast(token);
 	//ft_printast(tool);
-	//execute(tool, env);
+	while (tool->prev != NULL)
+		tool = tool->prev;
+	execute(tool, env);
+	while (tool)
+	{
+		free(tool);
+		tool = tool->next;
+	}
+	while (token)
+	{
+		free(token);
+		token = token->next;
+	}
+	minishell_loop(tool, token, env);
 }
 
 void 	make_env_node(char **env, t_env *node)

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/29 03:16:25 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/15 22:27:39 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	overwrite_append(t_lexer *lexer, int *pipe_fds)
 {
-	int 	fd;
-	int		count;
-	char	buff[BUFSIZ];
+	int	fd;
 
 	if (lexer == NULL)
 		return ;
