@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/16 23:10:37 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:09:21 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	execute(t_ast *ast, t_env *env)
 			ast_p->builtins = 1;
 		//______________________________________
 		if (ast->builtins == 1
-			&& (!ast->next && !ast->prev&& !ast->redirections))
+			&& (!ast->next && !ast->prev && !ast->redirections))
 			builtin(ast, env);
 		else
 			child = execute_cmd(ast_p, env);
