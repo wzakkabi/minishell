@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/16 19:22:21 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:54:11 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		token_or_not(char c, char c1)
 
 t_lexer *creat_node_token(char c, char c1, t_lexer *lx)
 {
-	t_token test;
+	t_token test = -1;
 	if (c == '<' && c1 == '<')
 		test =  LESS_LESS;
 	else if (c == '>' && c1 == '>')
@@ -135,7 +135,6 @@ t_lexer	*ft_token(char *ret)
 {
 	int cnt = 0;
 	t_lexer *lx;
-	char *p;
 	int y = 0;
 	int test;
 	int qst;
@@ -652,8 +651,8 @@ void 	make_env_node(char **env, t_env *node)
 
 int main(int c, char **av, char **grep_env)
 {
-	t_ast *tool;
-	t_lexer *token;
+	t_ast *tool = NULL;
+	t_lexer *token = NULL;
 	t_env *env;
 	
 	

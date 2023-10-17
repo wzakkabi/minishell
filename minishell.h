@@ -80,6 +80,7 @@ char	*ft_substr2(char const *s, unsigned int start, size_t len);
 void	execute(t_ast *ast, t_env *env);
 
 // redirections.c
-void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+// void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+void	overwrite_append(t_lexer *lexer);
 
 # endif

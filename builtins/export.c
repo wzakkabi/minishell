@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/29 21:54:09 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 01:13:10 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ char	**parse_param(char *str)
 
 void	update_env_vars(t_env *env, char *key, char *val)
 {
-	int		i;
 	t_env	*current;
 
 	current = get_env_var(env, key);
@@ -77,10 +76,9 @@ void	update_env_vars(t_env *env, char *key, char *val)
 		update_env_var(env, current->key, val);
 }
 
-int export(t_ast *ast, t_env *env)
+int	export(t_ast *ast, t_env *env)
 {
 	int		i;
-	t_env	*env_p;
 	char	**key_val_env;
 
 	i = 0;

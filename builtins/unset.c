@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/29 22:06:51 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/29 22:25:08 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:32:00 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static	int	parse_param(char *str)
 int	unset(t_ast *ast, t_env *env)
 {
 	int		i;
-	t_env	*env_p;
 
 	i = 0;
 	while (ast->str[i])

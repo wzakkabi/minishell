@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:51:22 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/25 20:20:05 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:49:47 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*parse_path(char	**cmd, t_env *env)
 {
 	int		i;
 	char	*tmp;
-	char	*ret;
+	char	*ret = NULL;
 
 	i = 0;
 	while (cmd[i])

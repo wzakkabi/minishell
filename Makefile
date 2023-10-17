@@ -12,6 +12,7 @@ all : re $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
 	gcc $(SRC) $(LIBFT) -lreadline -g -o $(NAME)
+	# gcc $(FLAGS) $(SRC) $(LIBFT) -lreadline -g -o $(NAME)
 
 $(LIBFT) :
 	make -C ./libft

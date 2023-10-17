@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 13:21:07 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/25 21:49:23 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:36:43 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	putstr_exit(char *str, int fd, int exit_state)
 	exit(exit_state);
 }
 
-void	builtin_exit(t_ast *ast, t_env *env)
+void	builtin_exit(t_ast *ast)
 {
 	int	i;
 
@@ -36,7 +36,7 @@ void	builtin_exit(t_ast *ast, t_env *env)
 		if (!ft_isdigit(ast->str[1][i])
 			&& (ast->str[1][i] != '-' && ast->str[1][i] != '+'))
 			break ;
-	if (i != ft_strlen(ast->str[1]))
+	if (i != (int) ft_strlen(ast->str[1]))
 		putstr_exit("exit\nminishell: exit: numeric argument required\n",
 			STDERR_FILENO, 2);
 	else

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:09:21 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 01:17:32 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,12 @@ char	**get_bin_paths(t_env *env)
 	char	*tmp;
 	t_env	*env_p;
 
+	if (!env)
+		return (NULL);
 	env_p = get_env_var(env, "PATH");
-	if (env_p != NULL)
-		ret = ft_split(env_p->value, ':');
+	if (!env_p)
+		return (NULL);
+	ret = ft_split(env_p->value, ':');
 	i = -1;
 	while (ret[++i])
 	{
@@ -42,20 +45,19 @@ void	builtin(t_ast *ast, t_env *env)
 	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
 		cd(ast, env);
 	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
-		pwd(ast, env);
+		pwd(ast);
 	else if (ft_strncmp(ast->str[0], "exit", 4) == 0)
-		builtin_exit(ast, env);
+		builtin_exit(ast);
 	else if (ft_strncmp(ast->str[0], "env", 3) == 0)
-		builtin_env(ast, env);
+		builtin_env(env);
 	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
 		export(ast, env);
 	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
 		unset(ast, env);
 }
 
-void	check_redirections(t_lexer *lexer, int *fds)
+void	check_redirections(t_lexer *lexer)
 {
-	int		i;
 	t_lexer	*lexer_p;
 
 	lexer_p = lexer;
@@ -63,14 +65,14 @@ void	check_redirections(t_lexer *lexer, int *fds)
 	{
 		if (lexer_p->token == GREAT
 			|| lexer_p->token == GREAT_GREAT)
-			overwrite_append(lexer_p, fds);
+			overwrite_append(lexer_p);
 		lexer_p = lexer_p->next;
 	}
 }
 
 void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 {
-	check_redirections(ast->redirections, pipe_fd);
+	check_redirections(ast->redirections);
 	if (!ast->prev && ast->next && !ast->redirections)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
@@ -144,7 +146,10 @@ void	execute(t_ast *ast, t_env *env)
 		//______________________________________
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
+		{
+			printf("	-> if (ast->builtins == 1 && (!ast->next && !ast->prev && !ast->redirections)) \n");
 			builtin(ast, env);
+		}
 		else
 			child = execute_cmd(ast_p, env);
 		// if (child != 0)

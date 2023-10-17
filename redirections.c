@@ -6,16 +6,17 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/15 22:27:39 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:45:34 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	overwrite_append(t_lexer *lexer, int *pipe_fds)
+void	overwrite_append(t_lexer *lexer)
 {
 	int	fd;
 
+	fd = -1;
 	if (lexer == NULL)
 		return ;
 	if ((lexer->token != GREAT && lexer->token != GREAT_GREAT)

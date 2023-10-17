@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:56:15 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/26 04:04:40 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 01:12:49 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ int	add_env_var(t_env **env, char *key, char *value)
 			env_p->value = NULL;
 		else
 			env_p->value = ft_strdup(value);
+		env_p->next = NULL;
 		return (1);
 	}
 	return (0);
