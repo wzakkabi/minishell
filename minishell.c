@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/16 05:40:52 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/17 01:51:17 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_ast	*newnode(void)
 
 	new = (t_ast *)malloc(sizeof(t_ast));
 	new->str = (char **)calloc(sizeof(char *), 10);
-	new->num_redirections = 0;
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -79,105 +78,6 @@ int	check_quote(char *str)
 	return (y);
 }
 
-int	token_or_not(char c, char c1)
-{
-	if (c == '<' && c1 == '<')
-		return (0);
-	else if (c == '>' && c1 == '>')
-		return (1);
-	else if (c == '<')
-		return (2);
-	else if (c == '>')
-		return (3);
-	else if (c == '|')
-		return (4);
-	return (6);
-}
-
-t_lexer	*creat_node_token(char c, char c1, t_lexer *lx)
-{
-	t_token	test;
-
-	if (c == '<' && c1 == '<')
-		test = LESS_LESS;
-	else if (c == '>' && c1 == '>')
-		test = GREAT_GREAT;
-	else if (c == '<')
-		test = LESS;
-	else if (c == '>')
-		test = GREAT;
-	else if (c == '|')
-		test = PIPE;
-	lx->token = test;
-	lx->word = NULL;
-	lx->next = lxnewnode();
-	lx->next->prev = lx;
-	return (lx->next);
-}
-
-t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y, int cnt)
-{
-	if (y == cnt)
-		return (lx);
-	lx->token = -1;
-	lx->word = ft_substr2(ret, y, cnt);
-	lx->next = lxnewnode();
-	lx->next->prev = lx;
-	return (lx->next);
-}
-
-t_lexer	*ft_token(char *ret)
-{
-	int cnt = 0;
-	t_lexer *lx;
-	char *p;
-	int y = 0;
-	int test;
-	int qst;
-	lx = lxnewnode();
-	while (ret[cnt])
-	{
-		test = token_or_not(ret[cnt], ret[cnt + 1]);
-		if(ret[cnt] == 34 || ret[cnt] == 39)
-		{
-			qst = ret[cnt];
-			cnt++;
-			test = cnt;
-			while(ret[cnt] != qst && ret[cnt])
-				cnt++;
-			cnt++;
-			if (ret[cnt] == 0)
-			{
-				lx = creat_node_word(lx, ret, y, cnt);
-			}
-		}
-		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
-		{
-			lx = creat_node_token(ret[cnt], ret[cnt + 1], lx);
-			if(test == 0 || test == 1)
-				cnt += 2;
-			else
-				cnt++;
-			y = cnt;
-		}
-		else if(ret[cnt] == ' ' || ret[cnt] == '\t')
-		{
-			lx = creat_node_word(lx, ret, y, cnt);
-			cnt++;
-			y = cnt;
-		}
-		else
-		{
-			cnt++;
-			if((ret[cnt] == 0 && ret[cnt - 1] != ' ') && (ret[cnt] == 0 && ret[cnt - 1] != '\t'))
-			{
-				lx = creat_node_word(lx, ret, y, cnt);
-			}
-		}
-	}
-	return lx;
-}
-
 void ft_print(t_lexer *lx)
 {
 	while(lx->prev != NULL)
@@ -212,6 +112,7 @@ void ft_printast(t_ast *lx)
 			printf("word = (%s) and token = (%d)\n", lx->redirections->word, lx->redirections->token);
 			lx->redirections = lx->redirections->next;
 		}
+		printf("%d\n", lx->builtins);
 		x = 0;
 		lx = lx->next;
 	}
@@ -219,9 +120,11 @@ void ft_printast(t_ast *lx)
 
 t_ast *split_to_ast(t_lexer *lx)
 {
+	t_ast *tool_head;
 	t_ast *tool;
 	int cnt = 0;
 	tool = newnode();
+	tool_head = tool;
 	tool->redirections = NULL;
 	while(lx->next != NULL)
 	{
@@ -235,7 +138,6 @@ t_ast *split_to_ast(t_lexer *lx)
 		}
 		else if(lx->token == GREAT || lx->token == GREAT_GREAT || lx->token == LESS || lx->token == LESS_LESS)
 		{
-			//printf("token == %d\n", lx->token);
 			if(tool->redirections == NULL)
 				tool->redirections = lxnewnode();
 			else
@@ -247,18 +149,15 @@ t_ast *split_to_ast(t_lexer *lx)
 			tool->redirections->token = lx->token;
 			lx = lx->next;
 			tool->redirections->word = lx->word;
-			tool->num_redirections +=  1;
-			//printf("toekn (%d) and word (%s)\n", tool->redirections->token, tool->redirections->word);
 		}
 		else if(lx->word != NULL)
 		{ 
 			tool->str[cnt] = lx->word;
-			//printf("str = %s\n",tool->str[cnt]);
 			cnt++;
 		}
 		lx = lx->next;
 	}
-	return tool;
+	return tool_head;
 }
 
 void	check_syntax_error(t_lexer *err)
@@ -384,34 +283,34 @@ void	check_expand(t_lexer *token, t_env *env)
 	}
 }
 
-t_lexer	*remove_emty_node(t_lexer *token)
-{
-	t_lexer	*test;
+// t_lexer	*remove_emty_node(t_lexer *token)
+// {
+// 	t_lexer	*test;
 
-	while (token->next)
-	{
-		if (token->token == -1 && ft_strlen(token->word) == 0)
-		{
-			test = token;
-			if (token->prev)
-			{
-				token->prev->next = token->next;
-				token->next->prev = token->prev;
-			}
-			else
-			{
-				token = token->next;
-				token->prev = NULL;
-			}
-			free(test->word);
-			free(test);
-		}
-		token = token->next;
-	}
-	while (token->prev)
-		token = token->prev;
-	return (token);
-}
+// 	while (token->next)
+// 	{
+// 		if (token->token == -1 && ft_strlen(token->word) == 0)
+// 		{
+// 			test = token;
+// 			if (token->prev)
+// 			{
+// 				token->prev->next = token->next;
+// 				token->next->prev = token->prev;
+// 			}
+// 			else
+// 			{
+// 				token = token->next;
+// 				token->prev = NULL;
+// 			}
+// 			free(test->word);
+// 			free(test);
+// 		}
+// 		token = token->next;
+// 	}
+// 	while (token->prev)
+// 		token = token->prev;
+// 	return (token);
+// }
 
 
 
@@ -444,6 +343,32 @@ void	remove_qost(t_lexer *token, int x, int y, int qst)
 	}
 }
 
+int	check_syntax_error_again(t_ast *tool)
+{
+	while (tool)
+	{
+		while (tool->redirections)
+		{
+			if (tool->redirections->token >= GREAT
+				&& tool->redirections->token <= LESS
+				&& ft_strlen(tool->redirections->word) == 0)
+				return (printf("minishell~>: no such file or directory\n"));
+			tool->redirections = tool->redirections->next;
+		}
+		if (ft_strncmp(tool->str[0], "cd", 2) == 0
+			|| ft_strncmp(tool->str[0], "pwd", 3) == 0
+			|| ft_strncmp(tool->str[0], "exit", 4) == 0
+			|| ft_strncmp(tool->str[0], "env", 3) == 0
+			|| ft_strncmp(tool->str[0], "export", 6) == 0
+			|| ft_strncmp(tool->str[0], "unset", 5) == 0
+			|| ft_strncmp(tool->str[0], "echo", 4) == 0)
+			tool->builtins = 1;
+		else
+			tool->builtins = 0;
+		tool = tool->next;
+	}
+	return (0);
+}
 
 
 void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
@@ -465,6 +390,8 @@ void    minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 	//ft_print(token);
 	//token = remove_emty_node(token);
 	tool = split_to_ast(token);
+	if(check_syntax_error_again(tool) != 0)
+		minishell_loop(tool, token, env);
 	ft_printast(tool);
 	//execute(tool, env);
 }

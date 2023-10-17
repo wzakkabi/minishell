@@ -33,10 +33,10 @@ typedef struct s_expand
 
 typedef enum s_token
 {
-	GREAT, // >
-	GREAT_GREAT, // >>
-	LESS, // <
-	LESS_LESS, // <<
+	GREAT,
+	GREAT_GREAT,
+	LESS,
+	LESS_LESS,
 	PIPE,
 } t_token;
 
@@ -44,7 +44,7 @@ typedef struct s_lexer
 {
 	char    	*word;
 	t_token       token;
-	int			num_node; // hadi bach n3erfo ach mn node bach hta ila bina n7ydoha ola n expandiwha tjina eazy
+	int			num_node;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
@@ -54,16 +54,13 @@ typedef struct s_ast
 {
 	char                    **str;
 	int						builtins; // 0 false o 1 true >> hadi ila kant t_ast fiha cmd li galo lina dero
-	int                     num_redirections;
 	t_lexer                 *redirections;/*hna ghadi ndir lik ga3 node li fihom redirection b tertib bhal >> > << <
 	ghadi ikom token = "redirection" and word fiha ya ima delemter or smit file */
 	struct s_ast			*next;
 	struct s_ast			*prev;
 } t_ast;
 
-/* sat ana ghadi ncreate function li kat7wl mn  2d arry l node ela 9bl env o 
-mn b3d ghadi nchofo chi struct general jam3a parsing m3a env lmohem 
-mjmo3 fiha kolchi ga3 li ghadi n7tajo bach execute cmd */ 
+
 typedef struct s_env 
 {
 	char *key;
@@ -72,8 +69,12 @@ typedef struct s_env
 	struct s_env *prev;
 } t_env;
 
-//sat ila kaina chi haja khassha tzzad golha liya ola zidha
+t_ast	*newnode(void);
+t_lexer	*lxnewnode(void);
+
+
 void ft_print(t_lexer *lx);
+t_lexer	*ft_token(char *ret);
 char	*ft_substr2(char const *s, unsigned int start, size_t len);
 
 // execution.c

@@ -223,3 +223,136 @@ while(token->next != NULL)
 // 		token = token->next;
 // 	}
 // }
+
+
+
+// t_lexer	*ft_token(char *ret)
+// {
+// 	t_vr_ft_token	t;
+
+// 	t.cnt = ((t.y = 0), (t.lx = lxnewnode()), 0);
+// 	while (ret[t.cnt])
+// 	{
+// 		t.no = token_or_not(ret[t.cnt], ret[t.cnt + 1]);
+// 		if (ret[t.cnt] == 34 || ret[t.cnt] == 39)
+// 		{
+// 			t.no = ((t.qst = ret[t.cnt]), (t.cnt++), t.cnt);
+// 			while (ret[t.cnt] != t.qst && ret[t.cnt])
+// 				t.cnt++;
+// 			if (ret[++t.cnt] == 0)
+// 				t.lx = creat_node_word(t.lx, ret, t.y, t.cnt);
+// 		}
+// 		else if (t.no == 0 || t.no == 1 || t.no == 2 || t.no == 3 || t.no == 4)
+// 		{
+// 			t.lx = creat_node_token(ret[t.cnt], ret[t.cnt + 1], t.lx);
+// 			if (t.no == 0 || t.no == 1)
+// 				t.cnt += 2;
+// 			else
+// 				t.cnt++;
+// 			t.y = t.cnt;
+// 		}
+// 		else if (ret[t.cnt] == ' ' || ret[t.cnt] == '\t')
+// 			t.y = ((t.lx = creat_node_word(t.lx, ret, t.y, t.cnt)), t.cnt++, t.cnt);
+// 		else
+// 		{
+// 			t.cnt++;
+// 			if ((ret[t.cnt] == 0 && ret[t.cnt - 1] != ' ')
+// 				&& (ret[t.cnt] == 0 && ret[t.cnt - 1] != '\t'))
+// 				t.lx = creat_node_word(t.lx, ret, t.y, t.cnt);
+// 		}
+// 	}
+// 	return (t.lx);
+// }
+
+// t_lexer	*ft_token(char *ret)
+// {
+// 	int cnt = 0;
+// 	t_lexer *lx;
+// 	char *p;
+// 	int y = 0;
+// 	int test;
+// 	int qst;
+// 	lx = lxnewnode();
+// 	while (ret[cnt])
+// 	{
+// 		test = token_or_not(ret[cnt], ret[cnt + 1]);
+// 		if(ret[cnt] == 34 || ret[cnt] == 39)
+// 		{
+// 			test = ((qst = ret[cnt]),(cnt++), cnt);
+// 			while(ret[cnt] != qst && ret[cnt])
+// 				cnt++;
+// 			if (ret[++cnt] == 0)
+// 				lx = creat_node_word(lx, ret, y, cnt);
+// 		}
+// 		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
+// 		{
+// 			lx = creat_node_token(ret[cnt], ret[cnt + 1], lx);
+// 			if(test == 0 || test == 1)
+// 				cnt += 2;
+// 			else
+// 				cnt++;
+// 			y = cnt;
+// 		}
+// 		else if(ret[cnt] == ' ' || ret[cnt] == '\t')
+// 			y = ((lx = creat_node_word(lx, ret, y, cnt)),cnt++, cnt);
+// 		else
+// 		{
+// 			cnt++;
+// 			if((ret[cnt] == 0 && ret[cnt - 1] != ' ') && (ret[cnt] == 0 && ret[cnt - 1] != '\t'))
+// 				lx = creat_node_word(lx, ret, y, cnt);
+// 		}
+// 	}
+// 	return lx;
+// }
+
+// t_lexer	*ft_token(char *ret) // dorijin XD
+// {
+// 	int cnt = 0;
+// 	t_lexer *lx;
+// 	char *p;
+// 	int y = 0;
+// 	int test;
+// 	int qst;
+// 	lx = lxnewnode();
+// 	while (ret[cnt])
+// 	{
+// 		test = token_or_not(ret[cnt], ret[cnt + 1]);
+// 		if(ret[cnt] == 34 || ret[cnt] == 39)
+// 		{
+// 			qst = ret[cnt];
+// 			cnt++;
+// 			test = cnt;
+// 			while(ret[cnt] != qst && ret[cnt])
+// 				cnt++;
+// 			cnt++;
+// 			if (ret[cnt] == 0)
+// 			{
+// 				lx = creat_node_word(lx, ret, y, cnt);
+// 			}
+// 		}
+// 		else if(test == 0 || test == 1 || test == 2 || test == 3 || test == 4)
+// 		{
+// 			lx = creat_node_token(ret[cnt], ret[cnt + 1], lx);
+// 			if(test == 0 || test == 1)
+// 				cnt += 2;
+// 			else
+// 				cnt++;
+// 			y = cnt;
+// 		}
+// 		else if(ret[cnt] == ' ' || ret[cnt] == '\t')
+// 		{
+// 			lx = creat_node_word(lx, ret, y, cnt);
+// 			cnt++;
+// 			y = cnt;
+// 		}
+// 		else
+// 		{
+// 			cnt++;
+// 			if((ret[cnt] == 0 && ret[cnt - 1] != ' ') && (ret[cnt] == 0 && ret[cnt - 1] != '\t'))
+// 			{
+// 				lx = creat_node_word(lx, ret, y, cnt);
+// 			}
+// 		}
+// 	}
+// 	return lx;
+// }
