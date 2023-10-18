@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 01:17:32 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 03:50:49 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,35 +128,28 @@ int	execute_cmd(t_ast *ast, t_env *env)
 
 void	execute(t_ast *ast, t_env *env)
 {
-	t_ast	*ast_p;
 	int		child;
 	int		state;
 
-	ast_p = ast;
-	while (ast_p)
+	while (ast)
 	{
 		//Temporary For Test ___________________
-		if (ft_strncmp(ast_p->str[0], "cd", 2) == 0
-			|| ft_strncmp(ast_p->str[0], "pwd", 3) == 0
-			|| ft_strncmp(ast_p->str[0], "exit", 4) == 0
-			|| ft_strncmp(ast_p->str[0], "env", 3) == 0
+		if (ft_strncmp(ast->str[0], "cd", 2) == 0
+			|| ft_strncmp(ast->str[0], "pwd", 3) == 0
+			|| ft_strncmp(ast->str[0], "exit", 4) == 0
+			|| ft_strncmp(ast->str[0], "env", 3) == 0
 			|| ft_strncmp(ast->str[0], "export", 6) == 0
 			|| ft_strncmp(ast->str[0], "unset", 5) == 0)
-			ast_p->builtins = 1;
+			ast->builtins = 1;
 		//______________________________________
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
 		{
-			printf("	-> if (ast->builtins == 1 && (!ast->next && !ast->prev && !ast->redirections)) \n");
 			builtin(ast, env);
 		}
 		else
-			child = execute_cmd(ast_p, env);
-		// if (child != 0)
-		// 	waitpid(child, &state ,0);
-		ast_p = ast_p->next;
+			child = execute_cmd(ast, env);
+		ast = ast->next;
 	}
 	waitpid(child, &state, 0);
-	// close (pipe_fd[1]);
-	// close (pipe_fd[0]);
 }
