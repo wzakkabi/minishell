@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/18 04:44:02 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/18 06:38:04 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 	tool = ((cnt = 0), newnode());
 	tool_head = tool;
 	tool->redirections = NULL;
+	tool->token = lx;
 	while (lx->next != NULL)
 	{
 		if (lx->token == PIPE)

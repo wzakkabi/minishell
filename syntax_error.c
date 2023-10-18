@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/17 23:31:04 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/18 06:04:25 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	check_syntax_error_again(t_ast *tool)
 			if (tool->redirections->token >= GREAT
 				&& tool->redirections->token <= LESS
 				&& ft_strlen(tool->redirections->word) == 0)
-				return (printf("minishell~>: no such file or directory\n"));
+					return (printf("minishell~>: no such file or directory\n"));
 			tool->redirections = tool->redirections->next;
 		}
 		tool->redirections = new;

@@ -44,6 +44,7 @@ typedef struct s_ast
 	int						builtins; // 0 false o 1 true >> hadi ila kant t_ast fiha cmd li galo lina dero
 	t_lexer                 *redirections;/*hna ghadi ndir lik ga3 node li fihom redirection b tertib bhal >> > << <
 	ghadi ikom token = "redirection" and word fiha ya ima delemter or smit file */
+	t_lexer					*token;
 	struct s_ast			*next;
 	struct s_ast			*prev;
 } t_ast;
