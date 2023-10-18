@@ -58,6 +58,8 @@ typedef struct s_env
 	struct s_env *prev;
 } t_env;
 
+// new readline
+void rl_replace_line(const char *text, int clear_undo);
 
 //create_node
 t_ast	*newnode(void);

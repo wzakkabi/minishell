@@ -9,10 +9,12 @@ syntax_error.c expand.c split_to_ast_node.c creat_node.c
 
 OBJ = $(SRC.c=.o)
 
+READLINE = $(shell brew --prefix readline)
+
 all : re $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	gcc $(SRC) $(LIBFT) -lreadline -g -o $(NAME)
+	gcc $(SRC) $(LIBFT) -lreadline -L $(READLINE)/lib -g -o $(NAME)
 
 $(LIBFT) :
 	make -C ./libft
