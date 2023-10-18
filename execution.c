@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/18 04:14:19 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 05:40:34 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	builtin(int child, t_ast *ast, t_env *env)
 		export(ast, env);
 	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
 		unset(ast, env);
+	else if (ft_strncmp(ast->str[0], "echo", 4) == 0)
+		echo(ast, env);
 	if (child == 0)
 		exit(0);
 }
@@ -144,7 +146,8 @@ void	execute(t_ast *ast, t_env *env)
 			|| ft_strncmp(ast->str[0], "exit", 4) == 0
 			|| ft_strncmp(ast->str[0], "env", 3) == 0
 			|| ft_strncmp(ast->str[0], "export", 6) == 0
-			|| ft_strncmp(ast->str[0], "unset", 5) == 0)
+			|| ft_strncmp(ast->str[0], "unset", 5) == 0
+			|| ft_strncmp(ast->str[0], "echo", 4) == 0)
 			ast->builtins = 1;
 		//______________________________________
 		if (ast->builtins == 1

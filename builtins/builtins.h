@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:52:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:47:23 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 05:37:32 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,7 @@ int		export(t_ast *ast, t_env *env);
 
 //unset.c
 int		unset(t_ast *ast, t_env *env);
+
+//echo.c
+void	echo(t_ast *ast, t_env *env);
 #endif

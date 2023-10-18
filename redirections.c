@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:45:34 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 04:54:29 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,26 @@ void	overwrite_append(t_lexer *lexer)
 	if (fd <= 2)
 		return ;
 	dup2(fd, STDOUT_FILENO);
+	close(fd);
+}
+
+void	stdin_redirection(t_lexer *lexer)
+{
+	int	fd;
+
+	fd = -1;
+	if (lexer == NULL)
+		return ;
+	if ((lexer->token != LESS)
+		|| lexer->word == NULL)
+		return ;
+	// Needs to add permission check before trying to open the file
+	// Or handle it from open() ret values
+	if (lexer->token == LESS)
+		fd = open(lexer->word, O_RDONLY);
+	// Bad file descriptor errors needs to be handled
+	if (fd <= 2)
+		return ;
+	dup2(fd, STDIN_FILENO);
 	close(fd);
 }
