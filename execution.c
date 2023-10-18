@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/18 03:50:49 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 04:14:19 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**get_bin_paths(t_env *env)
 	return (ret);
 }
 
-void	builtin(t_ast *ast, t_env *env)
+void	builtin(int child, t_ast *ast, t_env *env)
 {
 	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
 		cd(ast, env);
@@ -54,6 +54,8 @@ void	builtin(t_ast *ast, t_env *env)
 		export(ast, env);
 	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
 		unset(ast, env);
+	if (child == 0)
+		exit(0);
 }
 
 void	check_redirections(t_lexer *lexer)
@@ -87,12 +89,25 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	close(*save);
 }
 
+void	get_bin_and_exec(t_ast *ast, t_env *env)
+{
+	char	**bin_paths;
+	char	*tmp;
+	int		i;
+
+	bin_paths = get_bin_paths(env);
+	i = -1;
+	while (bin_paths[++i])
+	{
+		tmp = ft_strjoin(bin_paths[i], ast->str[0]);
+		execve(tmp, ast->str, NULL);
+	}
+}
+
 int	execute_cmd(t_ast *ast, t_env *env)
 {
 	int		child;
-	int		i, pipe_fd[2];
-	char	**bin_paths;
-	char	*tmp;
+	int		pipe_fd[2];
 	static int save;
 
 	pipe(pipe_fd);
@@ -101,20 +116,9 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	{
 		build_redirections(ast, pipe_fd, &save);
 		if (ast->builtins == 1)
-		{
-			builtin(ast, env);
-			exit(0);
-		}
+			builtin(child, ast, env);
 		else
-		{
-			bin_paths = get_bin_paths(env);
-			i = -1;
-			while (bin_paths[++i])
-			{
-				tmp = ft_strjoin(bin_paths[i], ast->str[0]);
-				execve(tmp, ast->str, NULL);
-			}
-		}
+			get_bin_and_exec(ast, env);
 	}
 	else
 	{
@@ -131,6 +135,7 @@ void	execute(t_ast *ast, t_env *env)
 	int		child;
 	int		state;
 
+	child = -1;
 	while (ast)
 	{
 		//Temporary For Test ___________________
@@ -145,7 +150,7 @@ void	execute(t_ast *ast, t_env *env)
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
 		{
-			builtin(ast, env);
+			builtin(child, ast, env);
 		}
 		else
 			child = execute_cmd(ast, env);
