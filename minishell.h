@@ -19,18 +19,6 @@
 #include <readline/history.h>
 #include <sys/wait.h>
 
-typedef struct s_expand
-{
-	int		x;
-	int		y;
-	int		i;
-	int		dollar;
-	int		c_p_dollar;
-	int		c_p_key;
-	char	*key;
-	char	*new_word;
-}t_ex;
-
 typedef enum s_token
 {
 	GREAT,
@@ -69,11 +57,24 @@ typedef struct s_env
 	struct s_env *prev;
 } t_env;
 
+
+//create_node
 t_ast	*newnode(void);
 t_lexer	*lxnewnode(void);
 
+//error
+int		check_quote(char *str);
+void	check_syntax_error(t_lexer *err);
+int		check_syntax_error_again(t_ast *tool);
 
-void ft_print(t_lexer *lx);
+//expand
+void    check_expand(t_lexer *token, t_env *env);
+
+//split_to_ast
+t_ast	*split_to_ast(t_lexer *lx);
+void	remove_qost(t_lexer *token, int x, int y, int qst);
+
+void	ft_print(t_lexer *lx);
 t_lexer	*ft_token(char *ret);
 char	*ft_substr2(char const *s, unsigned int start, size_t len);
 

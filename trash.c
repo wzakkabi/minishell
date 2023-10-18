@@ -356,3 +356,123 @@ while(token->next != NULL)
 // 	}
 // 	return lx;
 // }
+
+// t_lexer	*remove_emty_node(t_lexer *token)
+// {
+// 	t_lexer	*test;
+
+// 	while (token->next)
+// 	{
+// 		if (token->token == -1 && ft_strlen(token->word) == 0)
+// 		{
+// 			test = token;
+// 			if (token->prev)
+// 			{
+// 				token->prev->next = token->next;
+// 				token->next->prev = token->prev;
+// 			}
+// 			else
+// 			{
+// 				token = token->next;
+// 				token->prev = NULL;
+// 			}
+// 			free(test->word);
+// 			free(test);
+// 		}
+// 		token = token->next;
+// 	}
+// 	while (token->prev)
+// 		token = token->prev;
+// 	return (token);
+// }
+
+// typedef struct s_expand
+// {
+// 	int		x;
+// 	int		y;
+// 	int		i;
+// 	int		dollar;
+// 	int		c_p_dollar;
+// 	int		c_p_key;
+// 	char	*key;
+// 	char	*new_word;
+// }t_ex;
+
+// void	check_expand(t_lexer *token, t_env *env)
+// {
+// 	t_ex	ex;
+// 	t_env	*test;
+
+// 	ex.x = ((ex.y = 0, ex.i = 0, ex.dollar = 0, ex.c_p_key = 0), 0);
+// 	ex.c_p_dollar = 0;
+// 	while (token->next)
+// 	{
+// 		if (token->token == LESS_LESS)
+// 		{
+// 			token = token->next;
+// 			token = token->next;
+// 		}
+// 		else
+// 		{
+// 			ex.dollar = how_many(token->word, '$');
+// 			while (ex.dollar != 0)
+// 			{
+// 				while (token->word[ex.x] != '$')
+// 					ex.x++;
+// 				if (token->word[ex.x + 1] == ' '
+// 					|| token->word[ex.x + 1] == '\t'
+// 					|| token->word[ex.x + 1] == '\0'
+// 					|| token->word[ex.x + 1] == 34)
+// 					ex.x++;
+// 				else
+// 				{
+// 					ex.c_p_dollar = ++ex.x;
+// 					ex.c_p_key = 0;
+// 					while (token->word[ex.x + ex.c_p_key] != ' '
+// 						&& token->word[ex.x + ex.c_p_key] != '$'
+// 						&& token->word[ex.x + ex.c_p_key] != '\t'
+// 						&& token->word[ex.x + ex.c_p_key]
+// 						&& token->word[ex.x + ex.c_p_key] != 34
+// 						&& token->word[ex.x + ex.c_p_key] != 39)
+// 						ex.c_p_key++;
+// 					ex.key = ft_substr2(token->word,
+// 							ex.c_p_dollar, ex.c_p_key + ex.x);
+// 					test = get_env_var(env, ex.key);
+// 					if (test)
+// 					{
+// 						ex.new_word = malloc((ft_strlen(token->word) - ex.c_p_key) + ft_strlen(test->value));
+// 						ex.c_p_dollar = 0;
+// 						while (ex.c_p_dollar < ex.x - 1)
+// 							ex.new_word[ex.y++] = token->word[ex.c_p_dollar++];					
+// 						while (test->value[ex.i])
+// 							ex.new_word[ex.y++] = test->value[ex.i++];
+// 						while (token->word[ex.c_p_dollar + ex.c_p_key])
+// 							ex.new_word[ex.y++] = token->word[ex.c_p_dollar + ++ex.c_p_key];
+// 						ex.new_word[ex.y] = 0;
+// 					}
+// 					else
+// 					{
+// 						ex.new_word = malloc((ft_strlen(token->word) - ex.c_p_key));
+// 						ex.c_p_dollar = 0;
+// 						while (ex.c_p_dollar < ex.x - 1)
+// 							ex.new_word[ex.y++] = token->word[ex.c_p_dollar++];
+// 						while (token->word[ex.c_p_dollar + ex.c_p_key])
+// 							ex.new_word[ex.y++] = token->word[ex.c_p_dollar + ++ex.c_p_key];
+// 						ex.new_word[ex.y] = 0;
+// 					}
+// 					free(token->word);
+// 					free(ex.key);
+// 					token->word = ex.new_word;
+// 					ex.dollar--;
+// 					ex.c_p_dollar = 0;
+// 					ex.c_p_key = 0;
+// 					ex.y = 0;
+// 					ex.i = 0;
+// 				}
+// 				ex.dollar = how_many(token->word + ex.x, '$');
+// 			}
+// 			token = token->next;
+// 			ex.dollar = 0;
+// 		}
+// 	}
+// }
