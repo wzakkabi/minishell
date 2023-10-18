@@ -476,3 +476,50 @@ while(token->next != NULL)
 // 		}
 // 	}
 // }
+
+// void	ft_print(t_lexer *lx)
+// {
+// 	while(lx->prev != NULL)
+// 		lx = lx->prev;
+// 	while(lx->next != NULL)
+// 	{	
+// 		if(lx->word != NULL )
+// 			printf("word = (%s) %d\n", lx->word, lx->num_node);
+// 		else
+// 			printf("token = (%d) %d\n", lx->token, lx->num_node);
+// 		lx = lx->next;
+// 	}
+// }
+// void ft_printast(t_ast *lx)
+// {
+// 	int x = 0;
+// 	while(lx->prev != NULL)
+// 		lx = lx->prev;
+// 	while(lx != NULL)
+// 	{
+// 		while(lx->str[x])
+// 		{
+// 			printf("ast word == (%s)\n", lx->str[x]);
+// 			x++;
+// 		}
+// 		while(lx->redirections && lx->redirections->prev)
+// 			lx->redirections = lx->redirections->prev;
+// 		while(lx->redirections)
+// 		{
+// 			printf("word = (%s) and token = (%d)\n", lx->redirections->word, lx->redirections->token);
+// 			lx->redirections = lx->redirections->next;
+// 		}
+// 		printf("%d\n", lx->builtins);
+// 		x = 0;
+// 		lx = lx->next;
+// 	}
+// }
+
+
+// while(env->next)
+	// {
+	// 	printf("node->key == (%s)", env->key);
+	// 	printf("node->value == (%s)\n", env->value);
+	// 	env = env->next;
+	// }
+	//exit(0);

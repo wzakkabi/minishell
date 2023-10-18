@@ -61,6 +61,7 @@ typedef struct s_env
 //create_node
 t_ast	*newnode(void);
 t_lexer	*lxnewnode(void);
+t_env	*envnode(void);
 
 //error
 int		check_quote(char *str);
