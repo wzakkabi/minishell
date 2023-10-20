@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/18 08:58:32 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/20 10:34:16 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,31 +93,30 @@ void	minishell_loop(t_ast *tool, t_lexer *token, t_env *env)
 {
 	char	*input;
 
-	input = readline("minishell~>");
-	if (input == NULL || input[0] == 0 || check_quote(input) == 1)
+	while(1)
 	{
+		input = readline("minishell~>");
+		if (input != NULL && input[0] != 0 && check_quote(input) != 1)
+		{
+			add_history(input);
+			token = ft_token(input);
+			while (token->prev != NULL)
+				token = token->prev;
+			check_syntax_error(token);
+			check_expand(token, env);
+			remove_qost(token, 0, 0, 0);
+			tool = split_to_ast(token);
+			if (check_syntax_error_again(tool) != 0)
+				ft_free_ast(tool);
+			else
+			{
+				execute(tool, env);
+				ft_free_ast(tool);
+			}
+		}
 		free(input);
-		minishell_loop(tool, token, env);
 	}
-	add_history(input);
-	token = ft_token(input);
-	while (token->prev != NULL)
-		token = token->prev;
-	check_syntax_error(token);
-	check_expand(token, env);
-	remove_qost(token, 0, 0, 0);
-	tool = split_to_ast(token);
-	if (check_syntax_error_again(tool) != 0)
-	{
-		free(input);
-		ft_free_ast(tool);
-		minishell_loop(tool, token, env);
-	}
-	free(input);
-	//ft_printast(tool);
-	execute(tool, env);
-	ft_free_ast(tool);
-	minishell_loop(tool, token, env);
+	
 }
 
 void	make_env_node(char **env, t_env *node)
@@ -143,13 +142,17 @@ void	make_env_node(char **env, t_env *node)
 
 void	test(int a)
 {
-	if(a == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void ft_signal(void)
+{
+	signal(SIGINT, &test);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	main(int c, char **av, char **grep_env)
@@ -163,7 +166,7 @@ int	main(int c, char **av, char **grep_env)
 		printf("this program dont take paramiter");
 		exit(0);
 	}
-	signal(SIGINT, &test);
+	ft_signal();
 	env = envnode();
 	make_env_node(grep_env, env);
 	minishell_loop(tool, token, env);
