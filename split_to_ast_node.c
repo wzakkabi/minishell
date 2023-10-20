@@ -6,13 +6,13 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/18 06:38:04 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/20 18:26:55 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
+t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 {
 	if (lx->token == GREAT || lx->token == GREAT_GREAT
 		|| lx->token == LESS || lx->token == LESS_LESS)
@@ -34,6 +34,7 @@ void	ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		tool->str[*cnt] = lx->word;
 		*cnt += 1;
 	}
+	return lx->next;
 }
 
 t_ast	*split_to_ast(t_lexer *lx)
@@ -56,8 +57,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 			cnt = 0;
 			tool->redirections = NULL;
 		}
-		ast_helper(lx, tool, &cnt);
-		lx = lx->next;
+		lx = ast_helper(lx, tool, &cnt);
 	}
 	return (tool_head);
 }

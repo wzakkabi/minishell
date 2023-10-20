@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 04:49:17 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/18 04:50:14 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/20 19:14:04 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_ast	*newnode(void)
 	t_ast	*new;
 
 	new = (t_ast *)malloc(sizeof(t_ast));
-	new->str = (char **)calloc(sizeof(char *), 500);
+	new->str = (char **)ft_calloc(sizeof(char *), 500);
 	new->next = NULL;
 	new->prev = NULL;
 	return (new);
@@ -26,9 +26,8 @@ t_ast	*newnode(void)
 t_lexer	*lxnewnode(void)
 {
 	t_lexer		*new;
-	static int	i;
+	static int	i = 0;
 
-	i = 0;
 	new = (t_lexer *)malloc(sizeof(t_lexer));
 	new->num_node = i;
 	new->next = NULL;

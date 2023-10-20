@@ -54,9 +54,15 @@ typedef struct s_env
 {
 	char *key;
 	char *value;
+	int print_or_not; //0 or 1 ztha  bach n3erfha wach n9dero nprantiwha ola la
 	struct s_env *next;
 	struct s_env *prev;
 } t_env;
+
+
+// exit
+void ft_exit(t_env *env, int return_status);
+
 
 // new readline
 void rl_replace_line(const char *text, int clear_undo);
@@ -67,8 +73,8 @@ t_lexer	*lxnewnode(void);
 t_env	*envnode(void);
 
 //error
-int		check_quote(char *str);
-void	check_syntax_error(t_lexer *err);
+int		check_quote(char *str, t_env *env);
+int	check_syntax_error(t_env *env, t_lexer *err);
 int		check_syntax_error_again(t_ast *tool);
 
 //expand
@@ -87,5 +93,10 @@ void	execute(t_ast *ast, t_env *env);
 
 // redirections.c
 void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+
+//free
+void	ft_free_token(t_lexer *lx);
+void	ft_free_ast(t_ast *tool);
+
 
 # endif

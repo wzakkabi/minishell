@@ -6,19 +6,19 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/18 06:04:25 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/20 20:34:49 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quote(char *str)
+int	check_quote(char *str, t_env *env)
 {
 	int	x;
 	int	y;
 
-	x = ((y = 0), 0);
-	while (str[x])
+	x = ((y = 0), -1);
+	while (str[++x])
 	{
 		if (str[x] == 34)
 		{
@@ -26,22 +26,22 @@ int	check_quote(char *str)
 			while (str[x] != 34 && str[x])
 				x++;
 			if (str[x] == 0)
-				ft_putstr_fd("error double quote\n", ++y);
+				ft_putstr_fd("minishell~>: error double quote\n", ++y);
 		}
-		else if (str[x] == 39)
+		else if (str[x] == 39 && x++)
 		{
-			x++;
 			while (str[x] != 39 && str[x])
 				x++;
 			if (str[x] == 0)
-				ft_putstr_fd("error single quote\n", ++y);
+				ft_putstr_fd("minishell~>: error single quote\n", ++y);
 		}
-		x++;
 	}
+	if (y == 1)
+		ft_exit(env, 2);
 	return (y);
 }
 
-void	check_syntax_error(t_lexer *err)
+int	check_syntax_error(t_env *env, t_lexer *err)
 {
 	int	i;
 
@@ -54,8 +54,9 @@ void	check_syntax_error(t_lexer *err)
 		{
 			if (i == 1)
 			{
-				printf("syntax error");
-				exit(1);
+				ft_exit(env, 1);
+				ft_free_token(err);
+				return printf("minishell->: syntax error\n");
 			}
 			i = 1;
 		}
@@ -63,6 +64,7 @@ void	check_syntax_error(t_lexer *err)
 			i = 0;
 		err = err->next;
 	}
+	return 0;
 }
 
 int	check_syntax_error_again(t_ast *tool)
@@ -77,7 +79,7 @@ int	check_syntax_error_again(t_ast *tool)
 			if (tool->redirections->token >= GREAT
 				&& tool->redirections->token <= LESS
 				&& ft_strlen(tool->redirections->word) == 0)
-					return (printf("minishell~>: no such file or directory\n"));
+				return (printf("minishell~>: no such file or directory\n"));
 			tool->redirections = tool->redirections->next;
 		}
 		tool->redirections = new;
