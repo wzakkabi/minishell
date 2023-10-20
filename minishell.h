@@ -59,18 +59,13 @@ typedef struct s_env
 	struct s_env *prev;
 } t_env;
 
-
-// exit
-void ft_exit(t_env *env, int return_status);
-
-
-// new readline
-void rl_replace_line(const char *text, int clear_undo);
-
 //create_node
 t_ast	*newnode(void);
 t_lexer	*lxnewnode(void);
 t_env	*envnode(void);
+
+// exit
+void ft_exit(t_env *env, int return_status);
 
 //error
 int		check_quote(char *str, t_env *env);
@@ -80,9 +75,18 @@ int		check_syntax_error_again(t_ast *tool);
 //expand
 void    check_expand(t_lexer *token, t_env *env);
 
-//split_to_ast
+//split_to_ast and make env node and signal
 t_ast	*split_to_ast(t_lexer *lx);
 void	remove_qost(t_lexer *token, int x, int y, int qst);
+void	make_env_node(char **env, t_env *node);
+void	ft_signal(void);
+
+
+// new readline
+void rl_replace_line(const char *text, int clear_undo);
+
+
+
 
 void	ft_print(t_lexer *lx);
 t_lexer	*ft_token(char *ret);

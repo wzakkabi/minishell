@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/20 20:32:31 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/20 20:53:34 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,53 +134,11 @@ void	minishell_loop(t_env *env)
 	}
 }
 
-void	make_env_node(char **env, t_env *node)
-{
-	int	cnt_x;
-	int	cnt_y;
-
-	cnt_y = ((cnt_x = 0), 0);
-	while (env[cnt_y])
-	{
-		while (env[cnt_y][cnt_x] != '=' && env[cnt_y][cnt_x])
-			cnt_x++;
-		node->key = ft_substr2(env[cnt_y], 0, cnt_x);
-		node->value = ft_substr2(env[cnt_y], cnt_x + 1, ft_strlen(env[cnt_y]));
-		node->print_or_not = 1;
-		cnt_x = 0;
-		cnt_y++;
-		node->next = envnode();
-		node->next->prev = node;
-		node = node->next;
-	}
-	node->key = ft_substr("?", 0, 1);
-	node->value = ft_itoa(0);
-	node->print_or_not = 0;
-}
-
 void ft_exit(t_env *env, int return_status)
 {
 	t_env *tmp;
 	tmp = get_env_var(env, "?");
 	tmp->value = ft_itoa(return_status);
-}
-
-void	test(int a)
-{
-	if(a == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
-void	ft_signal(void)
-{
-	signal(SIGINT, &test);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 }
 
 int	main(int c, char **av, char **grep_env)
