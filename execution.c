@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/19 20:56:52 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/19 22:14:45 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,13 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	i = -1;
 	while (bin_paths[++i])
 	{
-		tmp = ft_strjoin(bin_paths[i], ast->str[0]); 
-		execve(tmp, ast->str, NULL);
+		tmp = ft_strjoin(bin_paths[i], ast->str[0]);
+		if (access(tmp, F_OK | X_OK) != -1)
+			execve(tmp, ast->str, NULL);
 		free(tmp);
 	}
-	ft_putstr_fd("command does't exist\n", 2);
+	ft_putstr_fd(ast->str[0], STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	free(bin_paths);
 }
 
