@@ -6,43 +6,16 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/19 22:14:45 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/21 08:12:10 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./builtins/builtins.h"
 
-char	**get_bin_paths(t_env *env)
-{
-	int		i;
-	char	**ret;
-	char	*tmp;
-	t_env	*env_p;
-
-	if (!env)
-		return (NULL);
-	env_p = get_env_var(env, "PATH");
-	if (!env_p)
-		return (NULL);
-	ret = ft_split(env_p->value, ':');
-	i = -1;
-	while (ret[++i])
-	{
-		if (ret[i][ft_strlen(ret[i]) - 1] != '/')
-		{
-			tmp = ft_strjoin(ret[i], "/");
-			free(ret[i]);
-			ret[i] = ft_strdup(tmp);
-			free(tmp);
-		}
-	}
-	return (ret);
-}
-
 void	builtin(int child, t_ast *ast, t_env *env)
 {
-	if ( ft_strncmp(ast->str[0], "cd", 2) == 0)
+	if (ft_strncmp(ast->str[0], "cd", 2) == 0)
 		cd(ast, env);
 	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
 		pwd(ast);
@@ -91,24 +64,39 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	close(*save);
 }
 
+void	exec_bin_file(t_ast *ast, char	**envp)
+{
+	if (access(ast->str[0], F_OK | X_OK) != -1)
+		execve(ast->str[0], ast->str, envp);
+	put_strerror(ast, errno);
+}
+
 void	get_bin_and_exec(t_ast *ast, t_env *env)
 {
 	char	**bin_paths;
+	char	**envp;
 	char	*tmp;
 	int		i;
 
+	envp = get_envp(env);
+	if (ast->str[0][0] == '.' || ast->str[0][0] == '/')
+	{
+		exec_bin_file(ast, envp);
+		return ;
+	}
 	bin_paths = get_bin_paths(env);
 	i = -1;
 	while (bin_paths[++i])
 	{
 		tmp = ft_strjoin(bin_paths[i], ast->str[0]);
 		if (access(tmp, F_OK | X_OK) != -1)
-			execve(tmp, ast->str, NULL);
+			execve(tmp, ast->str, envp);
 		free(tmp);
 	}
 	ft_putstr_fd(ast->str[0], STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	free(bin_paths);
+	free(envp);
 }
 
 int	execute_cmd(t_ast *ast, t_env *env)
@@ -158,9 +146,7 @@ void	execute(t_ast *ast, t_env *env)
 		//______________________________________
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
-		{
 			builtin(child, ast, env);
-		}
 		else
 			child = execute_cmd(ast, env);
 		ast = ast->next;
