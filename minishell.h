@@ -87,4 +87,5 @@ void	overwrite_append(t_lexer *lexer);
 void	put_strerror(t_ast *ast, int __errno);
 char	**get_bin_paths(t_env *env);
 char	**get_envp(t_env *env);
+void	builtin(int child, t_ast *ast, t_env *env);
 #endif

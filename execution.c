@@ -6,32 +6,12 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/21 08:12:10 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/21 08:59:34 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./builtins/builtins.h"
-
-void	builtin(int child, t_ast *ast, t_env *env)
-{
-	if (ft_strncmp(ast->str[0], "cd", 2) == 0)
-		cd(ast, env);
-	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
-		pwd(ast);
-	else if (ft_strncmp(ast->str[0], "exit", 4) == 0)
-		builtin_exit(ast);
-	else if (ft_strncmp(ast->str[0], "env", 3) == 0)
-		builtin_env(env);
-	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
-		export(ast, env);
-	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
-		unset(ast, env);
-	else if (ft_strncmp(ast->str[0], "echo", 4) == 0)
-		echo(ast, env);
-	if (child == 0)
-		exit(0);
-}
 
 void	check_redirections(t_lexer *lexer)
 {
@@ -64,13 +44,6 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	close(*save);
 }
 
-void	exec_bin_file(t_ast *ast, char	**envp)
-{
-	if (access(ast->str[0], F_OK | X_OK) != -1)
-		execve(ast->str[0], ast->str, envp);
-	put_strerror(ast, errno);
-}
-
 void	get_bin_and_exec(t_ast *ast, t_env *env)
 {
 	char	**bin_paths;
@@ -81,11 +54,12 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	envp = get_envp(env);
 	if (ast->str[0][0] == '.' || ast->str[0][0] == '/')
 	{
-		exec_bin_file(ast, envp);
+		if (access(ast->str[0], F_OK | X_OK) != -1)
+			execve(ast->str[0], ast->str, envp);
+		put_strerror(ast, errno);
 		return ;
 	}
-	bin_paths = get_bin_paths(env);
-	i = -1;
+	i = ((bin_paths = get_bin_paths(env)), -1);
 	while (bin_paths[++i])
 	{
 		tmp = ft_strjoin(bin_paths[i], ast->str[0]);
@@ -95,8 +69,7 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	}
 	ft_putstr_fd(ast->str[0], STDERR_FILENO);
 	ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	free(bin_paths);
-	free(envp);
+	(free(bin_paths), free(envp));
 }
 
 int	execute_cmd(t_ast *ast, t_env *env)
