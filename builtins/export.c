@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 01:13:10 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/21 09:36:47 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,17 @@ void	print_env_vars(t_env *env)
 	{
 		if (env_p->key)
 		{
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			ft_putstr_fd(env_p->key, STDOUT_FILENO);
 			ft_putstr_fd("=", STDOUT_FILENO);
 			if (!env_p->value)
 				ft_putstr_fd("''", STDOUT_FILENO);
 			else
+			{
+				ft_putchar_fd('"', STDOUT_FILENO);
 				ft_putstr_fd(env_p->value, STDOUT_FILENO);
+				ft_putchar_fd('"', STDOUT_FILENO);
+			}
 			ft_putchar_fd('\n', STDOUT_FILENO);
 		}
 		env_p = env_p->next;
