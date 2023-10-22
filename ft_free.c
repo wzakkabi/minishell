@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_frre.c                                          :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:52:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:52:55 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/22 20:14:40 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	ft_free_token(t_lexer *lx)
 {
-	while (lx && lx->prev != NULL)
+	while (lx && lx->prev)
 		lx = lx->prev;
-	while (lx && lx->next)
+	while (lx->next)
 	{
 		if (lx->word)
 			free(lx->word);
@@ -38,9 +38,15 @@ void	ft_free_ast(t_ast *tool)
 		tool = tool->prev;
 	while (tool)
 	{
-		ft_free_token(tool->token);
 		free(tool->str);
-		ft_free_token(tool->redirections);
+		while(tool->redirections->prev)
+			tool->redirections = tool->redirections->prev;
+		while(tool->redirections)
+		{
+			free(tool->redirections);
+			tool->redirections = tool->redirections->next;
+		}
+		ft_free_token(tool->token);
 		replace = tool;
 		tool = tool->next;
 		free(replace);

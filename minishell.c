@@ -6,12 +6,51 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 12:08:27 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/22 20:16:50 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
+
+// void	ft_print(t_lexer *lx)
+// {
+// 	while(lx->prev != NULL)
+// 		lx = lx->prev;
+// 	while(lx->next != NULL)
+// 	{	
+// 		if(lx->word != NULL )
+// 			printf("word = (%s) %d\n", lx->word, lx->num_node);
+// 		else
+// 			printf("token = (%d) %d\n", lx->token, lx->num_node);
+// 		lx = lx->next;
+// 	}
+// }
+// void	ft_printast(t_ast *lx)
+// {
+// 	int x = 0;
+// 	int tree = 0;
+// 	while(lx->prev != NULL)
+// 		lx = lx->prev;
+// 	while(lx != NULL)
+// 	{
+// 		printf("ast-------------------:>node == (%d)\n", tree++);
+// 		while(lx->str[x])
+// 		{
+// 			printf("ast word == (%s)\n", lx->str[x]);
+// 			x++;
+// 		}
+// 		while(lx->redirections && lx->redirections->prev)
+// 			lx->redirections = lx->redirections->prev;
+// 		while(lx->redirections)
+// 		{
+// 			printf("word = (%s) and token = (%d)\n", lx->redirections->word, lx->redirections->token);
+// 			lx->redirections = lx->redirections->next;
+// 		}
+// 		x = 0;
+// 		lx = lx->next;
+// 	}
+// }
 
 void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
@@ -25,7 +64,9 @@ void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 	}
 	else
 	{
-		execute(tool, env);
+		//ft_printast(tool);
+		//execute(tool, env);
+		printf("hna\n");
 		ft_free_ast(tool);
 	}
 }
@@ -46,7 +87,7 @@ void	minishell_loop(t_env *env)
 		}
 		else if (input[0] == 0)
 			ft_exit(env, 0);
-		else if (check_quote(input, env) != 1)
+		else if (input[0] != 0 && check_quote(input, env) != 1)
 		{
 			add_history(input);
 			token = ft_token(input);
@@ -62,6 +103,8 @@ void	ft_exit(t_env *env, int return_status)
 	t_env	*tmp;
 
 	tmp = get_env_var(env, "?");
+	if(tmp->value)
+		free(tmp->value);
 	tmp->value = ft_itoa(return_status);
 }
 
