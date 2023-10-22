@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/03 16:38:47 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:20:18 by wzakkabi         ###   ########.fr       */
+/*   Created: 2023/10/22 11:40:37 by wzakkabi          #+#    #+#             */
+/*   Updated: 2023/10/22 11:41:02 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"\
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	test(int a)
 {
-	size_t	x;
-	size_t	len;
-
-	if(!s1 || !s2)
-		return 10;
-	len = ft_strlen(s1);
-	x = 0;
-	while (x < n && x <= len)
+	if(a == SIGINT)
 	{
-		if (s1[x] != s2[x])
-		{
-			x = ((unsigned char *)s1)[x] -((unsigned char *)s2)[x];
-			return (x);
-		}
-		x++;
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
 	}
-	return (0);
+}
+
+void	ft_signal(void)
+{
+	signal(SIGINT, &test);
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
 }

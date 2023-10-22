@@ -59,48 +59,64 @@ typedef struct s_env
 	struct s_env *prev;
 } t_env;
 
-//create_node
+
+// minishell.c
+void	minishell_loop(t_env *env);
+int	main(int c, char **av, char **grep_env);
+/**** exit_status ****/
+void ft_exit(t_env *env, int return_status);
+
+// create_node.c
 t_ast	*newnode(void);
 t_lexer	*lxnewnode(void);
 t_env	*envnode(void);
+// expand.c
+void	check_expand(t_lexer *token, t_env *env);
+// ft_substr2.c
+char	*ft_substr2(char const *s, unsigned int start, size_t len);\
 
-// exit
-void ft_exit(t_env *env, int return_status);
+// ft_token.c
+t_lexer	*ft_token(char *ret);
 
-//error
-int		check_quote(char *str, t_env *env);
-int	check_syntax_error(t_env *env, t_lexer *err);
-int		check_syntax_error_again(t_ast *tool);
+// signal.c
+void	ft_signal(void);
 
-//expand
-void    check_expand(t_lexer *token, t_env *env);
-
-//split_to_ast and make env node and signal
+//	split_to_ast_node.c
 t_ast	*split_to_ast(t_lexer *lx);
 void	remove_qost(t_lexer *token, int x, int y, int qst);
 void	make_env_node(char **env, t_env *node);
-void	ft_signal(void);
 
+// syntax_error.c
+int	check_quote(char *str, t_env *env);
+int	check_syntax_error(t_env *env, t_lexer *err);
+int	check_syntax_error_again(t_ast *tool);
+
+// ft_free.c
+void	ft_free_token(t_lexer *lx);
+void	ft_free_ast(t_ast *tool);
 
 // new readline
 void rl_replace_line(const char *text, int clear_undo);
 
-
-
-
-void	ft_print(t_lexer *lx);
-t_lexer	*ft_token(char *ret);
-char	*ft_substr2(char const *s, unsigned int start, size_t len);
-
-// execution.c
+//  execution.c
 void	execute(t_ast *ast, t_env *env);
 
 // redirections.c
 void	overwrite_append(t_lexer *lexer, int *pipe_fds);
 
-//free
-void	ft_free_token(t_lexer *lx);
-void	ft_free_ast(t_ast *tool);
+
+void ft_exit(t_env *env, int return_status);
+
+// //error
+// int		check_quote(char *str, t_env *env);
+// int	check_syntax_error(t_env *env, t_lexer *err);
+// int		check_syntax_error_again(t_ast *tool);
+
+// //expand
+// void    check_expand(t_lexer *token, t_env *env);
+
+
+
 
 
 # endif

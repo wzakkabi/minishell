@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/20 20:53:52 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/22 11:41:59 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		tool->str[*cnt] = lx->word;
 		*cnt += 1;
 	}
-	return lx->next;
+	return (lx->next);
 }
 
 t_ast	*split_to_ast(t_lexer *lx)
@@ -113,20 +113,4 @@ void	make_env_node(char **env, t_env *node)
 	node->key = ft_substr("?", 0, 1);
 	node->value = ft_itoa(0);
 	node->print_or_not = 0;
-}
-void	test(int a)
-{
-	if(a == SIGINT)
-	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-void	ft_signal(void)
-{
-	signal(SIGINT, &test);
-	signal(SIGQUIT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 }
