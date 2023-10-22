@@ -6,55 +6,29 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:52:41 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/22 12:05:47 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
 
-
-void	ft_print(t_lexer *lx)
+void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
-	while(lx->prev != NULL)
-		lx = lx->prev;
-	while(lx->next != NULL)
-	{	
-		if(lx->word != NULL )
-			printf("word = (%s) %d\n", lx->word, lx->num_node);
-		else
-			printf("token = (%d) %d\n", lx->token, lx->num_node);
-		lx = lx->next;
-	}
-}
-
-void	ft_printast(t_ast *lx)
-{
-	int x = 0;
-	int tree = 0;
-	
-	while(lx->prev != NULL)
-		lx = lx->prev;
-	while(lx != NULL)
+	check_expand(token, env);
+	remove_qost(token, 0, 0, 0);
+	tool = split_to_ast(token);
+	if (check_syntax_error_again(tool) != 0)
 	{
-		printf("ast-------------------:>node == (%d)\n", tree++);
-		while(lx->str[x])
-		{
-			printf("ast word == (%s)\n", lx->str[x]);
-			x++;
-		}
-		while(lx->redirections && lx->redirections->prev)
-			lx->redirections = lx->redirections->prev;
-		while(lx->redirections)
-		{
-			printf("word = (%s) and token = (%d)\n", lx->redirections->word, lx->redirections->token);
-			lx->redirections = lx->redirections->next;
-		}
-		x = 0;
-		lx = lx->next;
+		ft_exit(env, 2);
+		ft_free_ast(tool);
+	}
+	else
+	{
+		execute(tool, env);
+		ft_free_ast(tool);
 	}
 }
-
 
 void	minishell_loop(t_env *env)
 {
@@ -70,38 +44,23 @@ void	minishell_loop(t_env *env)
 			printf("exit\n");
 			exit(0);
 		}
-		else if(input[0] == 0)
+		else if (input[0] == 0)
 			ft_exit(env, 0);
 		else if (check_quote(input, env) != 1)
 		{
 			add_history(input);
 			token = ft_token(input);
-			//ft_print(token);
-			if(check_syntax_error(env, token) == 0)
-			{
-				check_expand(token, env);
-				remove_qost(token, 0, 0, 0);
-				tool = split_to_ast(token);
-				if (check_syntax_error_again(tool) != 0)
-				{
-					ft_exit(env, 2);
-					ft_free_ast(tool);
-				}
-				else
-				{
-					ft_printast(tool);
-					//execute(tool, env);
-					ft_free_ast(tool);
-				}
-			}
+			if (check_syntax_error(env, token) == 0)
+				minishell_loop_helper(env, tool, token);
 		}
 		free(input);
 	}
 }
 
-void ft_exit(t_env *env, int return_status)
+void	ft_exit(t_env *env, int return_status)
 {
-	t_env *tmp;
+	t_env	*tmp;
+
 	tmp = get_env_var(env, "?");
 	tmp->value = ft_itoa(return_status);
 }
@@ -118,12 +77,6 @@ int	main(int c, char **av, char **grep_env)
 	ft_signal();
 	env = envnode();
 	make_env_node(grep_env, env);
-	// while(env->next)
-	// {
-	// 	printf("node->key == (%s)", env->key);
-	// 	printf("node->value == (%s)\n", env->value);
-	// 	env = env->next;
-	// }
 	minishell_loop(env);
 	return (0);
 }
