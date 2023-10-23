@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:52:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 20:14:40 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/23 13:11:45 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_free_token(t_lexer *lx)
 {
 	while (lx && lx->prev)
 		lx = lx->prev;
-	while (lx->next)
+	while (lx && lx->next)
 	{
 		if (lx->word)
 			free(lx->word);
@@ -36,17 +36,21 @@ void	ft_free_ast(t_ast *tool)
 
 	while (tool->prev)
 		tool = tool->prev;
+	ft_free_token(tool->token);
 	while (tool)
 	{
-		free(tool->str);
-		while(tool->redirections->prev)
+		if (tool->str)
+			free(tool->str);
+		while (tool->redirections && tool->redirections->prev)
 			tool->redirections = tool->redirections->prev;
-		while(tool->redirections)
+		while (tool->redirections)
 		{
-			free(tool->redirections);
+			tool->token = tool->redirections;
 			tool->redirections = tool->redirections->next;
+			free(tool->token);
 		}
-		ft_free_token(tool->token);
+		if (tool->redirections)
+			free(tool->redirections);
 		replace = tool;
 		tool = tool->next;
 		free(replace);
