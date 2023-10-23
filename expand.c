@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 20:40:53 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/23 20:43:28 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	expand_helper_1(t_lexer *token, t_env *test, t_ex *ex)
 	if (test)
 	{
 		ex->new_word = malloc((ft_strlen(token->word)
-					- ex->c_p_key) + ft_strlen(test->value));
+					- ex->c_p_key) + ft_strlen(test->value) + 1);
 		ex->c_p_dollar = 0;
 		while (ex->c_p_dollar < ex->x - 1)
 			ex->new_word[ex->y++] = token->word[ex->c_p_dollar++];
