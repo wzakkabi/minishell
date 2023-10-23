@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 01:49:58 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 13:05:45 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/23 20:41:20 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ typedef struct s_vr_ft_token
 {
 	int		cnt;
 	t_lexer	*lx;
-	t_lexer	*head;
 	char	*p;
 	int		y;
 	int		test;
@@ -103,9 +102,10 @@ void	ft_token_helper(t_vr_ft_token *t, char *ret, int if_redirection)
 t_lexer	*ft_token(char *ret)
 {
 	t_vr_ft_token	*t;
+	t_lexer *head;
 
 	t = (t_vr_ft_token *)malloc(sizeof(t_vr_ft_token));
-	t->cnt = ((t->y = 0), (t->lx = lxnewnode()), (t->head = t->lx), 0);
+	t->cnt = ((t->y = 0), (t->lx = lxnewnode()), (head = t->lx), 0);
 	while (ret[t->cnt])
 	{
 		t->test = token_or_not(ret[t->cnt], ret[t->cnt + 1]);
@@ -126,5 +126,5 @@ t_lexer	*ft_token(char *ret)
 		}
 	}
 	free(t);
-	return (t->head);
+	return (head);
 }

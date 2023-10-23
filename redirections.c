@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/25 00:15:29 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/23 16:19:23 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	overwrite_append(t_lexer *lexer, int *pipe_fds)
 {
-	int 	fd;
+	int		fd;
 	int		count;
 	char	buff[BUFSIZ];
 

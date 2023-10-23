@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/20 18:15:23 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/23 20:40:53 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	expand_helper_1(t_lexer *token, t_env *test, t_ex *ex)
 	}
 	else
 	{
-		ex->new_word = malloc((ft_strlen(token->word) - ex->c_p_key));
+		ex->new_word = malloc((ft_strlen(token->word) - ex->c_p_key) + 1);
 		ex->c_p_dollar = 0;
 		while (ex->c_p_dollar < ex->x - 1)
 			ex->new_word[ex->y++] = token->word[ex->c_p_dollar++];
@@ -86,7 +86,7 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 {
 	t_env	*test;
 
-	while (token->word[ex->x] != '$')
+	while (token->word[ex->x] && token->word[ex->x] != '$')
 		ex->x++;
 	if (token->word[ex->x + 1] == ' '
 		|| token->word[ex->x + 1] == '\t'
@@ -113,24 +113,26 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 
 void	check_expand(t_lexer *token, t_env *env)
 {
-	t_ex	ex;
+	t_ex	*ex;
 
-	ex.x = ((ex.y = 0, ex.i = 0, ex.dollar = 0, ex.c_p_key = 0), 0);
-	ex.c_p_dollar = 0;
+	ex = (t_ex *)malloc(sizeof(t_ex));
+	ex->x = ((ex->y = 0, ex->i = 0, ex->dollar = 0, ex->c_p_key = 0), 0);
+	ex->c_p_dollar = 0;
 	while (token->next)
 	{
 		if (token->token == LESS_LESS)
 			token = ((token = token->next), token->next);
 		else
 		{
-			ex.dollar = how_many(token->word, '$');
-			while (ex.dollar != 0)
+			ex->dollar = how_many(token->word, '$');
+			while (ex->dollar != 0)
 			{
-				expand_helper_0(token, env, &ex);
-				ex.dollar = how_many(token->word + ex.x, '$');
+				expand_helper_0(token, env, ex);
+				ex->dollar = how_many(token->word + ex->x, '$');
 			}
 			token = token->next;
-			ex.dollar = 0;
+			ex->dollar = 0;
 		}
 	}
+	free(ex);
 }
