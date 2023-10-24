@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:34:35 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/24 22:44:50 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ int	check_syntax_error(t_env *env, t_lexer *err)
 
 void	check_syntax_error_again_helper(t_ast *tool)
 {
-	if (ft_strncmp(tool->str[0], "cd", 2) == 0
-		|| ft_strncmp(tool->str[0], "pwd", 3) == 0
-		|| ft_strncmp(tool->str[0], "exit", 4) == 0
-		|| ft_strncmp(tool->str[0], "env", 3) == 0
-		|| ft_strncmp(tool->str[0], "export", 6) == 0
-		|| ft_strncmp(tool->str[0], "unset", 5) == 0
-		|| ft_strncmp(tool->str[0], "echo", 4) == 0)
+	if (ft_strncmp2(tool->str[0], "cd", 2) == 0
+		|| ft_strncmp2(tool->str[0], "pwd", 3) == 0
+		|| ft_strncmp2(tool->str[0], "exit", 4) == 0
+		|| ft_strncmp2(tool->str[0], "env", 3) == 0
+		|| ft_strncmp2(tool->str[0], "export", 6) == 0
+		|| ft_strncmp2(tool->str[0], "unset", 5) == 0
+		|| ft_strncmp2(tool->str[0], "echo", 4) == 0)
 		tool->builtins = 1;
 	else
 		tool->builtins = 0;

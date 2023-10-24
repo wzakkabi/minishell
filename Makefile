@@ -1,6 +1,6 @@
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 
 LIBFT = ./libft/libft.a
 
@@ -14,7 +14,7 @@ READLINE = $(shell brew --prefix readline)
 all : re $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	gcc $(SRC) $(LIBFT)  -fsanitize=address -g -lreadline -L $(READLINE)/lib -g -o $(NAME)
+	gcc $(SRC) $(LIBFT) -lreadline -L $(READLINE)/lib -g -o $(NAME)
 
 $(LIBFT) :
 	make -C ./libft

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toor <toor@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 00:16:49 by toor              #+#    #+#             */
-/*   Updated: 2023/08/18 00:26:56 by toor             ###   ########.fr       */
+/*   Updated: 2023/10/24 22:44:28 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,26 @@ char	*ft_substr2(char const *s, unsigned int start, size_t len)
 			p[x++] = s[start++];
 	}
 	return (p);
+}
+
+
+int	ft_strncmp2(const char *s1, const char *s2, size_t n)
+{
+	size_t	x;
+	size_t	len;
+
+	if (!s1 || !s2)
+		return (10);
+	len = ft_strlen(s1);
+	x = 0;
+	while (x < n && x <= len)
+	{
+		if (s1[x] != s2[x])
+		{
+			x = ((unsigned char *)s1)[x] -((unsigned char *)s2)[x];
+			return (x);
+		}
+		x++;
+	}
+	return (0);
 }

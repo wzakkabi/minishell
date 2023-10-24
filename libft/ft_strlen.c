@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 21:53:59 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 19:56:27 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/23 21:00:54 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ size_t	ft_strlen(const char *s)
 
 	b = 0;
 	if (!s)
-		return 0;
+		return (0);
 	while (s[b] != '\0')
 	{
 		b++;

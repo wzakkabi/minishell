@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 20:41:43 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/24 22:45:38 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_lexer
 	char			*word;
 	t_token			token;
 	int				num_node;
+	int				q;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 }	t_lexer;
@@ -88,6 +89,7 @@ void	check_expand(t_lexer *token, t_env *env);
 
 // ft_substr2.c
 char	*ft_substr2(char const *s, unsigned int start, size_t len);
+int	ft_strncmp2(const char *s1, const char *s2, size_t n);
 
 // ft_token.c
 t_lexer	*ft_token(char *ret);

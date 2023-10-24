@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:38:47 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:20:18 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/24 22:46:38 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	size_t	x;
 	size_t	len;
 
-	if(!s1 || !s2)
-		return 10;
 	len = ft_strlen(s1);
 	x = 0;
 	while (x < n && x <= len)
