@@ -6,37 +6,12 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/24 22:37:59 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/25 10:36:39 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
-void	ft_printast(t_ast *lx)
-{
-	int x = 0;
-	int tree = 0;
-	while(lx->prev != NULL)
-		lx = lx->prev;
-	while(lx != NULL)
-	{
-		printf("ast-------------------:>node == (%d)\n", tree++);
-		while(lx->str[x])
-		{
-			printf("ast word == (%s)\n", lx->str[x]);
-			x++;
-		}
-		while(lx->redirections && lx->redirections->prev)
-			lx->redirections = lx->redirections->prev;
-		while(lx->redirections)
-		{
-			printf("word = (%s) and token = (%d) q == ( %d )\n", lx->redirections->word, lx->redirections->token, lx->redirections->q);
-			lx->redirections = lx->redirections->next;
-		}
-		x = 0;
-		lx = lx->next;
-	}
-}
 
 void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
@@ -50,8 +25,7 @@ void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 	}
 	else
 	{
-		ft_printast(tool);
-		//execute(tool, env);
+		execute(tool, env);
 		ft_free_ast(tool);
 	}
 }
