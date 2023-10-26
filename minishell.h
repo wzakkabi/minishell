@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/25 10:35:06 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:19:15 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	remove_qost(t_lexer *token, int x, int y, int qst);
 void	make_env_node(char **env, t_env *node);
 
 // syntax_error.c
-int		check_quote(char *str, t_env *env);
+int		check_quote(char *str, t_env *env, int y);
 int		check_syntax_error(t_env *env, t_lexer *err);
 int		check_syntax_error_again(t_ast *tool);
 

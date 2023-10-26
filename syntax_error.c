@@ -6,31 +6,31 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/24 22:44:50 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:18:32 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_quote(char *str, t_env *env)
+int	check_quote(char *str, t_env *env, int y)
 {
 	int	x;
-	int	y;
 
 	x = ((y = 0), -1);
-	while (str[++x])
+	while (y != 1 && str[++x])
 	{
 		if (str[x] == 34)
 		{
 			x++;
-			while (str[x] != 34 && str[x])
+			while (str[x] && str[x] != 34)
 				x++;
 			if (str[x] == 0)
 				ft_putstr_fd("minishell~>: error double quote\n", ++y);
 		}
-		else if (str[x] == 39 && x++)
+		else if (str[x] == 39)
 		{
-			while (str[x] != 39 && str[x])
+			x++;
+			while (str[x] && str[x] != 39)
 				x++;
 			if (str[x] == 0)
 				ft_putstr_fd("minishell~>: error single quote\n", ++y);

@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/25 10:36:39 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/26 10:18:42 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	minishell_loop(t_env *env)
 		}
 		else if (input[0] == 0)
 			ft_exit(env, 0);
-		else if (input[0] != 0 && check_quote(input, env) != 1)
+		else if (input[0] != 0 && check_quote(input, env, 0) != 1)
 		{
 			add_history(input);
 			token = ft_token(input);
