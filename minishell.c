@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 20:40:36 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/26 03:26:23 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ void	minishell_loop(t_env *env)
 			printf("exit\n");
 			exit(0);
 		}
-		else if (input[0] == 0)
-			ft_exit(env, 0);
-		else if (input[0] != 0 && check_quote(input, env) != 1)
+		else
 		{
 			add_history(input);
 			token = ft_token(input);

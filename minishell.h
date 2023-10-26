@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 20:41:43 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/26 03:25:57 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_lexer
 	int				num_node;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
+	char	*doc_data;
 }	t_lexer;
 
 // int builtins = 0 false o 1 true
@@ -116,6 +117,12 @@ void	rl_replace_line(const char *text, int clear_undo);
 void	execute(t_ast *ast, t_env *env);
 
 // redirections.c
-void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+// void	overwrite_append(t_lexer *lexer, int *pipe_fds);
+void	overwrite_append(t_lexer *lexer);
 
+// execution2.c
+void	put_strerror(t_ast *ast, int __errno);
+char	**get_bin_paths(t_env *env);
+char	**get_envp(t_env *env);
+void	builtin(int child, t_ast *ast, t_env *env);
 #endif

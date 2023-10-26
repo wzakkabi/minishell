@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:52:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/01 15:09:16 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/18 05:37:32 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,20 @@ int		add_env_var(t_env **env, char *key, char *value);
 int		cd(t_ast *ast, t_env *env);
 
 //pwd.c
-int		pwd(t_ast *ast, t_env *env);
+int		pwd(t_ast *ast);
+
+//exit.c
+void	builtin_exit(t_ast *ast);
+
+//env.c
+void	builtin_env(t_env *env);
+
+//export.c
+int		export(t_ast *ast, t_env *env);
+
+//unset.c
+int		unset(t_ast *ast, t_env *env);
+
+//echo.c
+void	echo(t_ast *ast, t_env *env);
 #endif
