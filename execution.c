@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/26 03:14:46 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/26 08:59:09 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	close(*save);
+	if (*save > 0)
+		close(*save);
 }
 
 void	get_bin_and_exec(t_ast *ast, t_env *env)
