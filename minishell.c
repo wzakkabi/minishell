@@ -6,12 +6,26 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/26 03:26:23 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/27 06:20:01 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
+
+int	empty(char *str)
+{
+	int	ret;
+	int	i;
+
+	i = 0;
+	while (str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
+		i++;
+	if (str[i] == '\0')
+		return (1);
+	return (0);
+}
 
 void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
@@ -44,7 +58,7 @@ void	minishell_loop(t_env *env)
 			printf("exit\n");
 			exit(0);
 		}
-		else
+		else if (!empty(input))
 		{
 			add_history(input);
 			token = ft_token(input);
