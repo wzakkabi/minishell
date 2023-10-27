@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/26 03:25:48 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/27 07:33:33 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	overwrite_append(t_lexer *lexer)
 		fd = open(lexer->word, O_CREAT | O_TRUNC | O_WRONLY,
 			S_IRUSR | S_IWUSR);
 	else if (lexer->token == GREAT_GREAT)
-		fd = open(lexer->word, O_CREAT | O_APPEND | O_WRONLY | O_APPEND,
+		fd = open(lexer->word, O_CREAT | O_APPEND | O_WRONLY,
 				S_IRUSR | S_IWUSR);
 	// Bad file descriptor errors needs to be handled
 	if (fd <= 2)
@@ -56,4 +56,34 @@ void	stdin_redirection(t_lexer *lexer)
 		return ;
 	dup2(fd, STDIN_FILENO);
 	close(fd);
+}
+
+void	heredoc_handler(t_lexer *lexer)
+{
+	char	*tmp;
+	char	*holder;
+	int		last;
+
+	holder = NULL;
+	if (lexer && lexer->token == LESS_LESS)
+	{
+		while (1)
+		{
+			if (holder != NULL)
+				holder = ft_strjoin(holder, "\n");
+			tmp = readline("heredoc> ");
+			if (!tmp || ft_memcmp(tmp, lexer->word,
+					ft_strlen(lexer->word) + 1) == 0)
+				break ;
+			if (holder == NULL)
+				holder = ft_strdup(tmp);
+			else
+				holder = ft_strjoin(holder, tmp);
+		}
+		lexer->doc_data = holder;
+		// printf("%s\n", holder);
+		// dup2(pipe_fd[1], STDOUT_FILENO);
+		// close(pipe_fd[1]);
+		// write(pipe_fd[1], holder, ft_strlen(holder));
+	}
 }

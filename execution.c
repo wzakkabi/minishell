@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/26 08:59:09 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/27 07:47:57 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@ void	check_redirections(t_lexer *lexer)
 		if (lexer_p->token == GREAT
 			|| lexer_p->token == GREAT_GREAT)
 			overwrite_append(lexer_p);
-		// if (lexer_p->token == LESS_LESS)
+		else if (lexer_p->token == LESS)
+			stdin_redirection(lexer_p);
 		lexer_p = lexer_p->next;
 	}
 }
 
 void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 {
-	check_redirections(ast->redirections);
-	if (!ast->prev && ast->next && !ast->redirections)
+	// check_redirections(ast->redirections);
+	if (!ast->prev && ast->next)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
 	{
@@ -40,18 +41,15 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	}
 	else if (!ast->next)
 		dup2(*save, STDIN_FILENO);
-	if (ast->redirections != NULL)
-	{
-		t_lexer	*lex = ast->redirections;
-		if (lex->token == LESS_LESS)
-			write(*save, lex->doc_data, ft_strlen(lex->doc_data));
-		if (lex->token == LESS)
-		{
-			int file_fd = open(lex->word, O_RDONLY);
-			dup2(file_fd, STDIN_FILENO);
-			close(file_fd);
-		}
-	}
+	// if (ast->redirections != NULL)
+	// {
+	// 	t_lexer	*lex = ast->redirections;
+	// 	if (lex->token == LESS_LESS)
+	// 	{
+	// 		write(STDIN_FILENO, lex->doc_data, ft_strlen(lex->doc_data));
+	// 	}
+	// }
+	check_redirections(ast->redirections);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	if (*save > 0)
@@ -65,6 +63,10 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	char	*tmp;
 	int		i;
 
+	if (env == NULL || ast == NULL)
+		return ;
+	if (!ast->str || (ast->str && !ast->str[0]))
+		return ;
 	envp = get_envp(env);
 	if (ast->str[0][0] == '.' || ast->str[0][0] == '/')
 	{
@@ -92,33 +94,12 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	int		pipe_fd[2];
 	static int save;
 
-	t_lexer *lexer_p = ast->redirections;
-	pipe(pipe_fd);
-	if (lexer_p && lexer_p->token == LESS_LESS)
+	if (ast->redirections != NULL)
 	{
-		char	*tmp;
-		char	*holder = NULL;
-		int		last;
-
-		while (1)
-		{
-			if (holder)
-				holder = ft_strjoin(holder, "\n");
-			tmp = readline("heredoc> ");
-			if (!tmp || ft_memcmp(tmp, lexer_p->word,
-					ft_strlen(lexer_p->word) + 1) == 0)
-				break ;
-			if (holder == NULL)
-				holder = ft_strdup(tmp);
-			else
-				holder = ft_strjoin(holder, tmp);
-		}
-		lexer_p->doc_data = holder;
-		// printf("%s\n", holder);
-		// dup2(pipe_fd[1], STDOUT_FILENO);
-		// close(pipe_fd[1]);
-		// write(pipe_fd[1], holder, ft_strlen(holder));
+		if (ast->redirections->token == LESS_LESS)
+			heredoc_handler(ast->redirections);
 	}
+	pipe(pipe_fd);
 	child = fork();
 	if (child == 0)
 	{
