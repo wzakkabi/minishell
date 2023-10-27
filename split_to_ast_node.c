@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/25 10:34:45 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/27 18:53:51 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,18 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 	return (lx->next);
 }
 
+void	ft_reset_to_0(t_ast *tool)
+{
+	while (tool && tool->prev)
+		tool = tool->prev;
+	while (tool)
+	{
+		while (tool->redirections && tool->redirections->prev)
+			tool->redirections = tool->redirections->prev;
+		tool = tool->next;
+	}
+}
+
 t_ast	*split_to_ast(t_lexer *lx)
 {
 	t_ast	*tool_head;
@@ -60,6 +72,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 		}
 		lx = ast_helper(lx, tool, &cnt);
 	}
+	ft_reset_to_0(tool);
 	return (tool_head);
 }
 
