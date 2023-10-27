@@ -18,6 +18,10 @@ void	check_redirections(t_lexer *lexer)
 	t_lexer	*lexer_p;
 
 	lexer_p = lexer;
+	if (!lexer_p)
+		return ;
+	while (lexer_p->prev)
+		lexer_p = lexer_p->prev;
 	while (lexer_p != NULL)
 	{
 		if (lexer_p->token == GREAT
