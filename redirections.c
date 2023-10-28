@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/27 07:33:33 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/28 08:26:41 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,29 +61,23 @@ void	stdin_redirection(t_lexer *lexer)
 void	heredoc_handler(t_lexer *lexer)
 {
 	char	*tmp;
-	char	*holder;
-	int		last;
+	int		tmp_p[2];
 
-	holder = NULL;
 	if (lexer && lexer->token == LESS_LESS)
 	{
+		pipe(tmp_p);
 		while (1)
 		{
-			if (holder != NULL)
-				holder = ft_strjoin(holder, "\n");
 			tmp = readline("heredoc> ");
-			if (!tmp || ft_memcmp(tmp, lexer->word,
-					ft_strlen(lexer->word) + 1) == 0)
+			if (!tmp
+				|| ft_memcmp(tmp, lexer->word, ft_strlen(lexer->word) + 1) == 0)
 				break ;
-			if (holder == NULL)
-				holder = ft_strdup(tmp);
-			else
-				holder = ft_strjoin(holder, tmp);
+			ft_putstr_fd(tmp, tmp_p[1]);
+			ft_putchar_fd('\n', tmp_p[1]);
+			free(tmp);
 		}
-		lexer->doc_data = holder;
-		// printf("%s\n", holder);
-		// dup2(pipe_fd[1], STDOUT_FILENO);
-		// close(pipe_fd[1]);
-		// write(pipe_fd[1], holder, ft_strlen(holder));
+		dup2(tmp_p[0], STDIN_FILENO);
+		close(tmp_p[0]);
+		close(tmp_p[1]);
 	}
 }
