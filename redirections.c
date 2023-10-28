@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/28 08:26:41 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/28 08:53:45 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	stdin_redirection(t_lexer *lexer)
 	close(fd);
 }
 
-void	heredoc_handler(t_lexer *lexer)
+void	heredoc_handler(t_lexer *lexer, int *in_fd)
 {
 	char	*tmp;
 	int		tmp_p[2];
@@ -76,7 +76,7 @@ void	heredoc_handler(t_lexer *lexer)
 			ft_putchar_fd('\n', tmp_p[1]);
 			free(tmp);
 		}
-		dup2(tmp_p[0], STDIN_FILENO);
+		dup2(tmp_p[0], *in_fd);
 		close(tmp_p[0]);
 		close(tmp_p[1]);
 	}

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/27 07:28:10 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/28 08:52:09 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	execute(t_ast *ast, t_env *env);
 // void	overwrite_append(t_lexer *lexer, int *pipe_fds);
 void	overwrite_append(t_lexer *lexer);
 void	stdin_redirection(t_lexer *lexer);
-void	heredoc_handler(t_lexer *lexer);
+void	heredoc_handler(t_lexer *lexer, int	*in_fd);
 
 // execution2.c
 void	put_strerror(t_ast *ast, int __errno);
