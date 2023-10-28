@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 17:19:37 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/28 17:40:44 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,14 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 {
 	t_env	*test;
 
-	search_for_dollar(ex, token);
-	if(token->word[ex->x])
+	if (token->word[ex->x + 1] == ' '
+		|| token->word[ex->x + 1] == '\t')
+	{
+		while ((token->word[ex->x + 1] && token->word[ex->x + 1] == ' ')
+			|| (token->word[ex->x + 1] && token->word[ex->x + 1] == '\t'))
+			ex->x++;
+	}
+	else
 	{
 		ex->c_p_dollar = ((ex->c_p_key = 0), ++ex->x);
 		while (token->word[ex->x + ex->c_p_key]
@@ -121,7 +127,7 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 		ex->key = ft_substr2(token->word, ex->c_p_dollar, ex->c_p_key + ex->x);
 		test = get_env_var(env, ex->key);
 		expand_helper_1(token, test, ex);
-		token->word = ((ex->dollar--), ex->new_word);
+		token->word = ((ex->dollar--), (ex->x = ex->c_p_dollar), ex->new_word);
 		ex->c_p_dollar = ((ex->c_p_key = 0), (ex->y = 0), (ex->i = 0), 0);
 	}
 }
@@ -142,9 +148,9 @@ void	check_expand(t_lexer *token, t_env *env)
 			ex->dollar = how_many(token->word, '$');
 			while (ex->dollar != 0)
 			{
+				search_for_dollar(ex, token);
 				expand_helper_0(token, env, ex);
-				ex->dollar = how_many(token->word, '$');
-				ex->x = 0;
+				ex->dollar = how_many(token->word + ex->x, '$');
 			}
 			token = token->next;
 			ex->dollar = 0;
