@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 13:20:58 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/28 17:18:02 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,7 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 	t_env	*test;
 
 	search_for_dollar(ex, token);
-	if (token->word[ex->x + 1] == ' '
-		|| token->word[ex->x + 1] == '\t')
-		ex->x++;
-	else
+	if(token->word[ex->x])
 	{
 		ex->c_p_dollar = ((ex->c_p_key = 0), ++ex->x);
 		while (token->word[ex->x + ex->c_p_key]
