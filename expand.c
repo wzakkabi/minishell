@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 12:05:47 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:20:06 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 	while (token->word[ex->x] && token->word[ex->x] != '$')
 		ex->x++;
 	if (token->word[ex->x + 1] == ' '
-		|| token->word[ex->x + 1] == '\t'
-		|| token->word[ex->x + 1] == 34)
+		|| token->word[ex->x + 1] == '\t')
 		ex->x++;
 	else
 	{
