@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 12:20:06 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/28 13:20:58 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,32 @@ void	expand_helper_1(t_lexer *token, t_env *test, t_ex *ex)
 	free(ex->key);
 }
 
+void	search_for_dollar(t_ex *ex, t_lexer *token)
+{
+	while (token->word[ex->x] && token->word[ex->x] != '$')
+	{
+		if (token->word[ex->x] == 34)
+		{
+			while (token->word[++ex->x] != 34)
+			{
+				if (token->word[ex->x] == '$')
+					return ;
+			}
+		}
+		else if (token->word[ex->x] == 39)
+		{
+			while (token->word[++ex->x] != 39)
+				ex->x += 0;
+		}
+		ex->x++;
+	}
+}
+
 void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 {
 	t_env	*test;
 
-	while (token->word[ex->x] && token->word[ex->x] != '$')
-		ex->x++;
+	search_for_dollar(ex, token);
 	if (token->word[ex->x + 1] == ' '
 		|| token->word[ex->x + 1] == '\t')
 		ex->x++;
