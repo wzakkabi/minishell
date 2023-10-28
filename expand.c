@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 20:43:28 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/28 12:05:47 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	how_many(char *s, int c)
 			else
 				dbl = 0;
 		}
-		if (s[x] == c)
+		if (s[x] == c && s[x + 1] != 0)
 			find++;
 	}
 	return (find);
@@ -90,16 +90,15 @@ void	expand_helper_0(t_lexer *token, t_env *env, t_ex *ex)
 		ex->x++;
 	if (token->word[ex->x + 1] == ' '
 		|| token->word[ex->x + 1] == '\t'
-		|| token->word[ex->x + 1] == 0
 		|| token->word[ex->x + 1] == 34)
 		ex->x++;
 	else
 	{
 		ex->c_p_dollar = ((ex->c_p_key = 0), ++ex->x);
-		while (token->word[ex->x + ex->c_p_key] != ' '
+		while (token->word[ex->x + ex->c_p_key]
 			&& token->word[ex->x + ex->c_p_key] != '$'
 			&& token->word[ex->x + ex->c_p_key] != '\t'
-			&& token->word[ex->x + ex->c_p_key]
+			&& token->word[ex->x + ex->c_p_key] != ' '
 			&& token->word[ex->x + ex->c_p_key] != 34
 			&& token->word[ex->x + ex->c_p_key] != 39)
 			ex->c_p_key++;
@@ -128,7 +127,8 @@ void	check_expand(t_lexer *token, t_env *env)
 			while (ex->dollar != 0)
 			{
 				expand_helper_0(token, env, ex);
-				ex->dollar = how_many(token->word + ex->x, '$');
+				ex->dollar = how_many(token->word, '$');
+				ex->x = 0;
 			}
 			token = token->next;
 			ex->dollar = 0;
