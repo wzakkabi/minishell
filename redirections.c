@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/28 08:53:45 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/29 09:50:01 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,58 @@ void	stdin_redirection(t_lexer *lexer)
 	close(fd);
 }
 
-void	heredoc_handler(t_lexer *lexer, int *in_fd)
+void	putstr_expanded(int str, int start, int end, char *env_val)
+{
+	
+}
+
+char	*expand_heredoc(char *str)
+{
+	int		i;
+	int		start;
+	char	*tmp;
+
+	i = 0;
+	while (str[i] && str[i] != '$')
+		i++;
+	if (str[i++] == '$')
+	{
+		if (ft_isalpha(str[i]) && str[i] == '_')
+		{
+			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+				i++;
+			if (str[i] == ' ' || (!ft_isalnum(str[i]) && str[i] != '_'))
+				tmp = ft_substr(str, start, i);
+			if (!tmp)
+				return ;
+			// need replace the extracted env var & print it or return it
+			//putstr_expanded()
+		}
+	}
+	
+}
+
+int	*heredoc_handler(t_lexer *lexer, int *in_fd)
 {
 	char	*tmp;
-	int		tmp_p[2];
+	int		*doc_pipe;
 
+	doc_pipe = malloc(sizeof(int) * 2);
 	if (lexer && lexer->token == LESS_LESS)
 	{
-		pipe(tmp_p);
+		pipe(doc_pipe);
 		while (1)
 		{
 			tmp = readline("heredoc> ");
 			if (!tmp
 				|| ft_memcmp(tmp, lexer->word, ft_strlen(lexer->word) + 1) == 0)
 				break ;
-			ft_putstr_fd(tmp, tmp_p[1]);
-			ft_putchar_fd('\n', tmp_p[1]);
+			if (lexer->q)
+				expand_heredoc(tmp);
+			ft_putstr_fd(tmp, doc_pipe[1]);
+			ft_putchar_fd('\n', doc_pipe[1]);
 			free(tmp);
 		}
-		dup2(tmp_p[0], *in_fd);
-		close(tmp_p[0]);
-		close(tmp_p[1]);
 	}
+	return (doc_pipe);
 }

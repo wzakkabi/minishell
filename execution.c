@@ -6,14 +6,14 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/28 08:58:04 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/29 07:10:15 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./builtins/builtins.h"
 
-void	check_redirections(t_lexer *lexer, int *in_fd)
+void	check_redirections(t_lexer *lexer, int *doc_pipe)
 {
 	t_lexer	*lexer_p;
 
@@ -29,15 +29,21 @@ void	check_redirections(t_lexer *lexer, int *in_fd)
 			overwrite_append(lexer_p);
 		else if (lexer_p->token == LESS)
 			stdin_redirection(lexer_p);
-		// else if (lexer_p->token == LESS_LESS)
-		// 	heredoc_handler(lexer_p, in_fd);
+		else if (lexer_p->token == LESS_LESS)
+		{
+			dup2(doc_pipe[0], STDIN_FILENO);
+			close(doc_pipe[0]);
+			close(doc_pipe[1]);
+		}
 		lexer_p = lexer_p->next;
 	}
 }
 
 void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 {
-	heredoc_handler(ast->redirections, save);
+	int	*doc_pipe;
+
+	doc_pipe = heredoc_handler(ast->redirections, save);
 	if (!ast->prev && ast->next)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
@@ -47,7 +53,7 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	}
 	else if (!ast->next)
 		dup2(*save, STDIN_FILENO);
-	check_redirections(ast->redirections, save);
+	check_redirections(ast->redirections, doc_pipe);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	if (*save > 0)
