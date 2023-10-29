@@ -6,13 +6,13 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 13:20:40 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/09/01 15:00:15 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/17 00:28:23 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	pwd(t_ast *ast, t_env *env)
+int	pwd(t_ast *ast)
 {
 	char	path[PATH_MAX];
 	int		i;

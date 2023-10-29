@@ -6,52 +6,57 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/28 08:58:04 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/26 00:03:26 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./builtins/builtins.h"
 
-void	check_redirections(t_lexer *lexer, int *in_fd)
+void	check_redirections(t_lexer *lexer)
 {
 	t_lexer	*lexer_p;
 
 	lexer_p = lexer;
-	if (!lexer_p)
-		return ;
-	while (lexer_p->prev)
-		lexer_p = lexer_p->prev;
 	while (lexer_p != NULL)
 	{
 		if (lexer_p->token == GREAT
 			|| lexer_p->token == GREAT_GREAT)
 			overwrite_append(lexer_p);
-		else if (lexer_p->token == LESS)
-			stdin_redirection(lexer_p);
-		// else if (lexer_p->token == LESS_LESS)
-		// 	heredoc_handler(lexer_p, in_fd);
+		// if (lexer_p->token == LESS_LESS)
 		lexer_p = lexer_p->next;
 	}
 }
 
 void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 {
-	heredoc_handler(ast->redirections, save);
-	if (!ast->prev && ast->next)
+	check_redirections(ast->redirections);
+	if (!ast->prev && ast->next && !ast->redirections)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
 	{
 		dup2(*save, STDIN_FILENO);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	}
-	else if (!ast->next)
+	else if (!ast->next && !ast->redirections)
 		dup2(*save, STDIN_FILENO);
-	check_redirections(ast->redirections, save);
+	else if (ast->redirections && ast->redirections->token == LESS)
+		dup2(pipe_fd[0], STDIN_FILENO);
+	if (ast->redirections != NULL)
+	{
+		t_lexer	*lex = ast->redirections;
+		if (lex->token == LESS_LESS)
+			write(*save, lex->doc_data, ft_strlen(lex->doc_data));
+		if (lex->token == LESS)
+		{
+			int file_fd = open(lex->word, O_RDONLY);
+			dup2(file_fd, STDIN_FILENO);
+			close(file_fd);
+		}
+	}
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
-	if (*save > 0)
-		close(*save);
+	close(*save);
 }
 
 void	get_bin_and_exec(t_ast *ast, t_env *env)
@@ -61,10 +66,6 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	char	*tmp;
 	int		i;
 
-	if (env == NULL || ast == NULL)
-		return ;
-	if (!ast->str || (ast->str && !ast->str[0]))
-		return ;
 	envp = get_envp(env);
 	if (ast->str[0][0] == '.' || ast->str[0][0] == '/')
 	{
@@ -90,14 +91,46 @@ int	execute_cmd(t_ast *ast, t_env *env)
 {
 	int		child;
 	int		pipe_fd[2];
-	static int save;
+	static int save;	
 
-	// if (ast->redirections != NULL)
-	// {
-	// 	if (ast->redirections->token == LESS_LESS)
-	// 		heredoc_handler(ast->redirections);
-	// }
+	t_lexer *lexer_p = ast->redirections;
 	pipe(pipe_fd);
+	if (lexer_p && lexer_p->token == LESS_LESS)
+	{
+		char	*tmp;
+		char	*holder = NULL;
+		int		last;
+
+		while (1)
+		{
+			if (holder)
+				holder = ft_strjoin(holder, "\n");
+			tmp = readline("heredoc> ");
+			if (!tmp || ft_memcmp(tmp, lexer_p->word,
+					ft_strlen(lexer_p->word) + 1) == 0)
+				break ;
+			if (holder == NULL)
+				holder = ft_strdup(tmp);
+			else
+				holder = ft_strjoin(holder, tmp);
+		}
+		lexer_p->doc_data = holder;
+		// printf("%s\n", holder);
+		// dup2(pipe_fd[1], STDOUT_FILENO);
+		// close(pipe_fd[1]);
+		// write(pipe_fd[1], holder, ft_strlen(holder));
+	}
+	// else if (lexer_p && lexer_p->token == LESS)
+	// {
+	// 	int file_fd = open(lexer_p->word, O_RDONLY);
+	// 	char buff[MAX_INPUT];
+	// 	int r = read(file_fd, buff, MAX_INPUT);
+	// 	if (r > 0)
+	// 	{
+	// 		buff[r] = '\0';
+	// 		write(pipe_fd[1], buff, r);
+	// 	}
+	// }
 	child = fork();
 	if (child == 0)
 	{
@@ -136,6 +169,8 @@ void	execute(t_ast *ast, t_env *env)
 			|| ft_strncmp(ast->str[0], "echo", 4) == 0)
 			ast->builtins = 1;
 		//______________________________________
+		if (ast->builtins)
+			printf("Builtin cmd \n");
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
 			builtin(child, ast, env);

@@ -1,36 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/03 16:38:47 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/29 03:36:33 by mbousbaa         ###   ########.fr       */
+/*   Created: 2023/09/25 21:56:12 by mbousbaa          #+#    #+#             */
+/*   Updated: 2023/10/17 00:36:11 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "builtins.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	builtin_env(t_env *env)
 {
-	size_t	x;
-	size_t	len;
+	t_env	*env_p;
 
-	//nneded this_____________
-	if (!s1)
-		return (-1);
-	//________________________
-	len = ft_strlen(s1);
-	x = 0;
-	while (x < n && x <= len)
+	env_p = env;
+	while (env_p)
 	{
-		if (s1[x] != s2[x])
+		if (env_p->value != NULL)
 		{
-			x = ((unsigned char *)s1)[x] -((unsigned char *)s2)[x];
-			return (x);
+			ft_putstr_fd(env_p->key, STDOUT_FILENO);
+			ft_putstr_fd("=", STDOUT_FILENO);
+			ft_putstr_fd(env_p->value, STDOUT_FILENO);
+			ft_putchar_fd('\n', STDOUT_FILENO);
 		}
-		x++;
+		env_p = env_p->next;
 	}
-	return (0);
 }
