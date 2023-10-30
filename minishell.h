@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/30 16:12:35 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/30 20:55:15 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef enum s_token
 
 typedef struct s_lexer
 {
+	int				fd; // hada howa li fin kain file discripte le ghadi t7tage input li fih 
 	char			*word;
 	t_token			token;
 	int				num_node;
@@ -48,6 +49,13 @@ typedef struct s_lexer
 	struct s_lexer	*prev;
 	char	*doc_data;
 }	t_lexer;
+
+
+typedef struct s_here_doc
+{
+	int fd;
+	struct s_here_doc	*next;
+} t_here_doc;
 
 // int builtins = 0 false o 1 true
 //t_lexer	*redirections; = here is all the node of redirection
@@ -61,7 +69,9 @@ typedef struct s_ast
 	t_lexer			*token;
 	struct s_ast	*next;
 	struct s_ast	*prev;
+	t_here_doc		*here_doc;
 }	t_ast;
+
 
 //int print_or_not; //0 or 1 ztha  bach n3erfha wach n9dero nprantiwha ola la
 typedef struct s_env 

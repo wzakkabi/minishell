@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/30 16:11:32 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/30 18:45:08 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 	}
 	else
 	{
+		
 		execute(tool, env);
 		ft_free_ast(tool);
 	}

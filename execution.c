@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/30 15:56:56 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/30 20:58:56 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,61 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	return (child);
 }
 
+//hna ghadi tready ga3  herdoc li kainin o t save fd  dyalhom o dik sa3a finma l9iti commend m7taja input dyal herdoc rah ghadi tkhedm ghir f fd li endk fih data 
+// i try to give my best to fix what i can nta db ghadi t3erf ach khasso itdar
+void read_heardoc(t_ast *cmds, t_env* env)
+{
+	t_ast *head;
+	t_lexer *head_r;
+	pid_t pid;
+	int status;
+	int pip[2];
+	
+	head = cmds;
+	while(head)
+	{
+		head_r = head->redirections;
+		while(head_r && head_r->token == LESS_LESS)
+		{
+			if (pipe(pip) == -1)
+				return ;
+			pid = fork();
+			if (pid == -1)
+				return ;
+			if (pid == 0)
+			{
+				close(pip[0]);
+				while (1)
+				{
+					head_r->doc_data = readline("heredoc> ");
+					if (!head_r->doc_data
+						|| ft_memcmp(head_r->doc_data, head_r->word, ft_strlen(head_r->word) + 1) == 0)
+						break ;
+					if(head_r->q == 0)
+						expand_herdoc(head_r, env);
+					ft_putstr_fd(head_r->doc_data, pip[1]);
+					ft_putchar_fd('\n', pip[1]);
+					free(head_r->doc_data);
+				}
+				close(pip[1]);
+				exit(0);
+			}
+			close(pip[1]);
+			waitpid(pid, &status, 0);
+			head_r->fd = pip[0];
+			head_r = head_r->next;
+		}
+		head = head->next;
+	}
+}
+
 void	execute(t_ast *ast, t_env *env)
 {
 	int		child;
 	int		state;
 
 	child = -1;
+	//read_heardoc(ast, env); 9ra comment li kain lfog bach t3erf ach kain
 	while (ast)
 	{
 		//Temporary For Test ___________________

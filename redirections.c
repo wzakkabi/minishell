@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/30 16:12:19 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/30 20:15:44 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,33 @@ void	heredoc_handler(t_lexer *lexer, int *in_fd, t_env *env)
 		dup2(tmp_p[0], *in_fd);
 		close(tmp_p[0]);
 		close(tmp_p[1]);
-	}
+	} 
 }
+
+// function assliya
+// void	heredoc_handler(t_lexer *lexer, int *in_fd, t_env *env)
+// {
+// 	//char	*tmp;
+// 	int		tmp_p[2];
+	
+// 	//db expand mgad but tertib dyalhadchi khasso itgad
+// 	if (lexer && lexer->token == LESS_LESS)
+// 	{
+// 		pipe(tmp_p);
+// 		while (1)
+// 		{
+// 			lexer->doc_data = readline("heredoc> ");
+// 			if (!lexer->doc_data
+// 				|| ft_memcmp(lexer->doc_data, lexer->word, ft_strlen(lexer->word) + 1) == 0)
+// 				break ;
+// 			if(lexer->q == 0)
+// 				expand_herdoc(lexer, env);
+// 			ft_putstr_fd(lexer->doc_data, tmp_p[1]);
+// 			ft_putchar_fd('\n', tmp_p[1]);
+// 			free(lexer->doc_data);
+// 		}
+// 		dup2(tmp_p[0], *in_fd);
+// 		close(tmp_p[0]);
+// 		close(tmp_p[1]);
+// 	} 
+// }
