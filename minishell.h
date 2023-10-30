@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 08:52:09 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:12:35 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_lexer
 	char			*word;
 	t_token			token;
 	int				num_node;
+	int				q;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
 	char	*doc_data;
@@ -120,11 +121,14 @@ void	execute(t_ast *ast, t_env *env);
 // void	overwrite_append(t_lexer *lexer, int *pipe_fds);
 void	overwrite_append(t_lexer *lexer);
 void	stdin_redirection(t_lexer *lexer);
-void	heredoc_handler(t_lexer *lexer, int	*in_fd);
+void	heredoc_handler(t_lexer *lexer, int *in_fd, t_env *env);
 
 // execution2.c
 void	put_strerror(t_ast *ast, int __errno);
 char	**get_bin_paths(t_env *env);
 char	**get_envp(t_env *env);
 void	builtin(int child, t_ast *ast, t_env *env);
+
+//expand_herdoc.c
+void	expand_herdoc(t_lexer *token, t_env *env);
 #endif

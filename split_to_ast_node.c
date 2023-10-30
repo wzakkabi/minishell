@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/22 11:41:59 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/30 14:09:57 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		}
 		tool->redirections->token = lx->token;
 		lx = lx->next;
+		tool->redirections->q = lx->q;
 		tool->redirections->word = lx->word;
 	}
 	else if (lx->word != NULL)
@@ -35,6 +36,18 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		*cnt += 1;
 	}
 	return (lx->next);
+}
+
+void	ft_reset_to_0(t_ast *tool)
+{
+	while (tool && tool->prev)
+		tool = tool->prev;
+	while (tool)
+	{
+		while (tool->redirections && tool->redirections->prev)
+			tool->redirections = tool->redirections->prev;
+		tool = tool->next;
+	}
 }
 
 t_ast	*split_to_ast(t_lexer *lx)
@@ -59,6 +72,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 		}
 		lx = ast_helper(lx, tool, &cnt);
 	}
+	ft_reset_to_0(tool);
 	return (tool_head);
 }
 
@@ -68,7 +82,7 @@ void	remove_qost(t_lexer *token, int x, int y, int qst)
 
 	while (token->next)
 	{
-		x = ((y = -1), -1);
+		x = ((y = -1), (token->q = 0), -1);
 		while (token->word && token->word[++x])
 		{
 			if (token->word[x] == 34 || token->word[x] == 39)
@@ -84,7 +98,7 @@ void	remove_qost(t_lexer *token, int x, int y, int qst)
 				while (token->word[x + qst])
 					new_word[y++] = token->word[x + qst++];
 				new_word[y] = ((free(token->word)), 0);
-				y = ((token->word = new_word), (x = x - 3), -1);
+				y = ((token->word = new_word), (x = x - 3), (token->q = 1), -1);
 			}
 		}
 		token = token->next;

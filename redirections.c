@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/28 08:53:45 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/30 16:12:19 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,26 @@ void	stdin_redirection(t_lexer *lexer)
 	close(fd);
 }
 
-void	heredoc_handler(t_lexer *lexer, int *in_fd)
+void	heredoc_handler(t_lexer *lexer, int *in_fd, t_env *env)
 {
-	char	*tmp;
+	//char	*tmp;
 	int		tmp_p[2];
-
+	
+	//db expand mgad but tertib dyalhadchi khasso itgad
 	if (lexer && lexer->token == LESS_LESS)
 	{
 		pipe(tmp_p);
 		while (1)
 		{
-			tmp = readline("heredoc> ");
-			if (!tmp
-				|| ft_memcmp(tmp, lexer->word, ft_strlen(lexer->word) + 1) == 0)
+			lexer->doc_data = readline("heredoc> ");
+			if (!lexer->doc_data
+				|| ft_memcmp(lexer->doc_data, lexer->word, ft_strlen(lexer->word) + 1) == 0)
 				break ;
-			ft_putstr_fd(tmp, tmp_p[1]);
+			if(lexer->q == 0)
+				expand_herdoc(lexer, env);
+			ft_putstr_fd(lexer->doc_data, tmp_p[1]);
 			ft_putchar_fd('\n', tmp_p[1]);
-			free(tmp);
+			free(lexer->doc_data);
 		}
 		dup2(tmp_p[0], *in_fd);
 		close(tmp_p[0]);

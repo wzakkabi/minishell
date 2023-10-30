@@ -2,10 +2,15 @@ Makefile
 builtins
 creat_node.c
 execution.c
+execution.c.old
+execution2.c
 expand.c
+expand_herdoc.c
 ft_free.c
 ft_substr2.c
 ft_token.c
+hello
+hhna
 l
 libft
 minishell
@@ -20,6 +25,3 @@ split_to_ast_node.c
 syntax_error.c
 test
 trash.c
-wzakkabi
-he
-hello
