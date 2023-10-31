@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/29 05:09:52 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/31 01:24:22 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef enum s_token
 
 typedef struct s_lexer
 {
+	int				*fd; // hada howa li fin kain file discripte le ghadi t7tage input li fih 
 	char			*word;
 	t_token			token;
 	int				num_node;
@@ -122,11 +123,15 @@ void	execute(t_ast *ast, t_env *env);
 // void	overwrite_append(t_lexer *lexer, int *pipe_fds);
 void	overwrite_append(t_lexer *lexer);
 void	stdin_redirection(t_lexer *lexer);
-int		*heredoc_handler(t_lexer *lexer, int	*in_fd);
+void	heredoc_handler(t_lexer *lexer, t_env *env, int *in_fd);
 
 // execution2.c
 void	put_strerror(t_ast *ast, int __errno);
 char	**get_bin_paths(t_env *env);
 char	**get_envp(t_env *env);
 void	builtin(int child, t_ast *ast, t_env *env);
+
+//epand_heredoc.c
+void	read_heardoc(t_ast *cmds, t_env* env);
+void	expand_herdoc(t_lexer *token, t_env *env);
 #endif

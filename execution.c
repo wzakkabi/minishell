@@ -6,14 +6,14 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/29 07:10:15 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/31 05:48:22 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "./builtins/builtins.h"
 
-void	check_redirections(t_lexer *lexer, int *doc_pipe)
+void	check_redirections(t_lexer *lexer)
 {
 	t_lexer	*lexer_p;
 
@@ -31,19 +31,25 @@ void	check_redirections(t_lexer *lexer, int *doc_pipe)
 			stdin_redirection(lexer_p);
 		else if (lexer_p->token == LESS_LESS)
 		{
-			dup2(doc_pipe[0], STDIN_FILENO);
-			close(doc_pipe[0]);
-			close(doc_pipe[1]);
+			dup2(lexer_p->fd[0], STDIN_FILENO);
+			close(lexer_p->fd[0]);
+			close(lexer_p->fd[1]);
 		}
 		lexer_p = lexer_p->next;
 	}
 }
 
-void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
+void	build_redirections(t_ast *ast, t_env *env, int	*pipe_fd, int *save)
 {
-	int	*doc_pipe;
+	// int	*doc_pipe;
 
-	doc_pipe = heredoc_handler(ast->redirections, save);
+	t_lexer *lexer = ast->redirections;
+
+	while (lexer)
+	{
+		heredoc_handler(lexer, env, save);
+		lexer = lexer->next;
+	}
 	if (!ast->prev && ast->next)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
@@ -53,7 +59,7 @@ void	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 	}
 	else if (!ast->next)
 		dup2(*save, STDIN_FILENO);
-	check_redirections(ast->redirections, doc_pipe);
+	check_redirections(ast->redirections);
 	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	if (*save > 0)
@@ -107,7 +113,7 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	child = fork();
 	if (child == 0)
 	{
-		build_redirections(ast, pipe_fd, &save);
+		build_redirections(ast, env, pipe_fd, &save);
 		if (ast->builtins == 1)
 			builtin(child, ast, env);
 		else

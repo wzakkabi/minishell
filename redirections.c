@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/29 09:50:01 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/31 03:30:13 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,58 +58,58 @@ void	stdin_redirection(t_lexer *lexer)
 	close(fd);
 }
 
-void	putstr_expanded(int str, int start, int end, char *env_val)
-{
+// void	putstr_expanded(int str, int start, int end, char *env_val)
+// {
 	
-}
+// }
 
-char	*expand_heredoc(char *str)
-{
-	int		i;
-	int		start;
-	char	*tmp;
+// char	*expand_heredoc(char *str)
+// {
+// 	int		i;
+// 	int		start;
+// 	char	*tmp;
 
-	i = 0;
-	while (str[i] && str[i] != '$')
-		i++;
-	if (str[i++] == '$')
-	{
-		if (ft_isalpha(str[i]) && str[i] == '_')
-		{
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-				i++;
-			if (str[i] == ' ' || (!ft_isalnum(str[i]) && str[i] != '_'))
-				tmp = ft_substr(str, start, i);
-			if (!tmp)
-				return ;
-			// need replace the extracted env var & print it or return it
-			//putstr_expanded()
-		}
-	}
+// 	i = 0;
+// 	while (str[i] && str[i] != '$')
+// 		i++;
+// 	if (str[i++] == '$')
+// 	{
+// 		if (ft_isalpha(str[i]) && str[i] == '_')
+// 		{
+// 			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+// 				i++;
+// 			if (str[i] == ' ' || (!ft_isalnum(str[i]) && str[i] != '_'))
+// 				tmp = ft_substr(str, start, i);
+// 			if (!tmp)
+// 				return (NULL);
+// 			// need replace the extracted env var & print it or return it
+// 			//putstr_expanded()
+// 		}
+// 	}
 	
-}
+// }
 
-int	*heredoc_handler(t_lexer *lexer, int *in_fd)
+void	heredoc_handler(t_lexer *lexer, t_env *env, int *in_fd)
 {
-	char	*tmp;
-	int		*doc_pipe;
-
-	doc_pipe = malloc(sizeof(int) * 2);
+	// char	*tmp;
+	if (!lexer)
+		return ;
+	lexer->fd = malloc(sizeof(int) * 2);
 	if (lexer && lexer->token == LESS_LESS)
 	{
-		pipe(doc_pipe);
+		pipe(lexer->fd);
 		while (1)
 		{
-			tmp = readline("heredoc> ");
-			if (!tmp
-				|| ft_memcmp(tmp, lexer->word, ft_strlen(lexer->word) + 1) == 0)
+			lexer->doc_data = readline("heredoc> ");
+			if (!lexer->doc_data
+				|| ft_memcmp(lexer->doc_data, lexer->word, ft_strlen(lexer->word) + 1) == 0)
 				break ;
-			if (lexer->q)
-				expand_heredoc(tmp);
-			ft_putstr_fd(tmp, doc_pipe[1]);
-			ft_putchar_fd('\n', doc_pipe[1]);
-			free(tmp);
+			if (lexer->q == 0)
+				expand_herdoc(lexer, env);
+			ft_putstr_fd(lexer->doc_data, lexer->fd[1]);
+			ft_putchar_fd('\n', lexer->fd[1]);
+			free(lexer->doc_data);
 		}
 	}
-	return (doc_pipe);
+	// return (lexer->fd);
 }
