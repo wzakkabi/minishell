@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   creat_node.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 04:49:17 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 19:41:17 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/10/31 07:12:20 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_lexer	*lxnewnode(void)
 
 	new = (t_lexer *)malloc(sizeof(t_lexer) + 1);
 	new->num_node = i;
+	new->doc_data = NULL;
 	new->next = NULL;
 	new->prev = NULL;
 	i++;

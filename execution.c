@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/31 05:48:22 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/10/31 08:28:49 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,33 @@
 
 void	check_redirections(t_lexer *lexer)
 {
-	t_lexer	*lexer_p;
+	int		_pipe_fd[2];
 
-	lexer_p = lexer;
-	if (!lexer_p)
+	if (!lexer)
 		return ;
-	while (lexer_p->prev)
-		lexer_p = lexer_p->prev;
-	while (lexer_p != NULL)
+	while (lexer->prev)
+		lexer = lexer->prev;
+	while (lexer != NULL)
 	{
-		if (lexer_p->token == GREAT
-			|| lexer_p->token == GREAT_GREAT)
-			overwrite_append(lexer_p);
-		else if (lexer_p->token == LESS)
-			stdin_redirection(lexer_p);
-		else if (lexer_p->token == LESS_LESS)
+		if (lexer->token == GREAT
+			|| lexer->token == GREAT_GREAT)
+			overwrite_append(lexer);
+		else if (lexer->token == LESS)
+			stdin_redirection(lexer);
+		else if (lexer->token == LESS_LESS)
 		{
-			dup2(lexer_p->fd[0], STDIN_FILENO);
-			close(lexer_p->fd[0]);
-			close(lexer_p->fd[1]);
+			pipe(_pipe_fd);
+			write(_pipe_fd[1], lexer->doc_data, ft_strlen(lexer->doc_data));
+			dup2(_pipe_fd[0], STDIN_FILENO);
+			close(_pipe_fd[0]);
+			close(_pipe_fd[1]);
 		}
-		lexer_p = lexer_p->next;
+		lexer = lexer->next;
 	}
 }
 
 void	build_redirections(t_ast *ast, t_env *env, int	*pipe_fd, int *save)
 {
-	// int	*doc_pipe;
-
-	t_lexer *lexer = ast->redirections;
-
-	while (lexer)
-	{
-		heredoc_handler(lexer, env, save);
-		lexer = lexer->next;
-	}
 	if (!ast->prev && ast->next)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 	else if (ast->prev && ast->next)
@@ -100,15 +92,11 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 
 int	execute_cmd(t_ast *ast, t_env *env)
 {
-	int		child;
-	int		pipe_fd[2];
-	static int save;
+	int			child;
+	int			pipe_fd[2];
+	static int	save;
 
-	// if (ast->redirections != NULL)
-	// {
-	// 	if (ast->redirections->token == LESS_LESS)
-	// 		heredoc_handler(ast->redirections);
-	// }
+	heredoc_hendler(ast, env);
 	pipe(pipe_fd);
 	child = fork();
 	if (child == 0)
@@ -153,6 +141,11 @@ void	execute(t_ast *ast, t_env *env)
 			builtin(child, ast, env);
 		else
 			child = execute_cmd(ast, env);
+		if (ast->redirections && ast->redirections->doc_data)
+		{
+			free(ast->redirections->doc_data);
+			ast->redirections->doc_data = NULL;
+		}
 		ast = ast->next;
 	}
 	waitpid(child, &state, 0);
