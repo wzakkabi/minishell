@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/28 17:40:44 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/01 07:53:34 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	check_expand(t_lexer *token, t_env *env)
 	ex = (t_ex *)malloc(sizeof(t_ex));
 	ex->x = ((ex->y = 0, ex->i = 0, ex->dollar = 0, ex->c_p_key = 0), 0);
 	ex->c_p_dollar = 0;
-	while (token->next)
+	while (token && token->next)
 	{
 		if (token->token == LESS_LESS)
 			token = ((token = token->next), token->next);

@@ -6,35 +6,47 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/31 08:42:42 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 08:13:19 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	overwrite_append(t_lexer *lexer)
+int check_w_acc(char *file)
+{
+	if (access(file, W_OK) != 0)
+	{
+		if (errno != ENOENT)
+		{
+			perror(file);
+			return (0);
+		}
+	}
+	return (1);
+}
+
+int	overwrite_append(t_lexer *lexer)
 {
 	int	fd;
 
 	fd = -1;
 	if (lexer == NULL)
-		return ;
-	if ((lexer->token != GREAT && lexer->token != GREAT_GREAT)
-		|| lexer->word == NULL)
-		return ;
-	// Needs to add permission check before trying to open the file
-	// Or handle it from open() ret values
+		return (1);
+	if (lexer && lexer->word == NULL)
+		return (0);
+	if (!check_w_acc(lexer->word))
+		return (0);
 	if (lexer->token == GREAT)
 		fd = open(lexer->word, O_CREAT | O_TRUNC | O_WRONLY,
-			S_IRUSR | S_IWUSR);
+				S_IRUSR | S_IWUSR);
 	else if (lexer->token == GREAT_GREAT)
 		fd = open(lexer->word, O_CREAT | O_APPEND | O_WRONLY,
 				S_IRUSR | S_IWUSR);
-	// Bad file descriptor errors needs to be handled
 	if (fd <= 2)
-		return ;
+		return (0);
 	dup2(fd, STDOUT_FILENO);
 	close(fd);
+	return (1);
 }
 
 void	stdin_redirection(t_lexer *lexer)
@@ -85,7 +97,7 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 		{
 			tmp = readline("heredoc> ");
 			if (!tmp
-				|| ft_memcmp(tmp, lexer->word, ft_strlen(lexer->word) + 1) == 0)
+				|| !ft_strncmp(lexer->word, tmp, ft_strlen(lexer->word) + 1))
 			{
 				free(tmp);
 				break ;

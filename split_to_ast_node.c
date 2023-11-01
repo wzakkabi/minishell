@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_to_ast_node.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/27 18:53:51 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/01 07:47:08 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 	tool_head = tool;
 	tool->redirections = NULL;
 	tool->token = lx;
-	while (lx->next != NULL)
+	while (lx && lx->next != NULL)
 	{
 		if (lx->token == PIPE)
 		{

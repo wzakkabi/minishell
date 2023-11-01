@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/26 10:18:32 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/01 08:12:07 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	check_syntax_error_again(t_ast *tool)
 		{
 			if (tool->redirections->token >= GREAT
 				&& tool->redirections->token <= LESS
-				&& ft_strlen(tool->redirections->word) == 0)
+				&& !tool->redirections->word)
 				return (printf("minishell~>: no such file or directory\n"));
 			tool->redirections = tool->redirections->next;
 		}
