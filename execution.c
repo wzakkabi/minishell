@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 08:48:35 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 12:22:02 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int	check_redirections(t_lexer *lexer)
 		}
 		lexer = lexer->next;
 	}
-	if (_pipe_fd && _pipe_fd[1])
-		close(_pipe_fd[1]);
 	return (ret);
 }
 
@@ -102,12 +100,11 @@ int	execute_cmd(t_ast *ast, t_env *env)
 	int			pipe_fd[2];
 	int			save;
 
-	heredoc_hendler(ast, env);
 	pipe(pipe_fd);
 	child = fork();
 	if (child == 0)
 	{
-		if(build_redirections(ast, env, pipe_fd, &save))
+		if (build_redirections(ast, env, pipe_fd, &save))
 		{
 			if (ast->builtins == 1)
 				builtin(child, ast, env);
@@ -132,18 +129,9 @@ void	execute(t_ast *ast, t_env *env)
 	int		state;
 
 	child = -1;
+	heredoc_hendler(ast, env);
 	while (ast)
 	{
-		//Temporary For Test ___________________
-		// if (ft_strncmp(ast->str[0], "cd", 2) == 0
-		// 	|| ft_strncmp(ast->str[0], "pwd", 3) == 0
-		// 	|| ft_strncmp(ast->str[0], "exit", 4) == 0
-		// 	|| ft_strncmp(ast->str[0], "env", 3) == 0
-		// 	|| ft_strncmp(ast->str[0], "export", 6) == 0
-		// 	|| ft_strncmp(ast->str[0], "unset", 5) == 0
-		// 	|| ft_strncmp(ast->str[0], "echo", 4) == 0)
-		// 	ast->builtins = 1;
-		//______________________________________
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
 			builtin(child, ast, env);
