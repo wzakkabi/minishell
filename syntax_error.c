@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/01 08:12:07 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 10:24:12 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,13 @@ int	check_syntax_error(t_env *env, t_lexer *err)
 	{
 		if (err->token == PIPE)
 		{
-			if (pip == 1 || i == 1)
+			if (pip == 1 || i == 1 || err->next->next == 0 || err->prev == 0)
 				return (error_helper(env, err));
 			pip = 1;
 		}
 		else if (err->token >= GREAT && err->token <= PIPE)
 		{
-			if (i == 1)
+			if (i == 1 || err->next->next == NULL)
 				return (error_helper(env, err));
 			i = 1;
 		}
