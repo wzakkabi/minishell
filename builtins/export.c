@@ -6,13 +6,13 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/21 09:36:47 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:02:41 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void error__(char *token)
+void	error__(char *token)
 {
 	if (!token)
 		return ;
@@ -28,7 +28,7 @@ void	print_env_vars(t_env *env)
 	env_p = env;
 	while (env_p)
 	{
-		if (env_p->key)
+		if (env_p->key && env_p->print_or_not)
 		{
 			ft_putstr_fd("declare -x ", STDOUT_FILENO);
 			ft_putstr_fd(env_p->key, STDOUT_FILENO);
@@ -59,9 +59,11 @@ char	**parse_param(char *str)
 	{
 		if (str[i] == '=')
 			break ;
-		if (!ft_isalpha(str[i]) && !ft_isdigit(str[i]) && str[i] != '_')
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 		{
-			printf("illegal caracter : %c\n", str[i]);
+			// ft_putstr_fd("illegal caracter : ", STDOUT_FILENO);
+			// ft_putchar_fd(str[i], STDOUT_FILENO);
+			// ft_putchar_fd('\n', STDOUT_FILENO);
 			return (NULL);
 		}
 		i++;
@@ -90,21 +92,20 @@ int	export(t_ast *ast, t_env *env)
 	while (ast->str[i])
 		i++;
 	if (i == 1)
-	{
 		print_env_vars(env);
-		return (0);
-	}
 	else
 	{
 		i = 0;
 		while (ast->str[++i])
 		{
 			key_val_env = parse_param(ast->str[i]);
-			if (!key_val_env)
-				error__(ast->str[i]);
-			else
+			if (key_val_env != NULL)
+			{
 				update_env_vars(env, key_val_env[0], key_val_env[1]);
-			free(key_val_env);
+				(free(key_val_env[0]), free(key_val_env[1]), free(key_val_env));
+			}
+			else
+				error__(ast->str[i]);
 		}
 	}
 	return (0);

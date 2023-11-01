@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 08:13:19 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 17:23:43 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,7 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 			}
 			free(tmp);
 		}
+		if (!lexer->q)
+			expand_herdoc(lexer, env);
 	}
 }

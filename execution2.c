@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 04:54:32 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/27 07:08:34 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:48:31 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,20 @@ char	**get_envp(t_env *env)
 
 void	builtin(int child, t_ast *ast, t_env *env)
 {
-	if (ft_strncmp(ast->str[0], "cd", 2) == 0)
+	if (ft_strncmp(ast->str[0], "cd", 3) == 0)
 		cd(ast, env);
-	else if (ft_strncmp(ast->str[0], "pwd", 3) == 0)
+	else if (ft_strncmp(ast->str[0], "pwd", 4) == 0)
 		pwd(ast);
-	else if (ft_strncmp(ast->str[0], "exit", 4) == 0)
+	else if (ft_strncmp(ast->str[0], "exit", 5) == 0)
 		builtin_exit(ast);
-	else if (ft_strncmp(ast->str[0], "env", 3) == 0)
+	else if (ft_strncmp(ast->str[0], "env", 4) == 0)
 		builtin_env(env);
-	else if (ft_strncmp(ast->str[0], "export", 6) == 0)
+	else if (ft_strncmp(ast->str[0], "export", 7) == 0)
 		export(ast, env);
-	else if (ft_strncmp(ast->str[0], "unset", 5) == 0)
+	else if (ft_strncmp(ast->str[0], "unset", 6) == 0)
 		unset(ast, env);
-	else if (ft_strncmp(ast->str[0], "echo", 4) == 0)
-		echo(ast, env);
+	else if (ft_strncmp(ast->str[0], "echo", 5) == 0)
+		echo(ast);
 	if (child == 0)
 		exit(0);
 }

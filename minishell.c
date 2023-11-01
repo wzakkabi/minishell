@@ -6,26 +6,26 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/29 03:37:50 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 23:03:58 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
 
-int	empty(char *str)
-{
-	int	ret;
-	int	i;
+// int	empty(char *str)
+// {
+// 	int	ret;
+// 	int	i;
 
-	i = 0;
-	while (str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
-			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
-		i++;
-	if (str[i] == '\0')
-		return (1);
-	return (0);
-}
+// 	i = 0;
+// 	while (str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
+// 			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
+// 		i++;
+// 	if (str[i] == '\0')
+// 		return (1);
+// 	return (0);
+// }
 
 void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
@@ -50,9 +50,10 @@ void	minishell_loop(t_env *env)
 	t_lexer	*token;
 	char	*input;
 
+	tool = NULL;
 	while (1)
 	{
-		input = readline("minishell~>");
+		input = readline("\033[0;32mminishell~>\033[0m ");
 		if (input == NULL)
 		{
 			printf("exit\n");

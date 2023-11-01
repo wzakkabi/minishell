@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 12:22:02 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 15:02:02 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_redirections(t_lexer *lexer)
 	return (ret);
 }
 
-int	build_redirections(t_ast *ast, t_env *env, int	*pipe_fd, int *save)
+int	build_redirections(t_ast *ast, int	*pipe_fd, int *save)
 {
 	int	ret;
 
@@ -94,30 +94,29 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	(free(bin_paths), free(envp));
 }
 
-int	execute_cmd(t_ast *ast, t_env *env)
+int	execute_cmd(t_ast *ast, t_env *env, int *save)
 {
 	int			child;
 	int			pipe_fd[2];
-	int			save;
 
 	pipe(pipe_fd);
 	child = fork();
 	if (child == 0)
 	{
-		if (build_redirections(ast, env, pipe_fd, &save))
+		if (build_redirections(ast, pipe_fd, save))
 		{
 			if (ast->builtins == 1)
 				builtin(child, ast, env);
 			else
 				get_bin_and_exec(ast, env);
 		}
-		exit(1);
+		exit(127);
 	}
 	else
 	{
-		if (save > 2)
-			close(save);
-		save = pipe_fd[0];
+		if (*save > 2)
+			close(*save);
+		*save = pipe_fd[0];
 		close(pipe_fd[1]);
 	}
 	return (child);
@@ -127,8 +126,10 @@ void	execute(t_ast *ast, t_env *env)
 {
 	int		child;
 	int		state;
+	int		save;
 
 	child = -1;
+	save = -1;
 	heredoc_hendler(ast, env);
 	while (ast)
 	{
@@ -136,7 +137,7 @@ void	execute(t_ast *ast, t_env *env)
 			&& (!ast->next && !ast->prev && !ast->redirections))
 			builtin(child, ast, env);
 		else
-			child = execute_cmd(ast, env);
+			child = execute_cmd(ast, env, &save);
 		if (ast->redirections && ast->redirections->doc_data)
 		{
 			free(ast->redirections->doc_data);
@@ -147,5 +148,5 @@ void	execute(t_ast *ast, t_env *env)
 	waitpid(child, &state, 0);
 	while (wait(NULL) > 0);
 	// return (state >> 8);
-	// printf("state : %d\n", state);
+	ft_exit(env, state >> 8);
 }

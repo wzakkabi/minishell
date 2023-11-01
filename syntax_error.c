@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_error.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:19:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/01 10:24:12 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/01 18:47:04 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ int	check_syntax_error(t_env *env, t_lexer *err)
 	int	pip;
 
 	i = ((pip = 0), 0);
-	while (err->prev)
+	while (err && err->prev)
 		err = err->prev;
-	while (err)
+	while (err && err->next)
 	{
 		if (err->token == PIPE)
 		{
@@ -79,13 +79,13 @@ int	check_syntax_error(t_env *env, t_lexer *err)
 
 void	check_syntax_error_again_helper(t_ast *tool)
 {
-	if (ft_strncmp2(tool->str[0], "cd", 2) == 0
-		|| ft_strncmp2(tool->str[0], "pwd", 3) == 0
-		|| ft_strncmp2(tool->str[0], "exit", 4) == 0
-		|| ft_strncmp2(tool->str[0], "env", 3) == 0
-		|| ft_strncmp2(tool->str[0], "export", 6) == 0
-		|| ft_strncmp2(tool->str[0], "unset", 5) == 0
-		|| ft_strncmp2(tool->str[0], "echo", 4) == 0)
+	if (ft_strncmp2(tool->str[0], "cd", 3) == 0
+		|| ft_strncmp2(tool->str[0], "pwd", 4) == 0
+		|| ft_strncmp2(tool->str[0], "exit", 5) == 0
+		|| ft_strncmp2(tool->str[0], "env", 4) == 0
+		|| ft_strncmp2(tool->str[0], "export", 7) == 0
+		|| ft_strncmp2(tool->str[0], "unset", 6) == 0
+		|| ft_strncmp2(tool->str[0], "echo", 5) == 0)
 		tool->builtins = 1;
 	else
 		tool->builtins = 0;

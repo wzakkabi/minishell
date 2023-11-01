@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 21:56:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:36:11 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/01 13:39:28 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	builtin_env(t_env *env)
 	env_p = env;
 	while (env_p)
 	{
-		if (env_p->value != NULL)
+		if (env_p->value != NULL && env_p->print_or_not)
 		{
 			ft_putstr_fd(env_p->key, STDOUT_FILENO);
 			ft_putstr_fd("=", STDOUT_FILENO);
