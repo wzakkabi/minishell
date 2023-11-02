@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 15:02:02 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 00:53:31 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_redirections(t_lexer *lexer)
 		if (lexer->token == GREAT || lexer->token == GREAT_GREAT)
 			ret = overwrite_append(lexer);
 		else if (lexer->token == LESS)
-			stdin_redirection(lexer);
+			ret = stdin_redirection(lexer);
 		else if (lexer->token == LESS_LESS)
 		{
 			pipe(_pipe_fd);

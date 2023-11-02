@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:51:22 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:49:47 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 00:44:31 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 char	*expand_path(char *path, t_env *env)
 {
-	int		i;
 	char	*ret;
 	char	*tmp;
 
 	ret = NULL;
-	i = -1;
 	if (path[0] == '~')
 	{
 		if (path[1] == '/')
