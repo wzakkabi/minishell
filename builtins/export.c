@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 16:13:12 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 22:53:47 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	update_env_vars(t_env *env, char *key, char *val)
 	current = get_env_var(env, key);
 	if (!current)
 		add_env_var(&env, key, val);
-	else if (val && ft_strncmp(current->value, val, ft_strlen(val)) != 0)
+	else if (val && ft_strncmp(current->value, val, ft_strlen(val) + 1) != 0)
 		update_env_var(env, current->key, val);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 19:27:13 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 22:53:25 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 		{
 			tmp2 = ft_strjoin(lexer->doc_data, tmp);
 			free(lexer->doc_data);
-
 			lexer->doc_data = ft_strjoin(tmp2, "\n");
 			free(tmp2);
 		}

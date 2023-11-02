@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:56:15 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 16:12:54 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 22:56:53 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ t_env	*get_env_var(t_env *env, char *key)
 	{
 		if (tmp->key != NULL)
 		{
-			if (ft_strncmp(tmp->key, key, ft_strlen(key)) == 0
-				&& ft_strlen(tmp->key) == ft_strlen(key))
+			if (ft_strncmp(tmp->key, key, ft_strlen(key) + 1) == 0)
 				break ;
 		}
 		tmp = tmp->next;
@@ -67,7 +66,7 @@ int	unset_env_var(t_env **env, char *key)
 
 	curr = *env;
 	tmp = NULL;
-	if (ft_strncmp(curr->key, key, ft_strlen(key)) == 0)
+	if (ft_strncmp(curr->key, key, ft_strlen(key) + 1) == 0)
 	{
 		*env = curr->next;
 		delete_node(curr);
@@ -75,7 +74,7 @@ int	unset_env_var(t_env **env, char *key)
 	}
 	while (curr)
 	{
-		if (ft_strncmp(curr->key, key, ft_strlen(key)) == 0)
+		if (ft_strncmp(curr->key, key, ft_strlen(key) + 1) == 0)
 			break ;
 		tmp = curr;
 		curr = curr->next;

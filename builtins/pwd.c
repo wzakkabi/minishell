@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 13:20:40 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/10/17 00:28:23 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 22:58:08 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	pwd(t_ast *ast)
 
 	if (!ast)
 		return (0);
-	if (!ast->builtins || ft_strncmp(ast->str[0], "pwd", 3)
+	if (!ast->builtins || ft_strncmp(ast->str[0], "pwd", 4)
 		|| ft_strlen(ast->str[0]) != 3)
 		return (0);
 	i = 0;
