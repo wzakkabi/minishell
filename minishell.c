@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/01 23:03:58 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:17:00 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int	main(int c, char **av, char **grep_env)
 		printf("this program dont take paramiter");
 		exit(0);
 	}
+	g_signo = 0;
 	ft_signal();
 	env = envnode();
 	make_env_node(grep_env, env);

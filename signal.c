@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:40:37 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/01 18:43:47 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:17:00 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,24 @@ void	ft_signal(void)
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGQUIT, SIG_IGN);
 }
-// void	close_doc(int sig)
-// {
-// 	if (sig == SIGINT)
-// 	{
-// 		rl_replace_line("", 0);
-// 		write(1, "\n", 1);
-// 		// rl_on_new_line();
-// 		// rl_redisplay();
-// 	}
-// }
 
-// void	signal2(void)
-// {
-// 	signal(SIGINT, close_doc);
-// }
+void	close_doc(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_signo = 1;
+		write(STDOUT_FILENO, 0, 1);
+		rl_replace_line("", 0);
+	}
+}
+
+void	doc_interrupt(int sig)
+{
+	(void)sig;
+}
+
+void	doc_signal(void)
+{
+	signal(SIGINT, close_doc);
+	signal(SIGQUIT, doc_interrupt);
+}

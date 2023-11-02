@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 00:53:31 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:17:00 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	check_redirections(t_lexer *lexer)
 			ret = overwrite_append(lexer);
 		else if (lexer->token == LESS)
 			ret = stdin_redirection(lexer);
-		else if (lexer->token == LESS_LESS)
+		else if (lexer->token == LESS_LESS && g_signo == 0)
 		{
 			pipe(_pipe_fd);
 			write(_pipe_fd[1], lexer->doc_data, ft_strlen(lexer->doc_data));
@@ -69,8 +69,6 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 	char	*tmp;
 	int		i;
 
-	if (env == NULL || ast == NULL)
-		return ;
 	if (!ast->str || (ast->str && !ast->str[0]))
 		return ;
 	envp = get_envp(env);
@@ -89,8 +87,7 @@ void	get_bin_and_exec(t_ast *ast, t_env *env)
 			execve(tmp, ast->str, envp);
 		free(tmp);
 	}
-	ft_putstr_fd(ast->str[0], STDERR_FILENO);
-	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	put_cmd_error(ast->str[0], "command not found");
 	(free(bin_paths), free(envp));
 }
 
@@ -131,7 +128,7 @@ void	execute(t_ast *ast, t_env *env)
 	child = -1;
 	save = -1;
 	heredoc_hendler(ast, env);
-	while (ast)
+	while (ast && g_signo == 0)
 	{
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
@@ -147,6 +144,6 @@ void	execute(t_ast *ast, t_env *env)
 	}
 	waitpid(child, &state, 0);
 	while (wait(NULL) > 0);
-	// return (state >> 8);
 	ft_exit(env, state >> 8);
+	g_signo = 0;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:52:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/10/23 19:13:40 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/02 13:30:10 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,15 @@ void	ft_free_ast(t_ast *tool)
 		free(replace);
 	}
 	free(tool);
+}
+
+void	free_doc_data(t_lexer *lexer)
+{
+	if (!lexer || (lexer && lexer->token != LESS_LESS))
+		return ;
+	if (lexer->doc_data != NULL)
+	{
+		free(lexer->doc_data);
+		lexer->doc_data = NULL;
+	}
 }

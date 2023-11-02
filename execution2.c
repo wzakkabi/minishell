@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 04:54:32 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 18:48:31 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 17:58:22 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ void	put_strerror(t_ast *ast, int __errno)
 	ft_putstr_fd(ast->str[0], STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
 	ft_putstr_fd(strerror(__errno), STDERR_FILENO);
+	ft_putchar_fd('\n', STDERR_FILENO);
+}
+
+void	put_cmd_error(char *cmd_str, char *error_str)
+{
+	ft_putstr_fd(cmd_str, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+	ft_putstr_fd(error_str, STDERR_FILENO);
 	ft_putchar_fd('\n', STDERR_FILENO);
 }
 

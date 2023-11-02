@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/26 03:05:47 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 18:02:41 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 16:13:12 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,7 @@ char	**parse_param(char *str)
 		if (str[i] == '=')
 			break ;
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-		{
-			// ft_putstr_fd("illegal caracter : ", STDOUT_FILENO);
-			// ft_putchar_fd(str[i], STDOUT_FILENO);
-			// ft_putchar_fd('\n', STDOUT_FILENO);
 			return (NULL);
-		}
 		i++;
 	}
 	ret = ft_split(str, '=');

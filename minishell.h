@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/02 00:53:17 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 19:14:02 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 
+int	g_signo;
+
 typedef enum s_token
 {
 	GREAT,
@@ -40,7 +42,7 @@ typedef enum s_token
 
 typedef struct s_lexer
 {
-	int				*fd; // hada howa li fin kain file discripte le ghadi t7tage input li fih 
+	int				*fd;
 	char			*word;
 	t_token			token;
 	int				num_node;
@@ -50,10 +52,6 @@ typedef struct s_lexer
 	char	*doc_data;
 }	t_lexer;
 
-// int builtins = 0 false o 1 true
-//t_lexer	*redirections; = here is all the node of redirection
-//t_lexer	*token = i add it just to free all in one move
-// str all the commend and paramiter
 typedef struct s_ast
 {
 	char			**str;
@@ -64,7 +62,6 @@ typedef struct s_ast
 	struct s_ast	*prev;
 }	t_ast;
 
-//int print_or_not; //0 or 1 ztha  bach n3erfha wach n9dero nprantiwha ola la
 typedef struct s_env 
 {
 	char			*key;
@@ -98,6 +95,7 @@ t_lexer	*ft_token(char *ret);
 
 // signal.c
 void	ft_signal(void);
+void	doc_signal(void);
 
 //	split_to_ast_node.c
 t_ast	*split_to_ast(t_lexer *lx);
@@ -112,6 +110,7 @@ int		check_syntax_error_again(t_ast *tool);
 // ft_free.c
 void	ft_free_token(t_lexer *lx);
 void	ft_free_ast(t_ast *tool);
+void	free_doc_data(t_lexer *lexer);
 
 // new readline
 void	rl_replace_line(const char *text, int clear_undo);
@@ -128,6 +127,7 @@ void	heredoc_hendler(t_ast *ast, t_env *env);
 
 // execution2.c
 void	put_strerror(t_ast *ast, int __errno);
+void	put_cmd_error(char *cmd_str, char *error_str);
 char	**get_bin_paths(t_env *env);
 char	**get_envp(t_env *env);
 void	builtin(int child, t_ast *ast, t_env *env);

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:56:15 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 17:40:46 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 16:12:54 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	add_env_var(t_env **env, char *key, char *value)
 {
 	t_env	*env_p;
 
-	if (!env || !key )
+	if (!env || !key)
 		return (0);
 	env_p = *env;
 	while (env_p->next != NULL)

@@ -6,11 +6,21 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:51:22 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 00:44:31 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/02 18:11:40 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+int	count(char **cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+		i++;
+	return (i);
+}
 
 char	*expand_path(char *path, t_env *env)
 {
@@ -35,11 +45,11 @@ char	*parse_path(char	**cmd, t_env *env)
 {
 	int		i;
 	char	*tmp;
-	char	*ret = NULL;
+	char	*ret;
 
 	i = 0;
-	while (cmd[i])
-		i++;
+	ret = NULL;
+	i = count(cmd);
 	if (i > 2)
 	{
 		tmp = ft_strjoin("cd: string not in pwd: ", cmd[1]);
@@ -80,8 +90,7 @@ int	cd(t_ast *ast, t_env *env)
 	int		i;
 
 	i = 0;
-	while (ast->str[i])
-		i++;
+	i = count(ast->str);
 	if (i > 2)
 		return (1);
 	if (get_env_var(env, "HOME") == NULL && i < 2)
