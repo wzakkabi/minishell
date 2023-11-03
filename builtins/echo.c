@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 04:24:39 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/01 14:50:26 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:03:11 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,34 @@ int	parse_option(char *str)
 	i = 0;
 	if (str[i] == '-')
 	{
+		if (str[i + 1] == '\0')
+			return (0);
 		while (str[++i])
+		{
 			if (str[i] != 'n')
 				return (0);
+		}
 		return (1);
 	}
 	return (0);
+}
+
+int	check_args(char	**cmd, int *is_option)
+{
+	int	ret;
+	int	i;
+
+	i = 1;
+	*is_option = parse_option(cmd[i]);
+	if (!(*is_option))
+		return (i);
+	while (cmd[++i])
+	{
+		ret = parse_option(cmd[i]);
+		if (ret == 0)
+			return (i);
+	}
+	return (i);
 }
 
 void	echo(t_ast *ast)
@@ -38,15 +60,13 @@ void	echo(t_ast *ast)
 		i++;
 	if (i > 1)
 	{
-		i = 1;
-		is_option = parse_option(ast->str[i]);
-		if (!is_option)
-			i = 0;
-		while (ast->str[++i])
+		i = check_args(ast->str, &is_option);
+		while (ast->str[i])
 		{
 			ft_putstr_fd(ast->str[i], STDOUT_FILENO);
 			if (ast->str[i + 1] != NULL)
 				ft_putchar_fd(' ', STDOUT_FILENO);
+			i++;
 		}
 	}
 	if (!is_option)

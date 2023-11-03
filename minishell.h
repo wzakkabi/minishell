@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 09:05:01 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 13:40:40 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 
-int	g_signo;
+int	g_signo[5];
 
 typedef enum s_token
 {
@@ -96,7 +96,6 @@ t_lexer	*ft_token(char *ret);
 
 // signal.c
 void	ft_signal(void);
-void	doc_signal(void);
 
 //	split_to_ast_node.c
 t_ast	*split_to_ast(t_lexer *lx);

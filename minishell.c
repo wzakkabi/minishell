@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 09:06:57 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 13:42:02 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	main(int c, char **av, char **grep_env)
 		printf("this program dont take paramiter");
 		exit(0);
 	}
-	g_signo = 0;
+	g_signo[1] = 0;
 	ft_signal();
 	env = envnode();
 	make_env_node(grep_env, env);

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 12:22:41 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:46:50 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	heredoc_hendler(t_ast *ast, t_env *env)
 {
 	t_lexer	*lexer;
 
-	doc_signal();
 	while (ast)
 	{
 		lexer = ast->redirections;
@@ -82,8 +81,11 @@ void	heredoc_hendler(t_ast *ast, t_env *env)
 		{
 			if (lexer->token == LESS_LESS)
 				get_doc_data(lexer, env);
-			if (g_signo == 1)
+			if (g_signo[1] == 1)
+			{
 				free_doc_data(lexer);
+				break ;
+			}
 			lexer = lexer->next;
 		}
 		ast = ast->next;
@@ -94,15 +96,14 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 {
 	char	*tmp;
 	char	*tmp2;
-	int		in_fd;
 
-	in_fd = dup(STDIN_FILENO);
+	g_signo[0] = dup(STDIN_FILENO);
 	while (1)
 	{
-		if (g_signo == 1)
+		if (g_signo[1] == 1)
 			break ;
-		ft_putstr_fd("heredoc> ", in_fd);
-		tmp = get_next_line(in_fd);
+		ft_putstr_fd("heredoc> ", STDOUT_FILENO);
+		tmp = get_next_line(g_signo[0]);
 		if (!tmp)
 			break ;
 		if (tmp && !ft_strncmp(lexer->word, tmp, ft_strlen(lexer->word) + 1))
@@ -121,8 +122,6 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 		}
 		free(tmp);
 	}
-	if (g_signo)
-		close(in_fd);
 	if (!lexer->q)
 		expand_herdoc(lexer, env);
 }
