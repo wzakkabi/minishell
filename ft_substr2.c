@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 00:16:49 by toor              #+#    #+#             */
-/*   Updated: 2023/10/24 22:44:28 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:43:41 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ char	*ft_substr2(char const *s, unsigned int start, size_t len)
 	}
 	return (p);
 }
-
 
 int	ft_strncmp2(const char *s1, const char *s2, size_t n)
 {

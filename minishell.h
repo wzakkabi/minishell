@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 13:40:40 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:06:05 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_lexer
 	int				q;
 	struct s_lexer	*next;
 	struct s_lexer	*prev;
-	char	*doc_data;
+	char			*doc_data;
 }	t_lexer;
 
 typedef struct s_ast
@@ -133,6 +133,5 @@ char	**get_envp(t_env *env);
 void	builtin(int child, t_ast *ast, t_env *env);
 
 //epand_heredoc.c
-void	read_heardoc(t_ast *cmds, t_env* env);
 void	expand_herdoc(t_lexer *token, t_env *env);
 #endif
