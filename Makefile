@@ -24,10 +24,10 @@ $(LIBFT) :
 
 fclean : clean
 	rm -rf $(NAME)
-	rm -f $(LIBFT)
+	make -C ./libft fclean
 
 clean :
 	rm -rf $(OBJ)
-	rm -f ./libft/*.o
+	make -C ./libft clean
 
 re : fclean all
