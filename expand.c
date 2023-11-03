@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 17:11:34 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:20:19 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	how_many(char *s, int c)
 
 void	expand_helper_1(t_lexer *token, t_env *test, t_ex *ex)
 {
-	if (test)
+	if (test && test->value)
 	{
 		ex->new_word = malloc((ft_strlen(token->word)
 					- ex->pk) + ft_strlen(test->value) + 1);
