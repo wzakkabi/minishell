@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 12:54:21 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 14:36:56 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,11 +107,10 @@ void	expand_helper_0(t_lexer *tk, t_env *env, t_ex *ex)
 {
 	t_env	*test;
 
-	while ((tk->word[ex->x + 1] && tk->word[ex->x + 1] == ' ')
+	if ((tk->word[ex->x + 1] && tk->word[ex->x + 1] == ' ')
 		|| (tk->word[ex->x + 1] && tk->word[ex->x + 1] == '\t'))
 		ex->x++;
-	if ((tk->word[ex->x + 1] && tk->word[ex->x + 1] != ' ')
-		|| (tk->word[ex->x + 1] && tk->word[ex->x + 1] != '\t'))
+	else
 	{
 		ex->c_p_dollar = ((ex->pk = 0), ++ex->x);
 		while ((tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] >= '0'
