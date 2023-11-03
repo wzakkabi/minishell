@@ -3,29 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/02 18:17:00 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 09:06:57 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins/builtins.h"
-
-// int	empty(char *str)
-// {
-// 	int	ret;
-// 	int	i;
-
-// 	i = 0;
-// 	while (str[i] && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
-// 			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
-// 		i++;
-// 	if (str[i] == '\0')
-// 		return (1);
-// 	return (0);
-// }
 
 void	minishell_loop_helper(t_env *env, t_ast *tool, t_lexer *token)
 {
