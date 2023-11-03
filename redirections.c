@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 22:53:25 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 12:22:41 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,29 +94,35 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 {
 	char	*tmp;
 	char	*tmp2;
+	int		in_fd;
 
+	in_fd = dup(STDIN_FILENO);
 	while (1)
 	{
 		if (g_signo == 1)
 			break ;
-		tmp = readline("heredoc> ");
-		if (!tmp
-			|| !ft_strncmp(lexer->word, tmp, ft_strlen(lexer->word) + 1))
+		ft_putstr_fd("heredoc> ", in_fd);
+		tmp = get_next_line(in_fd);
+		if (!tmp)
+			break ;
+		if (tmp && !ft_strncmp(lexer->word, tmp, ft_strlen(lexer->word) + 1))
 		{
 			free(tmp);
 			break ;
 		}
 		if (!lexer->doc_data)
-			lexer->doc_data = ft_strjoin(tmp, "\n");
+			lexer->doc_data = ft_strdup(tmp);
 		else
 		{
-			tmp2 = ft_strjoin(lexer->doc_data, tmp);
+			tmp2 = ft_strdup(lexer->doc_data);
 			free(lexer->doc_data);
-			lexer->doc_data = ft_strjoin(tmp2, "\n");
+			lexer->doc_data = ft_strjoin(tmp2, tmp);
 			free(tmp2);
 		}
 		free(tmp);
 	}
+	if (g_signo)
+		close(in_fd);
 	if (!lexer->q)
 		expand_herdoc(lexer, env);
 }

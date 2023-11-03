@@ -3,118 +3,135 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/01 03:41:54 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 09:03:34 by wzakkabi         ###   ########.fr       */
+/*   Created: 2022/11/06 23:39:44 by mbousbaa          #+#    #+#             */
+/*   Updated: 2023/02/11 18:45:17 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*fstrjoin(char *save, char *buf, int count)
+int	strlen_hlpr(const char *s)
 {
-	char	*p;
-	int		x;
-	int		y;
+	int	i;
 
-	buf[count] = 0;
-	x = 0;
-	y = 0;
-	p = malloc((fstrlen(save) + fstrlen(buf) + 1) * sizeof(char));
-	if (!p)
-		return (NULL);
-	if (save)
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*strchr_hlpr(const char *s, int c)
+{
+	unsigned char	*ret;
+
+	ret = (unsigned char *)s;
+	while (1)
 	{
-		while (save[x])
-		{
-			p[x] = save[x];
-			x++;
-		}
+		if (*ret == (unsigned char) c)
+			return ((char *) ret);
+		if (*ret == 0)
+			return (NULL);
+		ret++;
 	}
-	while (buf[y])
-		p[x++] = buf[y++];
-	p[x] = '\0';
-	if (save)
-		free(save);
-	return (p);
 }
 
-int	fstrlen(char *str)
+char	*substr_hlpr(const char *s, int start, int len)
 {
-	int	x;
+	int		i;
+	char	*ret;
 
-	x = 0;
-	if (!str)
-		return (0);
-	while (str[x] != '\0')
-		x++;
-	return (x);
-}
-
-char	*fstrchr(char *s, int c)
-{
-	int	x;
-
-	x = 0;
+	i = 0;
 	if (!s)
 		return (NULL);
-	while (s[x] != '\0')
+	if (start >= strlen_hlpr(s))
 	{
-		if (s[x] == c)
-			return (s + x);
-		x++;
+		ret = (char *) malloc(sizeof(char));
+		*ret = '\0';
+		return (ret);
 	}
-	return (NULL);
+	if (len > strlen_hlpr(s) - start)
+		len = strlen_hlpr(s) - start;
+	s = s + start;
+	ret = malloc((len + 1) * sizeof(char));
+	if (!ret)
+		return (NULL);
+	while (*s && i < len)
+	{
+		ret[i] = *s++;
+		i++;
+	}
+	ret[len] = '\0';
+	return (ret);
 }
 
-char	*nwline(char *save)
-{
-	char	*line;
-	int		x;
+// char	*strtrim_hlpr(char const *s1, char const *set)
+// {
+// 	char	*ret;
+// 	size_t	start;
+// 	size_t	len_s1;
 
-	x = 0;
-	while (save[x] && save[x] != '\n')
-		x++;
-	if (save[x] == '\n')
-		x++;
-	line = malloc((x + 1) * sizeof(char));
-	if (!line)
+// 	if (!s1 || !set)
+// 		return (NULL);
+// 	len_s1 = strlen_hlpr(s1) - 1;
+// 	start = 0;
+// 	while ((strchr_hlpr(set, s1[start]) != NULL) && s1[start])
+// 		start++;
+// 	if (s1[start] == '\0')
+// 	{
+// 		ret = malloc(sizeof(char));
+// 		*ret = '\0';
+// 		return (ret);
+// 	}
+// 	while ((strchr_hlpr(set, s1[len_s1]) != NULL) && (len_s1 >= 0))
+// 		len_s1--;
+// 	ret = substr_hlpr(s1, start, len_s1 - start + 1);
+// 	return (ret);
+// }
+char	*strdup_hlpr(char *str)
+{
+	int		i;
+	char	*ret;
+
+	ret = malloc((strlen_hlpr(str) + 1) * sizeof(char));
+	if (!ret)
 		return (NULL);
-	x = 0;
-	while (save[x] && save[x] != '\n')
+	i = 0;
+	while (str[i])
 	{
-		line[x] = save[x];
-		x++;
+		ret[i] = str[i];
+		i++;
 	}
-	if (save[x] == '\n')
-	{
-		line[x] = save[x];
-		x++;
-	}
-	line[x] = '\0';
-	return (line);
+	ret[i] = '\0';
+	return (ret);
 }
 
-char	*cutline(char *save)
+char	*strjoin_hlpr(char *s1, char *s2)
 {
-	char	*cut;
-	int		x;
-	int		y;
+	size_t	i;
+	size_t	len;
+	char	*ret;
 
-	y = 0;
-	x = 0;
-	while (save[x] && save[x] != '\n')
-		x++;
-	if (save[x] == '\n')
-		x++;
-	cut = malloc((fstrlen(save) - x) + 1 * sizeof(char));
-	if (!cut)
+	if (!s2)
 		return (NULL);
-	while (save[x])
-		cut[y++] = save[x++];
-	cut[y] = '\0';
-	if (save)
-		free(save);
-	return (cut);
+	if (!s1)
+		return (strdup_hlpr(s2));
+	len = strlen_hlpr(s1) + strlen_hlpr(s2);
+	ret = (char *) malloc((len + 1) * sizeof(char));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (s1[i])
+	{
+		*(ret++) = s1[i];
+		i++;
+	}
+	i = 0;
+	while (s2[i])
+		*(ret++) = s2[i++];
+	*ret = '\0';
+	ret -= len;
+	free(s1);
+	return (ret);
 }
