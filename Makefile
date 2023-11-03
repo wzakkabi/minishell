@@ -14,7 +14,7 @@ READLINE = $(shell brew --prefix readline)
 all : $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
-	gcc $(FLAGS) $(SRC) $(LIBFT) -lreadline -L $(READLINE)/lib -g -o $(NAME)
+	gcc $(FLAGS) $(SRC) $(LIBFT) -fsanitize=address -g -lreadline -L $(READLINE)/lib -g -o $(NAME)
 
 $(LIBFT) :
 	make -C ./libft
