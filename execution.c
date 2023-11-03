@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 13:41:20 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:54:03 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ void	execute(t_ast *ast, t_env *env)
 	int		state;
 	int		save;
 
-	child = -1;
-	save = -1;
+	save = ((child = -1), -1);
 	heredoc_hendler(ast, env);
 	while (ast)
 	{
@@ -143,7 +142,8 @@ void	execute(t_ast *ast, t_env *env)
 		ast = ast->next;
 	}
 	waitpid(child, &state, 0);
-	while (wait(NULL) > 0);
+	while (wait(NULL) > 0)
+		;
 	ft_exit(env, state >> 8);
 	g_signo[1] = 0;
 }
