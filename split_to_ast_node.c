@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   split_to_ast_node.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/01 13:54:08 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 15:57:14 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_reset_to_0(t_ast *tool, t_lexer *lx, int	*cnt, int tx)
+{
+	char	**p;
+	int		x;
+
+	if (tx == 0)
+	{
+		while (tool && tool->prev)
+			tool = tool->prev;
+		while (tool)
+		{
+			while (tool->redirections && tool->redirections->prev)
+				tool->redirections = tool->redirections->prev;
+			tool = tool->next;
+		}
+	}
+	else if (tx == 1)
+	{
+		if (lx->q == 0)
+		{
+			x = ((p = ft_split(lx->word, ' ')), 0);
+			while (p[x])
+				*cnt = ((tool->str[*cnt] = p[x++]), *cnt + 1);
+		}
+		else
+			*cnt = ((tool->str[*cnt] = lx->word), *cnt + 1);
+	}
+}
 
 t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 {
@@ -31,23 +60,8 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		tool->redirections->word = lx->word;
 	}
 	else if (lx->word != NULL)
-	{
-		tool->str[*cnt] = lx->word;
-		*cnt += 1;
-	}
+		ft_reset_to_0(tool, lx, cnt, 1);
 	return (lx->next);
-}
-
-void	ft_reset_to_0(t_ast *tool)
-{
-	while (tool && tool->prev)
-		tool = tool->prev;
-	while (tool)
-	{
-		while (tool->redirections && tool->redirections->prev)
-			tool->redirections = tool->redirections->prev;
-		tool = tool->next;
-	}
 }
 
 t_ast	*split_to_ast(t_lexer *lx)
@@ -72,7 +86,7 @@ t_ast	*split_to_ast(t_lexer *lx)
 		}
 		lx = ast_helper(lx, tool, &cnt);
 	}
-	ft_reset_to_0(tool);
+	ft_reset_to_0(tool, lx, &cnt, 0);
 	return (tool_head);
 }
 
