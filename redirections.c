@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/19 17:55:42 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 16:51:42 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:02:03 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	heredoc_hendler(t_ast *ast, t_env *env)
 void	get_doc_data(t_lexer *lexer, t_env *env)
 {
 	char	*tmp;
-	char	*tmp2;
 
 	g_signo[0] = dup(STDIN_FILENO);
 	while (1)
@@ -111,15 +110,7 @@ void	get_doc_data(t_lexer *lexer, t_env *env)
 			free(tmp);
 			break ;
 		}
-		if (!lexer->doc_data)
-			lexer->doc_data = ft_strdup(tmp);
-		else
-		{
-			tmp2 = ft_strdup(lexer->doc_data);
-			free(lexer->doc_data);
-			lexer->doc_data = ft_strjoin(tmp2, tmp);
-			free(tmp2);
-		}
+		join_and_free(lexer, tmp);
 		free(tmp);
 	}
 	if (!lexer->q)

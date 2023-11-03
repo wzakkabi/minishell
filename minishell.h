@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 16:45:21 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:01:39 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ void	ft_free_token(t_lexer *lx);
 void	ft_free_ast(t_ast *tool);
 void	free_doc_data(t_lexer *lexer);
 void	ft_free_2darry(char **p);
+void	join_and_free(t_lexer *lexer, char *str);
 
 // new readline
 void	rl_replace_line(const char *text, int clear_undo);

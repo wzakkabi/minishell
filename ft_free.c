@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:52:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 16:40:30 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:01:18 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,20 @@ void	free_doc_data(t_lexer *lexer)
 	{
 		free(lexer->doc_data);
 		lexer->doc_data = NULL;
+	}
+}
+
+void	join_and_free(t_lexer *lexer, char *str)
+{
+	char	*tmp;
+
+	if (!lexer->doc_data)
+		lexer->doc_data = ft_strdup(str);
+	else
+	{
+		tmp = ft_strdup(lexer->doc_data);
+		free(lexer->doc_data);
+		lexer->doc_data = ft_strjoin(tmp, str);
+		free(tmp);
 	}
 }

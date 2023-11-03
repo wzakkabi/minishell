@@ -11,7 +11,7 @@ OBJ = $(SRC.c=.o)
 
 READLINE = $(shell brew --prefix readline)
 
-all : re $(NAME)
+all : $(NAME)
 
 $(NAME) : $(OBJ) $(LIBFT)
 	gcc $(FLAGS) $(SRC) $(LIBFT)  -lreadline -L $(READLINE)/lib -g -o $(NAME)
