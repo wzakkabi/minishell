@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 14:36:56 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:11:34 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,8 @@ void	expand_helper_0(t_lexer *tk, t_env *env, t_ex *ex)
 				&& tk->word[ex->x + ex->pk] <= 'Z')
 			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] >= 'a'
 				&& tk->word[ex->x + ex->pk] <= 'z')
-			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] == '_'))
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] == '_')
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] == '?'))
 			ex->pk++;
 		ex->key = ft_substr2(tk->word, ex->c_p_dollar, ex->pk + ex->x);
 		test = get_env_var(env, ex->key);
