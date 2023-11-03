@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 23:35:12 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 17:18:40 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 17:20:19 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,14 +113,14 @@ void	expand_helper_0(t_lexer *tk, t_env *env, t_ex *ex)
 	else
 	{
 		ex->c_p_dollar = ((ex->pk = 0), ++ex->x);
-		while ((tk->word[ex->x + ex->pk] != 0 && tk->word[ex->x + ex->pk] >= '0'
+		while ((tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] >= '0'
 				&& tk->word[ex->x + ex->pk] <= '9')
-			|| (tk->word[ex->x + ex->pk] != 0 && tk->word[ex->x + ex->pk] >= 'A'
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] >= 'A'
 				&& tk->word[ex->x + ex->pk] <= 'Z')
-			|| (tk->word[ex->x + ex->pk] != 0&& tk->word[ex->x + ex->pk] >= 'a'
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] >= 'a'
 				&& tk->word[ex->x + ex->pk] <= 'z')
-			|| (tk->word[ex->x + ex->pk] != 0 && tk->word[ex->x + ex->pk] == '_')
-			|| (tk->word[ex->x + ex->pk] != 0 && tk->word[ex->x + ex->pk] == '?'))
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] == '_')
+			|| (tk->word[ex->x + ex->pk] && tk->word[ex->x + ex->pk] == '?'))
 			ex->pk++;
 		ex->key = ft_substr2(tk->word, ex->c_p_dollar, ex->pk + ex->x);
 		test = get_env_var(env, ex->key);
