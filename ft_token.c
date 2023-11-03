@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_token.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 01:49:58 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 11:58:35 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:50:10 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ t_lexer	*creat_node_word(t_lexer *lx, char *ret, int y, int cnt)
 	}
 	else
 		lx->word = ft_substr2(ret, y, cnt);
-
 	lx->next = lxnewnode();
 	lx->next->prev = lx;
 	return (lx->next);

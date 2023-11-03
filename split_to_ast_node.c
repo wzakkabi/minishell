@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 00:28:48 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 15:57:14 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:49:08 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	ft_reset_to_0(t_ast *tool, t_lexer *lx, int	*cnt, int tx)
 {
 	char	**p;
-	int		x;
 
 	if (tx == 0)
 	{
@@ -32,12 +31,12 @@ void	ft_reset_to_0(t_ast *tool, t_lexer *lx, int	*cnt, int tx)
 	{
 		if (lx->q == 0)
 		{
-			x = ((p = ft_split(lx->word, ' ')), 0);
-			while (p[x])
-				*cnt = ((tool->str[*cnt] = p[x++]), *cnt + 1);
+			tx = ((p = ft_split(lx->word, ' ')), 0);
+			while (p[tx])
+				*cnt = ((tool->str[*cnt] = ft_substr2(p[tx],
+								0, ft_strlen(p[tx]))), (tx++), (*cnt + 1));
+			ft_free_2darry(p);
 		}
-		else
-			*cnt = ((tool->str[*cnt] = lx->word), *cnt + 1);
 	}
 }
 
@@ -60,7 +59,12 @@ t_lexer	*ast_helper(t_lexer *lx, t_ast *tool, int *cnt)
 		tool->redirections->word = lx->word;
 	}
 	else if (lx->word != NULL)
+	{
 		ft_reset_to_0(tool, lx, cnt, 1);
+		if (lx->q == 1)
+			*cnt = (tool->str[*cnt] = ft_substr2(lx->word, 0,
+						ft_strlen(lx->word)), *cnt + 1);
+	}
 	return (lx->next);
 }
 

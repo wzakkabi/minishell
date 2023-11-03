@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:52:33 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 14:43:33 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 16:40:30 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ void	ft_free_token(t_lexer *lx)
 		free(lx);
 }
 
+void	ft_free_2darry(char **p)
+{
+	int	x;
+
+	x = 0;
+	while (p && p[x])
+		free(p[x++]);
+	if (p)
+		free(p);
+}
+
 void	ft_free_ast(t_ast *tool)
 {
 	t_ast	*replace;
@@ -39,8 +50,7 @@ void	ft_free_ast(t_ast *tool)
 	ft_free_token(tool->token);
 	while (tool)
 	{
-		if (tool->str)
-			free(tool->str);
+		ft_free_2darry(tool->str);
 		while (tool->redirections && tool->redirections->prev)
 			tool->redirections = tool->redirections->prev;
 		while (tool->redirections)
