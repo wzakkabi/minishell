@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 04:24:39 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 16:03:11 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 20:57:12 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	check_args(char	**cmd, int *is_option)
 	return (i);
 }
 
-void	echo(t_ast *ast)
+int	echo(t_ast *ast)
 {
 	int	i;
 	int	is_option;
@@ -71,4 +71,5 @@ void	echo(t_ast *ast)
 	}
 	if (!is_option)
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	return (0);
 }

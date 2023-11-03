@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 12:10:20 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 16:45:21 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 20:58:49 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	put_strerror(t_ast *ast, int __errno);
 void	put_cmd_error(char *cmd_str, char *error_str);
 char	**get_bin_paths(t_env *env);
 char	**get_envp(t_env *env);
-void	builtin(int child, t_ast *ast, t_env *env);
+int		builtin(int child, t_ast *ast, t_env *env);
 
 //epand_heredoc.c
 void	expand_herdoc(t_lexer *token, t_env *env);

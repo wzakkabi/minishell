@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 16:54:03 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/03 20:52:22 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	execute_cmd(t_ast *ast, t_env *env, int *save)
 			else
 				get_bin_and_exec(ast, env);
 		}
-		exit(127);
+		exit(errno);
 	}
 	else
 	{
@@ -144,6 +144,5 @@ void	execute(t_ast *ast, t_env *env)
 	waitpid(child, &state, 0);
 	while (wait(NULL) > 0)
 		;
-	ft_exit(env, state >> 8);
-	g_signo[1] = 0;
+	g_signo[1] = (ft_exit(env, state >> 8), 0);
 }
