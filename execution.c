@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/03 16:54:03 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/04 11:34:21 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	execute(t_ast *ast, t_env *env)
 	int		state;
 	int		save;
 
-	save = ((child = -1), -1);
+	save = ((child = -1), (state = 0), -1);
 	heredoc_hendler(ast, env);
 	while (ast)
 	{
