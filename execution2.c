@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 04:54:32 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 17:58:22 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 23:55:40 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,22 +85,25 @@ char	**get_envp(t_env *env)
 	return (ret);
 }
 
-void	builtin(int child, t_ast *ast, t_env *env)
+int	builtin(int child, t_ast *ast, t_env *env)
 {
+	int	ret;
+
 	if (ft_strncmp(ast->str[0], "cd", 3) == 0)
-		cd(ast, env);
+		ret = cd(ast, env);
 	else if (ft_strncmp(ast->str[0], "pwd", 4) == 0)
-		pwd(ast);
+		ret = pwd(ast);
 	else if (ft_strncmp(ast->str[0], "exit", 5) == 0)
 		builtin_exit(ast);
 	else if (ft_strncmp(ast->str[0], "env", 4) == 0)
-		builtin_env(env);
+		ret = builtin_env(env);
 	else if (ft_strncmp(ast->str[0], "export", 7) == 0)
-		export(ast, env);
+		ret = export(ast, env);
 	else if (ft_strncmp(ast->str[0], "unset", 6) == 0)
-		unset(ast, env);
+		ret = unset(ast, env);
 	else if (ft_strncmp(ast->str[0], "echo", 5) == 0)
-		echo(ast);
+		ret = echo(ast);
 	if (child == 0)
-		exit(0);
+		exit(ret);
+	return (ret);
 }

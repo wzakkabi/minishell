@@ -6,7 +6,7 @@
 /*   By: wzakkabi <wzakkabi@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 11:20:15 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/03 14:35:20 by wzakkabi         ###   ########.fr       */
+/*   Updated: 2023/11/04 08:46:21 by wzakkabi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	how_many_dollar(char *s, int c)
 
 void	helper_1(t_lexer *token, t_env *test, t_ex *ex)
 {
-	if (test)
+	if (test && test->value)
 	{
 		ex->new_word = malloc((ft_strlen(token->doc_data)
 					- ex->pk) + ft_strlen(test->value) + 1);
@@ -90,7 +90,8 @@ void	helper_0(t_lexer *t, t_env *env, t_ex *e)
 				&& t->doc_data[e->x + e->pk] <= 'Z')
 			|| (t->doc_data[e->x + e->pk] && t->doc_data[e->x + e->pk] >= 'a'
 				&& t->doc_data[e->x + e->pk] <= 'z')
-			|| (t->doc_data[e->x + e->pk] && t->doc_data[e->x + e->pk] == '_'))
+			|| (t->doc_data[e->x + e->pk] && t->doc_data[e->x + e->pk] == '_')
+			|| (t->doc_data[e->x + e->pk] && t->doc_data[e->x + e->pk] == '?'))
 			e->pk++;
 		e->key = ft_substr2(t->doc_data, e->c_p_dollar, e->pk + e->x);
 		test = get_env_var(env, e->key);

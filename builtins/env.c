@@ -6,13 +6,13 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 21:56:12 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 16:14:36 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/03 22:30:03 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	builtin_env(t_env *env)
+int	builtin_env(t_env *env)
 {
 	t_env	*env_p;
 
@@ -28,4 +28,5 @@ void	builtin_env(t_env *env)
 		}
 		env_p = env_p->next;
 	}
+	return (0);
 }
