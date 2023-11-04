@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/26 02:51:22 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/02 18:11:40 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/04 13:03:52 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,5 +109,5 @@ int	cd(t_ast *ast, t_env *env)
 	}
 	else
 		perror("cd");
-	return (i);
+	return (i * -1);
 }

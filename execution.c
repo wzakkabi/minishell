@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/04 12:10:58 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/04 13:29:54 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	execute(t_ast *ast, t_env *env)
 	{
 		if (ast->builtins == 1
 			&& (!ast->next && !ast->prev && !ast->redirections))
-			builtin(child, ast, env);
+			state = builtin(child, ast, env);
 		else
 			child = execute_cmd(ast, env, &save);
 		if (ast->redirections && ast->redirections->doc_data)
