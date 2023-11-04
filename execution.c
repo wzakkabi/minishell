@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 16:06:31 by mbousbaa          #+#    #+#             */
-/*   Updated: 2023/11/04 13:29:54 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:47:15 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	execute(t_ast *ast, t_env *env)
 	int		state;
 	int		save;
 
-	save = ((child = -1), (state = 0), -1);
+	save = ((child = -1), (state = 0), (g_signo[3] = 1), -1);
 	heredoc_hendler(ast, env);
 	while (ast)
 	{
@@ -145,4 +145,5 @@ void	execute(t_ast *ast, t_env *env)
 	while (wait(NULL) > 0)
 		;
 	g_signo[1] = (ft_exit(env, state >> 8), 0);
+	g_signo[3] = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/22 11:40:37 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/04 11:47:28 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:46:32 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	test(int a)
 		rl_replace_line("", 0);
 		write(1, "\n", 1);
 		rl_on_new_line();
-		if (g_signo[2] == 0)
+		if (g_signo[2] == 0 && g_signo[3] != 1)
 			rl_redisplay();
 	}
 }

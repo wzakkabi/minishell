@@ -6,7 +6,7 @@
 /*   By: mbousbaa <mbousbaa@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 19:30:45 by wzakkabi          #+#    #+#             */
-/*   Updated: 2023/11/04 11:47:56 by mbousbaa         ###   ########.fr       */
+/*   Updated: 2023/11/04 15:52:25 by mbousbaa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	minishell_loop(t_env *env)
 	while (1)
 	{
 		g_signo[2] = 0;
-		input = readline("\033[0;32mminishell~>\033[0m ");
+		input = readline("🖕🏻 minishell~> ");
 		if (input == NULL)
 		{
 			printf("exit\n");
@@ -80,6 +80,7 @@ int	main(int c, char **av, char **grep_env)
 		exit(0);
 	}
 	g_signo[1] = 0;
+	g_signo[3] = 0;
 	ft_signal();
 	env = envnode();
 	make_env_node(grep_env, env);
